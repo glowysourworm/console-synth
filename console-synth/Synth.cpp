@@ -59,12 +59,15 @@ float Synth::GetSample(float absoluteTime)
 	}
 
 	// FILTER SWEEP
-	if (_filterEnvelope->HasOutput(absoluteTime))
-	{
-		_filter->Set((float)MAX_FREQUENCY * _filterEnvelope->GetEnvelopeLevel(absoluteTime), 0.5);
+	//if (_filterEnvelope->HasOutput(absoluteTime))
+	//{
+	//	_filter->Set((float)MAX_FREQUENCY * _filterEnvelope->GetEnvelopeLevel(absoluteTime), 0.5);
 
-		output = _filter->Apply(output);
-	}
+	//	output = _filter->Apply(output);
+	//}
+
+	// OUTPUT EFFECTS
+	output = _reverb->Apply(output);
 
 	return output;
 }

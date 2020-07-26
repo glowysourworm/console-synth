@@ -98,6 +98,11 @@ int callback(void* outputBuffer, void* inputBuffer,
         }
     }
 
+    if (_frameIndex >= MAXUINT32)
+    {
+        int foo = 2;
+    }
+
     return 0;
 }
 
@@ -105,7 +110,7 @@ RtAudio* initialize()
 {
     print("Initializing audio playback device...");
 
-    RtAudio* rtAudio = new RtAudio(/*RtAudio::Api::WINDOWS_DS*/);
+    RtAudio* rtAudio = new RtAudio(RtAudio::Api::WINDOWS_WASAPI);
 
     RtAudio::StreamParameters parameters;
     unsigned int bufferFrames = AUDIO_BUFFER_SIZE;

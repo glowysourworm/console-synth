@@ -2,7 +2,7 @@
 
 Reverb::Reverb(float delaySeconds, float gain, int samplingRate)
 {
-	_combCount = 4;
+	_combCount = 1;
 	_allPassCount = 0;
 
 	_combFilters = new CombFilter * [_combCount];

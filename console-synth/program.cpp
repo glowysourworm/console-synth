@@ -12,8 +12,8 @@
 // Static variables for audio playback (callback is written as static)
 Synth* _synth;
 int _frameIndex;
-
-
+int* _keyCodes;
+int _keyCodesLength;
 
 void print(const char* str, bool newLine = true)
 {
@@ -83,11 +83,30 @@ int callback(void* outputBuffer, void* inputBuffer,
     // Output frames should be interleved
     float* buffer = (float*)outputBuffer;
     float sampleSize = (1.0 / (float)SAMPLING_RATE);
+    bool keyPressed = false;
+
+    // Check the configured piano notes to process the input
+    for (int i = 0; i < _keyCodesLength; i++)
+    {
+        int code = _keyCodes[i];
+
+        // Get keyboard key state
+        bool pressed = (bool)GetAsyncKeyState(code);
+
+        // Update piano virtual device
+        _synth->Set(code, pressed, (float)_frameIndex / (float)SAMPLING_RATE);
+
+        keyPressed |= pressed;
+    }
+
+    // Update synth primary voice parameters
+    if (!keyPressed)
+        _synth->SetDisEngaged(_frameIndex * sampleSize);
 
     // Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
     for (unsigned int i = 0; i < nFrames; i++)
     {
-        float absoluteTime = (++_frameIndex) * sampleSize;
+        float absoluteTime = (_frameIndex++) * sampleSize;
         float sample = _synth->GetSample(absoluteTime);
 
         // Interleved frames
@@ -98,12 +117,12 @@ int callback(void* outputBuffer, void* inputBuffer,
         }
     }
 
-    if (_frameIndex >= MAXUINT32)
-    {
-        int foo = 2;
-    }
-
     return 0;
+}
+
+void errorCallback(RtAudioError::Type type, const std::string& errorText)
+{
+    print(errorText.c_str(), true);
 }
 
 RtAudio* initialize()
@@ -118,6 +137,7 @@ RtAudio* initialize()
     RtAudio::StreamOptions options;
     options.flags |= RTAUDIO_SCHEDULE_REALTIME;
     options.flags |= RTAUDIO_HOG_DEVICE;
+    options.flags |= RTAUDIO_MINIMIZE_LATENCY;
     // options.flags |= RTAUDIO_NONINTERLEAVED;
 
     // STEREO / DEFAULT AUDIO DEVICE
@@ -125,7 +145,7 @@ RtAudio* initialize()
     parameters.firstChannel = 0;
     parameters.nChannels = NUMBER_CHANNELS;
 
-    rtAudio->openStream(&parameters, NULL, RTAUDIO_FLOAT32, SAMPLING_RATE, &bufferFrames, &callback, NULL, &options);
+    rtAudio->openStream(&parameters, NULL, RTAUDIO_FLOAT32, SAMPLING_RATE, &bufferFrames, &callback, NULL, &options, errorCallback);
     rtAudio->startStream();
 
     return rtAudio;
@@ -133,13 +153,11 @@ RtAudio* initialize()
 
 int main()
 {
-    bool exit = false;
-    int* keyCodes;
-    int keyCodesLength;
+    bool exit = false;    
 
     // Create the predefined piano virtual device
     //    
-    _synth = configure(keyCodes, keyCodesLength);
+    _synth = configure(_keyCodes, _keyCodesLength);
 
     // Initialize audio device
     RtAudio* device = initialize();
@@ -158,13 +176,13 @@ int main()
         else
         {
             // Check the configured piano notes to process the input
-            for (int i = 0; i < keyCodesLength; i++)
-            {
-                int code = keyCodes[i];
+            //for (int i = 0; i < keyCodesLength; i++)
+            //{
+            //    int code = keyCodes[i];
 
-                // Update piano virtual device
-                _synth->Set(code, (bool)GetAsyncKeyState(code), _frameIndex / (float)SAMPLING_RATE);
-            }
+            //    // Update piano virtual device
+            //    _synth->Set(code, (bool)GetAsyncKeyState(code), (float)_frameIndex / (float)SAMPLING_RATE);
+            //}
         }
         
         Sleep(LOOP_INCREMENT);

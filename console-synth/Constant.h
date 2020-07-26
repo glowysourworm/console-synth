@@ -2,7 +2,7 @@
 #define SYNTH_CONSTANT_H
 
 const float PI = (float)3.1415926;
-const int LOOP_INCREMENT = 10;
+const int LOOP_INCREMENT = 300;
 const unsigned int SAMPLING_RATE = 44100;
 const unsigned int MAX_FREQUENCY = 22000;
 const unsigned int NUMBER_CHANNELS = 2;

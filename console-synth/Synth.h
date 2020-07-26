@@ -1,7 +1,7 @@
 #ifndef SYNTH_H
 #define SYNTH_H
 
-#include <list>
+#include <map>
 
 #include "Constant.h"
 #include "SynthNote.h"
@@ -20,10 +20,13 @@ public:
 	~Synth();
 
 	// Getters
-	const SynthNote* Get(int keyCode);
+	SynthNote* Get(int keyCode);
 	
 	// Setters
 	void Set(int keyCode, bool pressed, float absoluteTime);
+
+	// Shuts off piano envelope
+	void SetDisEngaged(float absoluteTime);
 
 	// Synthesizes a full output at the specified time
 	float GetSample(float absoluteTime);
@@ -38,13 +41,16 @@ private:
 
 private:
 
-	std::list<SynthNote*>* _pianoNotes;
+	SynthNote** _pianoNotes;
+	int _pianoNotesLength;
 
 	// Post-processing effects
 	ButterworthFilter* _filter;
 	Envelope* _filterEnvelope;
 
 	Reverb* _reverb;
+
+	CombFilter* _delay;
 };
 
 #endif

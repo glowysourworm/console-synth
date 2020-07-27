@@ -1,8 +1,10 @@
 #ifndef REVERB_H
 #define REVERB_H
 
+#include "Constant.h"
 #include "CombFilter.h"
 #include "AllPassFilter.h"
+#include "ButterworthFilter.h"
 
 // Implements Schroeder Reverb
 //
@@ -17,9 +19,7 @@ public:
 private:
 	CombFilter** _combFilters;
 	AllPassFilter** _allPassFilters;
-
-	int _combCount;
-	int _allPassCount;
+	ButterworthFilter* _lowPassFilter;
 };
 
 #endif

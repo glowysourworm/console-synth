@@ -5,10 +5,13 @@ Synth::Synth(SynthNote** pianoNotes, int pianoNotesLength)
 	_pianoNotes = pianoNotes;
 	_pianoNotesLength = pianoNotesLength;
 
+	_frequencyShift = 0.5;
+	_frequencyShiftGain = 0.4;
+
 	_filter = new ButterworthFilter(SAMPLING_RATE, 1.0);
 	_filterEnvelope = new Envelope(1.5, 0.5, 0.5, 3.0, 1, 0.8);
-	_reverb = new Reverb(0.01, 0.5, SAMPLING_RATE);
-	_delay = new CombFilter(0.75, 0.75, SAMPLING_RATE);
+	_reverb = new Reverb(0.1, 0.5, SAMPLING_RATE);
+	_delay = new CombFilter(0.65, 0.25, SAMPLING_RATE);
 }
 
 Synth::~Synth()
@@ -37,28 +40,40 @@ float Synth::GetSample(float absoluteTime)
 	{
 		SynthNote* note = _pianoNotes[i];
 
-		// Engaged notes will have a non-zero output
-		if (note->GetEnvelopeLevel(absoluteTime) > 0)
-		{
-			output += note->GetEnvelopeLevel(absoluteTime) * GenerateTriangle(absoluteTime, note->GetFrequency());
-		}
+		// Primary notes
+		output += (1 - _frequencyShiftGain) *
+				  note->GetEnvelopeLevel(absoluteTime) * 
+				  GenerateTriangle(absoluteTime, note->GetFrequency());
+
+		// Frequency Shift Effect
+		output += _frequencyShiftGain * 
+				  note->GetEnvelopeLevel(absoluteTime) * 
+				  GenerateTriangle(absoluteTime, note->GetFrequency() * _frequencyShift);
 	}
 
 	// FILTER SWEEP
 	if (_filterEnvelope->HasOutput(absoluteTime))
 	{
-		_filter->Set((float)MAX_FREQUENCY * _filterEnvelope->GetEnvelopeLevel(absoluteTime), 0.5);
+		_filter->Set((float)MAX_FREQUENCY * _filterEnvelope->GetEnvelopeLevel(absoluteTime), 0.3);
 
 		output = _filter->Apply(output);
 	}
 
-	// OUTPUT EFFECTS
-	// output = _reverb->Apply(output);
+	// OUTPUT EFFECTS	
+	// float reverbOutput = _reverb->Apply(output);
+	// float delayOutput = _delay->Apply(output);
 
-	float mixLevel = 0.5;
-	float delayOutput = _delay->Apply(output);
+	// return _delay->Apply(output);
 
-	return ((mixLevel) * output) + ((1 - mixLevel) * delayOutput);
+	// return _reverb->Apply(output);
+
+	// return 0.5 * (reverbOutput + delayOutput);
+
+	// return reverbOutput;
+
+	// return delayOutput;
+
+	return output;
 }
 
 // Setters

@@ -1,28 +1,36 @@
 #include "CombFilter.h"
 
-CombFilter::CombFilter(float delaySeconds, float gain, int samplingRate)
+CombFilter::CombFilter(float delaySeconds, float gain, int samplingRate, bool feedbackForm)
 {
 	int bufferSize = (int)(delaySeconds * samplingRate);
 
-	_delayedOutput = new std::queue<float>();
+	_buffer = new std::queue<float>();
 	_gain = gain;
+	_feedbackForm = feedbackForm;
 	
 	// Initialize the queue
 	for (int i = 0; i < bufferSize; i++)
-		_delayedOutput->push(0);
+		_buffer->push(0);
 }
 CombFilter::~CombFilter()
 {
-	delete _delayedOutput;
+	delete _buffer;
 }
 float CombFilter::Apply(float sample)
 {
-	// Calculate sample from front of the queue
-	float result = sample + (_gain * _delayedOutput->front());
+	// Calculate sample from front of the queue (SAME FOR BOTH FORMS)
+	float result = sample + (_gain * _buffer->front());;
+	
+	// Remove used sample
+	_buffer->pop();
 
-	// Queue the result
-	_delayedOutput->pop();
-	_delayedOutput->push(result);
+	// Feed-forward -> store input sample
+	if (!_feedbackForm)
+		_buffer->push(sample);
+	
+	// Feed-back -> store result
+	else
+		_buffer->push(result);
 
 	return result;
 }

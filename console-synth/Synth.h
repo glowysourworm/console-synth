@@ -44,6 +44,9 @@ private:
 	SynthNote** _pianoNotes;
 	int _pianoNotesLength;
 
+	float _frequencyShift;
+	float _frequencyShiftGain;
+
 	// Post-processing effects
 	ButterworthFilter* _filter;
 	Envelope* _filterEnvelope;

@@ -8,6 +8,7 @@
 #include "ButterworthFilter.h"
 #include "Reverb.h"
 #include "Envelope.h"
+#include "AmplitudeOscillator.h"
 
 // Class to define static piano notes and store their names / frequencies w.r.t. the SDL keyboard
 // defined inputs.
@@ -48,6 +49,7 @@ private:
 	float _frequencyShiftGain;
 
 	// Post-processing effects
+	AmplitudeOscillator* _oscillator;
 	ButterworthFilter* _filter;
 	Envelope* _filterEnvelope;
 

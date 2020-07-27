@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="..\rtaudio-master\RtAudio.cpp" />
     <ClCompile Include="AllPassFilter.cpp" />
+    <ClCompile Include="AmplitudeOscillator.cpp" />
     <ClCompile Include="ButterworthFilter.cpp" />
     <ClCompile Include="CombFilter.cpp" />
     <ClCompile Include="Envelope.cpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="..\rtaudio-master\RtAudio.h" />
     <ClInclude Include="AllPassFilter.h" />
+    <ClInclude Include="AmplitudeOscillator.h" />
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="CombFilter.h" />
     <ClInclude Include="Constant.h" />

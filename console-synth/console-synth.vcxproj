@@ -160,7 +160,9 @@
     <ClCompile Include="AmplitudeOscillator.cpp" />
     <ClCompile Include="ButterworthFilter.cpp" />
     <ClCompile Include="CombFilter.cpp" />
+    <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Envelope.cpp" />
+    <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Reverb.cpp" />
     <ClCompile Include="Synth.cpp" />
     <ClCompile Include="program.cpp" />
@@ -172,8 +174,10 @@
     <ClInclude Include="AmplitudeOscillator.h" />
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="CombFilter.h" />
+    <ClInclude Include="Compressor.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Envelope.h" />
+    <ClInclude Include="Mixer.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="Synth.h" />
     <ClInclude Include="SynthNote.h" />

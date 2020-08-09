@@ -11,7 +11,7 @@ SynthNote::SynthNote(const char* name,
 	_pressed = false;
 	_pressedTime = 0;
 	_keyCode = keyCode;
-	_envelope = new Envelope(0.1, 0.2, 0.5, 0.5, 1, 0.8);
+	_envelope = new Envelope(0.1, 0.2, 0.5, 0.5, 1, 0.9);
 }
 
 SynthNote::~SynthNote()

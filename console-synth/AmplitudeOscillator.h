@@ -2,13 +2,15 @@
 #define AMPLITUDEOSCILLATOR_H
 
 #include <math.h>
+#include <random>
 
 #include "Constant.h"
 
 enum class AmplitudeOscillatorType
 {
 	Sine,
-	Square
+	Square,
+	Random
 };
 
 class AmplitudeOscillator
@@ -23,6 +25,10 @@ private:
 	float _frequency;
 	float _period;
 	AmplitudeOscillatorType _type;
+
+	float* _randomDivisions;
+	float* _randomValues;
+	int _randomLastDivisionIndex;
 };
 
 #endif

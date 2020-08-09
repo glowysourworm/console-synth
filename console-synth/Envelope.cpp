@@ -24,9 +24,21 @@ Envelope::~Envelope()
 
 void Envelope::Engage(float absoluteTime)
 {
+	float currentLevel = GetEnvelopeLevel(absoluteTime);
+
 	_engaged = true;
 	_hasEngaged = true;
-	_engagedTime = absoluteTime;
+
+	// Set the engage time with an offset to smoothly transition envelopes
+	if (currentLevel > 0)
+	{
+		// Subtract offset of the attack (ADVANCES ENVELOPE)
+		_engagedTime = absoluteTime - ((currentLevel / _attackPeak) * _attack);
+	}
+	else
+	{
+		_engagedTime = absoluteTime;
+	}
 }
 
 void Envelope::DisEngage(float absoluteTime)
@@ -63,6 +75,16 @@ bool Envelope::HasOutput(float absoluteTime)
 bool Envelope::IsEngaged()
 {
 	return _engaged;
+}
+
+float Envelope::GetEngageTime()
+{
+	return _engagedTime;
+}
+
+float Envelope::GetDisEngageTime()
+{
+	return _disEngagedTime;
 }
 
 float Envelope::GetEnvelopeLevel(float absoluteTime)

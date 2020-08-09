@@ -14,6 +14,8 @@ public:
 	bool HasOutput(float absoluteTime);
 	bool IsEngaged();
 	float GetEnvelopeLevel(float absoluteTime);
+	float GetEngageTime();
+	float GetDisEngageTime();
 
 private:
 

@@ -10,33 +10,20 @@ class SynthNote
 {
 public:
 
-	SynthNote() {};
-
-	SynthNote(const char* name,
-		const char* keyMap,
-		int midiNumber,
-		int keyCode);
-
+	SynthNote(int midiNumber);
 	~SynthNote();
 
-	const char* GetName();
-	const char* GetKeyMap();
-	const int GetKeyCode();
-	const bool GetPressed();
+	const int GetMidiNumber();
 	const float GetFrequency();
 	float GetEnvelopeLevel(float absoluteTime);
 
-	void SetPressed(bool pressed, float absoluteTime);
+	bool IsEngaged();
+	void Engage(float absoluteTime);
+	void DisEngage(float absoluteTime);
 
 private:
 
-	const char* _name;
-	const char* _keyMap;
-	bool  _pressed;
-	float _pressedTime;
-	int _keyCode;
 	int  _midiNumber;
-
 	Envelope* _envelope;
 };
 

@@ -37,27 +37,34 @@ float Reverb::Apply(float sample)
 {
 	// https://ccrma.stanford.edu/~jos/pasp/Schroeder_Reverberators.html
 	//
+	// Other techniques to try
+	//
+	// https://www.musicdsp.org/en/latest/Effects/45-reverberation-techniques.html
+	//
 
 	float output = sample;
 
+	// All pass taps
+	//
+	float outputA = _allPassFilters[0]->Apply(output);
+	float outputB = _allPassFilters[1]->Apply(outputA);
+	float outputC = _allPassFilters[2]->Apply(outputB);
+	float outputD = _allPassFilters[3]->Apply(outputC);
+
 	// Series all pass filters
-	for (int i = 0; i < REVERB_ALLPASS_SIZE; i++)
-		output = _allPassFilters[i]->Apply(output);
+	//for (int i = 0; i < REVERB_ALLPASS_SIZE; i++)
+	//	output = _allPassFilters[i]->Apply(output);
 
 	// Calculate comb filter outputs
-	float outputA = _combFilters[0]->Apply(output);
-	float outputB = _combFilters[1]->Apply(output);
-	float outputC = _combFilters[2]->Apply(output);
-	float outputD = _combFilters[3]->Apply(output);
-
-	// output = 0.25 * (outputA + outputB + outputC + outputD);
-
-
+	//float outputA = _combFilters[0]->Apply(output);
+	//float outputB = _combFilters[1]->Apply(output);
+	//float outputC = _combFilters[2]->Apply(output);
+	//float outputD = _combFilters[3]->Apply(output);
 
 	// Apply mixing matrix to comb outputs
 	
 	// return output;
 	// return _lowPassFilter->Apply(output);
 
-	return 0.25 * (outputA + outputB + outputC + outputD);
+	return (0.5 * output + 0.6 * outputA + 0.7 * outputB + 0.85 * outputC + outputD);
 }

@@ -2,6 +2,7 @@
 #define SYNTH_H
 
 #include <map>
+#include <vector>
 
 #include "Constant.h"
 #include "SynthNote.h"
@@ -12,6 +13,7 @@
 #include "Compressor.h"
 #include "Mixer.h"
 
+
 // Class to define static piano notes and store their names / frequencies w.r.t. the SDL keyboard
 // defined inputs.
 //
@@ -19,17 +21,11 @@ class Synth
 {
 
 public:
-	Synth(SynthNote** pianoNotes, int pianoNotesLength);
+	Synth();
 	~Synth();
 
-	// Getters
-	SynthNote* Get(int keyCode);
-	
-	// Setters
-	void Set(int keyCode, bool pressed, float absoluteTime);
-
-	// Shuts off piano envelope
-	void SetDisEngaged(float absoluteTime);
+	// Sets midi notes on / off
+	void Set(int midiNumber, bool pressed, float absoluteTime);
 
 	// Synthesizes a full output at the specified time
 	float GetSample(float absoluteTime);
@@ -44,8 +40,7 @@ private:
 
 private:
 
-	SynthNote** _pianoNotes;
-	int _pianoNotesLength;
+	std::vector<SynthNote*>* _pianoNotes;
 
 	float _frequencyShift;
 	float _frequencyShiftGain;

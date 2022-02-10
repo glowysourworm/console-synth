@@ -4,16 +4,9 @@ AllPassFilter::AllPassFilter(float delaySeconds, float gain, int samplingRate)
 {
 	int bufferSize = (int)(delaySeconds * samplingRate);
 
-	_delayedInput = new std::queue<float>();
-	_delayedOutput = new std::queue<float>();
+	_delayedInput = new float[bufferSize];
+	_delayedOutput = new float[bufferSize];
 	_gain = gain;
-
-	// Initialize the queue
-	for (int i = 0; i < bufferSize; i++)
-	{
-		_delayedInput->push(0);
-		_delayedOutput->push(0);
-	}
 }
 AllPassFilter::~AllPassFilter()
 {
@@ -28,13 +21,15 @@ float AllPassFilter::Apply(float sample)
 	//
 
 	// Calculate sample from front of the queue
-	float result = (-1 * _gain * sample) + _delayedInput->front() + (_gain * _delayedOutput->front());
+	//float result = (-1 * _gain * sample) + _delayedInput->front() + (_gain * _delayedOutput->front());
 
-	// Queue the result and the input sample
-	_delayedOutput->pop();
-	_delayedInput->pop();
-	_delayedOutput->push(result);
-	_delayedInput->push(sample);
+	//// Queue the result and the input sample
+	//_delayedOutput->pop();
+	//_delayedInput->pop();
+	//_delayedOutput->push(result);
+	//_delayedInput->push(sample);
 
-	return result;
+	//return result;
+
+	return sample;
 }

@@ -6,8 +6,8 @@ AmplitudeOscillator::AmplitudeOscillator(float frequency, AmplitudeOscillatorTyp
 	_period = 1.0 / frequency;
 	_type = type;
 	
-	_randomDivisions = new float[5] { 0.2, 0.4, 0.6, 0.8, 1 };
-	_randomValues = new float[5]{ 0.2, 0.8, 0.5, 0.1, 1 };
+	_randomDivisions = new float[4] { 0.25, 0.5, 0.75, 1 };
+	_randomValues = new float[4]{ 0.1, 1, 0.6, 0.3 };
 	_randomLastDivisionIndex = 0;
 }
 
@@ -39,7 +39,7 @@ float AmplitudeOscillator::GetSample(float absoluteTime)
 			int currentDivisionIndex = 0;
 
 			// Cycle through the period divisions
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 4; i++)
 			{
 				if (periodRatio < _randomDivisions[i])
 				{

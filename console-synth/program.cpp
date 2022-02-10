@@ -7,13 +7,17 @@
 #include "Synth.h"
 #include "SynthNote.h"
 #include "RtAudio.h"
+#include "MidiFile.h"
 
+using namespace smf;
 
 // Static variables for audio playback (callback is written as static)
 Synth* _synth;
 int _frameIndex;
-int* _keyCodes;
-int _keyCodesLength;
+bool configuredForMidi;
+bool _initialized;
+float* _waveBuffer;
+int _waveBufferLength;
 
 void print(const char* str, bool newLine = true)
 {
@@ -31,83 +35,26 @@ void printHeader()
     print("Waiting on input (Escape to exit)...");
 }
 
-Synth* configure(int* &usedCodes, int& usedCodesLength)
-{
-    SynthNote** notes = new SynthNote*[14];
-
-    print("Initializing Synth Virtual Device...");
-
-    notes[0] = new SynthNote("C3", "A", 48, WindowsKeyCodes::A);
-    notes[1] = new SynthNote("C#3 / Db3", "W", 49, WindowsKeyCodes::W);
-    notes[2] = new SynthNote("D3", "S", 50, WindowsKeyCodes::S);
-    notes[3] = new SynthNote("D#3 / Eb3", "E", 51, WindowsKeyCodes::E);
-    notes[4] = new SynthNote("E3", "D", 52, WindowsKeyCodes::D);
-    notes[5] = new SynthNote("F3", "F", 53, WindowsKeyCodes::F);
-    notes[6] = new SynthNote("F#3 / Gb3", "T", 54, WindowsKeyCodes::T);
-    notes[7] = new SynthNote("G3", "G", 55, WindowsKeyCodes::G);
-    notes[8] = new SynthNote("G#3 / Ab3", "Y", 56, WindowsKeyCodes::Y);
-    notes[9] = new SynthNote("A4", "H", 57, WindowsKeyCodes::H);
-    notes[10] = new SynthNote("A#4 / Bb4", "U", 58, WindowsKeyCodes::U);
-    notes[11] = new SynthNote("B4", "J", 59, WindowsKeyCodes::J);
-    notes[12] = new SynthNote("C4", "K", 60, WindowsKeyCodes::K);
-    notes[13] = new SynthNote("D4", "L", 62, WindowsKeyCodes::L);
-
-    // Setup key code array for return
-    usedCodes = new int[14];
-    usedCodesLength = 14;
-
-    usedCodes[0] = WindowsKeyCodes::A;
-    usedCodes[1] = WindowsKeyCodes::W;
-    usedCodes[2] = WindowsKeyCodes::S;
-    usedCodes[3] = WindowsKeyCodes::E;
-    usedCodes[4] = WindowsKeyCodes::D;
-    usedCodes[5] = WindowsKeyCodes::F;
-    usedCodes[6] = WindowsKeyCodes::T;
-    usedCodes[7] = WindowsKeyCodes::G;
-    usedCodes[8] = WindowsKeyCodes::Y;
-    usedCodes[9] = WindowsKeyCodes::H;
-    usedCodes[10] = WindowsKeyCodes::U;
-    usedCodes[11] = WindowsKeyCodes::J;
-    usedCodes[12] = WindowsKeyCodes::K;
-    usedCodes[13] = WindowsKeyCodes::L;
-
-    return new Synth(notes, 14);
-}
-
 int callback(void* outputBuffer, void* inputBuffer,
              unsigned int nFrames,
              double streamTime,
              RtAudioStreamStatus status,
              void* userData)
 {
+    if (!_initialized)
+        return 0;
+
     // Output frames should be interleved
     float* buffer = (float*)outputBuffer;
     float sampleSize = (1.0 / (float)SAMPLING_RATE);
-    bool keyPressed = false;
-
-    // Check the configured piano notes to process the input
-    for (int i = 0; i < _keyCodesLength; i++)
-    {
-        int code = _keyCodes[i];
-
-        // Get keyboard key state
-        bool pressed = (bool)GetAsyncKeyState(code);
-
-        // Update piano virtual device
-        _synth->Set(code, pressed, (float)_frameIndex / (float)SAMPLING_RATE);
-
-        keyPressed |= pressed;
-    }
-
-    // Update synth primary voice parameters
-    if (!keyPressed)
-        _synth->SetDisEngaged(_frameIndex * sampleSize);
+    float systemTime = (float)_frameIndex / (float)SAMPLING_RATE;
 
     // Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
-    for (unsigned int i = 0; i < nFrames; i++)
+    for (unsigned int i = 0; (i < nFrames) && (_frameIndex < _waveBufferLength); i++)
     {
         float absoluteTime = (_frameIndex++) * sampleSize;
-        float sample = _synth->GetSample(absoluteTime);
+        // float sample = _synth->GetSample(absoluteTime);
+        float sample = _waveBuffer[_frameIndex + i];
 
         // Interleved frames
         for (unsigned int j = 0; j < NUMBER_CHANNELS; j++)
@@ -151,19 +98,100 @@ RtAudio* initialize()
     return rtAudio;
 }
 
-int main()
+void beginKeyboardInputLoop()
 {
-    bool exit = false;    
 
+}
+
+void beginMidiFilePlayback(char* fileName)
+{
+    MidiFile midi;
+
+    midi.read(std::string(fileName));
+
+    // Set "absolute ticks mode"
+    midi.absoluteTicks();
+
+    // Finally, try merging tracks to create a single-track song
+    // midiFile.joinTracks();
+
+    float secondsPerTick = midi.getFileDurationInSeconds() / midi.getFileDurationInTicks();
+    float timeCursor = 0;
+
+    // Calculate number of midi ticks to progress during this callback
+    // double midiTicksPerFrame = (((1 / (double)NUMBER_CHANNELS) / (double)SAMPLING_RATE) * ticksPerSecond);
+
+    _waveBufferLength = midi.getFileDurationInSeconds() * SAMPLING_RATE;
+    int waveIndex = 0;
+    int samplesPerTick = (int)(secondsPerTick * SAMPLING_RATE);
+
+    _waveBuffer = new float[_waveBufferLength];
+
+    for (int k = 0; k < midi.getFileDurationInTicks(); k++)
+    {
+        for (int i = 0; i < midi.getTrackCount(); i++)
+        {
+            if (k >= midi[i].size())
+                continue;
+
+            MidiEvent midiEvent = midi[i][k];
+
+            // Note On
+            if (midiEvent.isNoteOn())
+            {
+                _synth->Set(midiEvent.getKeyNumber(), true, timeCursor);
+            }
+
+            // Note Off
+            else if (midiEvent.isNoteOff())
+            {
+                _synth->Set(midiEvent.getKeyNumber(), false, timeCursor);
+            }
+        }
+
+        // Advance midi time clock
+        timeCursor += secondsPerTick;
+
+        // Synthesize samples during that time period
+        for (int i = waveIndex; (i < (waveIndex + samplesPerTick)) && (i < _waveBufferLength); i++)
+        {
+            _waveBuffer[i] = _synth->GetSample(i / (float)SAMPLING_RATE);
+        }
+
+        // Increment wave index
+        waveIndex += samplesPerTick;
+     }
+}
+
+int main(int argc, char* argv[], char* envp[])
+{
     // Create the predefined piano virtual device
     //    
-    _synth = configure(_keyCodes, _keyCodesLength);
+    _synth = new Synth();
 
     // Initialize audio device
     RtAudio* device = initialize();
 
     // Print application header
     printHeader();
+
+    // Read midi file
+    if (argc > 1)
+    {        
+        configuredForMidi = true;
+        beginMidiFilePlayback(argv[1]);
+    }
+    // Manual keyboard input
+    else
+    {        
+        configuredForMidi = false;
+        beginKeyboardInputLoop();        
+    }
+
+    // Unblock primary audio device callback
+    _initialized = true;
+
+    bool exit = false;
 
     // Listen for keyboard inputs / exit key
     while (!exit)
@@ -172,19 +200,6 @@ int main()
         if (GetAsyncKeyState(VK_ESCAPE))
             exit = true;
 
-        // Process primary synth input
-        else
-        {
-            // Check the configured piano notes to process the input
-            //for (int i = 0; i < keyCodesLength; i++)
-            //{
-            //    int code = keyCodes[i];
-
-            //    // Update piano virtual device
-            //    _synth->Set(code, (bool)GetAsyncKeyState(code), (float)_frameIndex / (float)SAMPLING_RATE);
-            //}
-        }
-        
         Sleep(LOOP_INCREMENT);
     }
 

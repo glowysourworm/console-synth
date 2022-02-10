@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "console-synth", "console-sy
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_Brinstar|x64 = Debug_Brinstar|x64
+		Debug_Brinstar|x86 = Debug_Brinstar|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
@@ -15,6 +17,10 @@ Global
 		Template|x86 = Template|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C957E0FF-74D6-4972-B4C9-9029ED733023}.Debug_Brinstar|x64.ActiveCfg = Debug_Brinstar|x64
+		{C957E0FF-74D6-4972-B4C9-9029ED733023}.Debug_Brinstar|x64.Build.0 = Debug_Brinstar|x64
+		{C957E0FF-74D6-4972-B4C9-9029ED733023}.Debug_Brinstar|x86.ActiveCfg = Debug_Brinstar|Win32
+		{C957E0FF-74D6-4972-B4C9-9029ED733023}.Debug_Brinstar|x86.Build.0 = Debug_Brinstar|Win32
 		{C957E0FF-74D6-4972-B4C9-9029ED733023}.Debug|x64.ActiveCfg = Debug|x64
 		{C957E0FF-74D6-4972-B4C9-9029ED733023}.Debug|x64.Build.0 = Debug|x64
 		{C957E0FF-74D6-4972-B4C9-9029ED733023}.Debug|x86.ActiveCfg = Debug|Win32

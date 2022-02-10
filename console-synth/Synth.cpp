@@ -1,124 +1,115 @@
 #include "Synth.h"
 
-Synth::Synth(SynthNote** pianoNotes, int pianoNotesLength)
+Synth::Synth()
 {
-	_pianoNotes = pianoNotes;
-	_pianoNotesLength = pianoNotesLength;
+	_pianoNotes = new std::vector<SynthNote*>();
 
 	_frequencyShift = 0.5;
 	_frequencyShiftGain = 0.5;
 
-	_mixer = new Mixer(pianoNotesLength);
-	_oscillator = new AmplitudeOscillator(1.0, AmplitudeOscillatorType::Random);
+	_mixer = new Mixer(1);
+	_oscillator = new AmplitudeOscillator(2.5, AmplitudeOscillatorType::Sine);
 	_filter = new ButterworthFilter(SAMPLING_RATE, 1.0);
-	_filterEnvelope = new Envelope(1.5, 0.5, 0.5, 2.0, 1, 0.8);
-	_reverb = new Reverb(0.1, 0.3, SAMPLING_RATE);
+	_filterEnvelope = new Envelope(1.5, 3, 0.5, 1, 0.8, 0.1);
+	_reverb = new Reverb(0.1, 0.9, SAMPLING_RATE);
 	_delay = new CombFilter(0.1, 0.35, SAMPLING_RATE);
-	_limiter = new Compressor(2.0, 0.6, 4, 0.2, 0.2, 0.2);	
+	_limiter = new Compressor(10, 0.6, 4, 0.2, 0.2, 0.2);	
 }
 
 Synth::~Synth()
 {
+	for (int i = 0; i < _pianoNotes->size(); i++)
+	{
+		delete _pianoNotes->at(i);
+	}
+
 	delete[] _pianoNotes;
 	delete _filterEnvelope;
 	delete _reverb;
 }
 
-// Getters
-SynthNote* Synth::Get(int keyCode)
+void Synth::Set(int midiNumber, bool pressed, float absoluteTime)
 {
-	for (int i = 0; i < _pianoNotesLength; i++)
-		if (_pianoNotes[i]->GetKeyCode() == keyCode)
-			return _pianoNotes[i];
+	for (int i = 0; i < _pianoNotes->size(); i++)
+	{
+		SynthNote* note = _pianoNotes->at(i);
 
-	throw;
+		if (note->GetMidiNumber() == midiNumber)
+		{
+			if (!pressed)
+				note->DisEngage(absoluteTime);
+
+			else
+				note->Engage(absoluteTime);
+
+			// Don't assign new note
+			return;
+		}
+	}
+
+	// Assign new note
+	SynthNote* note = new SynthNote(midiNumber);
+
+	_pianoNotes->push_back(note);
 }
 
 float Synth::GetSample(float absoluteTime)
 {
+	if (_pianoNotes->size() == 0)
+		return 0;
+
+	float output = 0;
+
 	// BASE OSCILLATORS
-	for (int i=0;i<_pianoNotesLength;i++)
+	for (int i=_pianoNotes->size() - 1;i >= 0; i--)
 	{
-		SynthNote* note = _pianoNotes[i];
-		float output = 0;
+		SynthNote* note = _pianoNotes->at(i);
 
-		// Primary notes
-		output += (1 - _frequencyShiftGain) *
-				  note->GetEnvelopeLevel(absoluteTime) * 
-				  GenerateTriangle(absoluteTime, note->GetFrequency());
+		if (note->IsEngaged())
+			output += GenerateTriangle(absoluteTime, note->GetFrequency());
 
-		// Frequency Shift Effect
-		output += _frequencyShiftGain * 
-				  note->GetEnvelopeLevel(absoluteTime) * 
-				  GenerateTriangle(absoluteTime, note->GetFrequency() * _frequencyShift);
+		// GROOM COLLECTION
+		else
+		{
+			// delete note;
+			// _pianoNotes->pop_back();
+		}
 
-		// Average the two signals
-		output *= 0.5;
+			// Primary notes
+			//output += (1 - _frequencyShiftGain) *
+			//		  note->GetEnvelopeLevel(absoluteTime) * 
+			//		  GenerateTriangle(absoluteTime, note->GetFrequency());
 
-		// Send to the mixer
-		_mixer->SetChannel(i, output);
+			//// Frequency Shift Effect
+			//output += _frequencyShiftGain * 
+			//		  note->GetEnvelopeLevel(absoluteTime) * 
+			//		  GenerateSine(absoluteTime, note->GetFrequency() * _frequencyShift);
+
+			//// Average the two signals
+			//output *= 0.5;
+
+			// Send to the mixer
+			// _mixer->SetChannel(i, output);
 	}
 
-	// AMPLITUDE OSCILLATOR (LFO)
-	// output *= _oscillator->GetSample(absoluteTime);
-
-	float dryOutput = _mixer->Get();
-	float wetOutput = dryOutput;
+	// Mixer -> AMPLITUDE OSCILLATOR (LFO)
+	 // float dryOutput = _mixer->Get();
+	 // float wetOutput = dryOutput;
 
 	// FILTER SWEEP
 	//if (_filterEnvelope->HasOutput(absoluteTime))
 	//{
 	//	_filter->Set((float)MAX_FREQUENCY * _filterEnvelope->GetEnvelopeLevel(absoluteTime), 0.3);
 
-	//	// _filter->Set((float)MAX_FREQUENCY * _oscillator->GetSample(absoluteTime), 0.1);
-
-	//	// _filter->Set((float)MAX_FREQUENCY * _oscillator->GetSample(absoluteTime), 0.3);
-
 	//	wetOutput = _filter->Apply(wetOutput);
 	//}
 
 	// OUTPUT EFFECTS	
-	// float reverbOutput = _reverb->Apply(output);
-	// float delayOutput = _delay->Apply(output);
+	// wetOutput = _delay->Apply(wetOutput);
+	// wetOutput = _reverb->Apply(wetOutput);
 
-	// return output;
-
-	// return _delay->Apply(output);
-
-	// output = _reverb->Apply(output);
-
-	// return wetOutput;
-
-	return _limiter->Apply(absoluteTime, wetOutput);
-
-	// return 0.5 * (reverbOutput + delayOutput);
-
-	// return reverbOutput;
-
-	// return delayOutput;
-
-	// return output;
-}
-
-// Setters
-void Synth::Set(int keyCode, bool pressed, float absoluteTime)
-{
-	// NOTE*** MUST BE SYNCHRONIZED COLLECTION ITERATION
-	SynthNote* note = this->Get(keyCode);
-
-	if (note->GetPressed() != pressed)
-	{
-		note->SetPressed(pressed, absoluteTime);
-
-		// Check for new key press
-		if (pressed)
-			_filterEnvelope->Engage(absoluteTime);
-	}
-}
-void Synth::SetDisEngaged(float absoluteTime)
-{
-	if (_filterEnvelope->IsEngaged())
-		_filterEnvelope->DisEngage(absoluteTime);
+	// return _limiter->Apply(absoluteTime, wetOutput);
+	 return output;
 }
 
 // BASE OSCILLATORS
@@ -126,7 +117,6 @@ float Synth::GenerateSine(float absoluteTime, float frequency)
 {
 	return sinf(2.0 * PI * frequency * absoluteTime);
 }
-
 float Synth::GenerateTriangle(float absoluteTime, float frequency)
 {
 	float period = 1.0 / (float)frequency;

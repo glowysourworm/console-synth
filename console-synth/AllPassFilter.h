@@ -13,8 +13,8 @@ public:
 
 private:
 
-	std::queue<float>* _delayedInput;
-	std::queue<float>* _delayedOutput;
+	float* _delayedInput;
+	float* _delayedOutput;
 
 	float _gain;
 };

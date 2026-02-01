@@ -17,6 +17,24 @@ Envelope::Envelope(float attack, float decay, float sustain, float release, floa
 	_engagedTime = 0;
 	_disEngagedTime = 0;
 }
+Envelope::Envelope(const Envelope& copy)
+{
+	_attack = copy.GetAttack();
+	_decay = copy.GetDecay();
+	_sustain = copy.GetSustain();
+	_release = copy.GetRelease();
+
+	_attackPeak = copy.GetAttackPeak();
+	_sustainPeak = copy.GetSustainPeak();
+
+	// Defaults
+	_engaged = false;
+	_hasEngaged = false;
+
+	_disEngagedLevel = 0;
+	_engagedTime = 0;
+	_disEngagedTime = 0;
+}
 Envelope::~Envelope()
 {
 
@@ -75,6 +93,31 @@ bool Envelope::HasOutput(float absoluteTime)
 bool Envelope::IsEngaged()
 {
 	return _engaged;
+}
+
+float Envelope::GetAttack() const
+{
+	return _attack;
+}
+float Envelope::GetDecay() const
+{
+	return _decay;
+}
+float Envelope::GetSustain() const
+{
+	return _sustain;
+}
+float Envelope::GetRelease() const
+{
+	return _release;
+}
+float Envelope::GetAttackPeak() const
+{
+	return _attackPeak;
+}
+float Envelope::GetSustainPeak() const
+{
+	return _sustainPeak;
 }
 
 float Envelope::GetEngageTime()

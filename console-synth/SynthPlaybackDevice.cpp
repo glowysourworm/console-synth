@@ -1,4 +1,5 @@
 #include "Constant.h"
+#include "Envelope.h"
 #include "RtAudio.h"
 #include "Synth.h"
 #include "SynthPlaybackDevice.h"
@@ -7,7 +8,11 @@ bool SynthPlaybackDevice::Initialize()
 {
 	_initialized = true;
 
-	_synth = new Synth();
+	// Attack / Decay / Sustain / Release / Attack Peak / Sustain Peak
+	//
+	Envelope noteEnvelope(0.15, 0.01, 0.01, 0.2, 1, 1);
+
+	_synth = new Synth(MIDI_PIANO_LOW_NUMBER, MIDI_PIANO_HIGH_NUMBER, noteEnvelope);
 
 	return _initialized;
 }

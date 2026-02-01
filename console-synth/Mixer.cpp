@@ -1,6 +1,5 @@
 #include "Mixer.h"
 #include <vector>
-#include <vector>
 
 Mixer::Mixer(int channels)
 {
@@ -21,20 +20,31 @@ void Mixer::SetChannel(int index, float sample, float relativeMix)
 
 float Mixer::Get()
 {
+	int engagedChannels = 0;
 	float result = 0;
 	float totalMixLevel = 0;
 
 	// Sum up the total mix level
-	for (int i = 0; i < (int)_channels->size(); i++)
-	{
-		totalMixLevel += _channels->at(i).mixLevel;
-	}
+	//for (int i = 0; i < (int)_channels->size(); i++)
+	//{
+	//	totalMixLevel += _channels->at(i).mixLevel;
+	//}
 
 	// Do a relative weighting
 	for (int i = 0; i < (int)_channels->size(); i++)
 	{
-		result += (_channels->at(i).sample * _channels->at(i).mixLevel) / totalMixLevel;
+		if (_channels->at(i).sample > 0 ||
+			_channels->at(i).sample < 0)
+		{
+			result += _channels->at(i).sample * _channels->at(i).mixLevel;
+			engagedChannels++;
+		}
 	}
+
+	if (engagedChannels > 0)
+		result = result / (double)engagedChannels;
+	else
+		result = 0;
 
 	return result;
 }

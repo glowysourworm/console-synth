@@ -3,12 +3,13 @@
 #include <cmath>
 #include <queue>
 
-Compressor::Compressor(float gain, float threshold, float compressionRatio, float relaxationPeriod, float attack, float release)
+Compressor::Compressor(float gain, float threshold, float compressionRatio, float relaxationPeriod, float attack, float release, bool cutoffLineLimit)
 {
 	// Compression parameters
 	_gain = gain;
 	_threshold = threshold;
 	_compressionRatio = compressionRatio;
+	_cutoff = cutoffLineLimit;
 	_relaxationValue = 0;
 	_relaxationBuffer = new std::queue<float>();
 	_relaxationBufferLength = SAMPLING_RATE * relaxationPeriod;
@@ -24,6 +25,7 @@ Compressor::~Compressor()
 float Compressor::Apply(float absoluteTime, float sample)
 {
 	float slope = 1 / _compressionRatio;
+	float result = 0;
 
 	// Hard knee compression
 	if (fabsf(sample) > _threshold)
@@ -31,20 +33,27 @@ float Compressor::Apply(float absoluteTime, float sample)
 		if (sample > 0)
 		{
 			// Hard limit at 1
-			return _gain * fminf((slope * sample) + (_threshold * (1 - slope)), 1.0f);
+			result = _gain * fminf((slope * sample) + (_threshold * (1 - slope)), 1.0f);
 		}
 		else
 		{
 			// Hard limit at -1
-			return _gain * fmaxf((slope * sample) + (_threshold * (slope - 1)), -1.0f);
+			result = _gain * fmaxf((slope * sample) + (_threshold * (slope - 1)), -1.0f);
 		}
-
-
 	}
 
 	// BYPASS
 	else
 	{
-		return _gain * sample;
+		result = _gain * sample;
 	}
+
+	// Line Limit
+	if (_cutoff && result > 1)
+		result = 1;
+
+	if (_cutoff && result < -1)
+		result = -1;
+
+	return result;
 }

@@ -13,5 +13,6 @@ const float AMPLITUDE = 1;
 const int REVERB_COMB_SIZE = 4;
 const int REVERB_ALLPASS_SIZE = 4;
 const int MIDI_PIANO_LOW_NUMBER = 21;
+const int MIDI_PIANO_HIGH_NUMBER = 108;
 
 #endif

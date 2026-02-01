@@ -2,10 +2,15 @@
 #include "SynthNote.h"
 #include <cmath>
 
-SynthNote::SynthNote(int midiNumber)
+SynthNote::SynthNote(int midiNumber, const Envelope& envelope)
 {
 	_midiNumber = midiNumber;
-	_envelope = new Envelope(0.01, 0.01, 0.01, 0.01, 1, 1);
+	_envelope = new Envelope(envelope.GetAttack(),
+		envelope.GetDecay(),
+		envelope.GetSustain(),
+		envelope.GetRelease(),
+		envelope.GetAttackPeak(),
+		envelope.GetSustainPeak());
 }
 
 SynthNote::~SynthNote()
@@ -31,6 +36,11 @@ const float SynthNote::GetFrequency()
 bool SynthNote::IsEngaged()
 {
 	return _envelope->IsEngaged();
+}
+
+bool SynthNote::HasOutput(float absoluteTime)
+{
+	return _envelope->HasOutput(absoluteTime);
 }
 
 void SynthNote::Engage(float absoluteTime)

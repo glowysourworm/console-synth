@@ -5,6 +5,7 @@ class Envelope
 {
 public:
 	Envelope(float attack, float decay, float sustain, float release, float attackPeak, float sustainPeak);
+	Envelope(const Envelope& copy);
 	~Envelope();
 
 	void Engage(float absoluteTime);
@@ -14,6 +15,13 @@ public:
 	float GetEnvelopeLevel(float absoluteTime);
 	float GetEngageTime();
 	float GetDisEngageTime();
+
+	float GetAttack() const;
+	float GetDecay() const;
+	float GetSustain() const;
+	float GetRelease() const;
+	float GetAttackPeak() const;
+	float GetSustainPeak() const;
 
 private:
 

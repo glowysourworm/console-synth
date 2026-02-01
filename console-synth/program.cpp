@@ -204,7 +204,7 @@ void LoopUI()
 	}
 
 	// This may be required for some UI loop functions that did / did not exit properly
-	//screen.Exit();
+	screen.Exit();
 }
 
 

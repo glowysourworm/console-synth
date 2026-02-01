@@ -5,8 +5,9 @@
 
 class SynthNote
 {
-public:
-	SynthNote(int m);
+public:
+
+	SynthNote(int midiNote, const Envelope& envelope);
 	~SynthNote();
 
 	const int GetMidiNumber();
@@ -14,6 +15,7 @@ public:
 	float GetEnvelopeLevel(float absoluteTime);
 
 	bool IsEngaged();
+	bool HasOutput(float absoluteTime);
 	void Engage(float absoluteTime);
 	void DisEngage(float absoluteTime);
 

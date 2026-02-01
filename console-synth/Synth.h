@@ -20,7 +20,7 @@ class Synth
 {
 
 public:
-	Synth();
+	Synth(int midiLow, int midiHigh, const Envelope& noteEnvelope);
 	~Synth();
 
 	// Sets midi notes on / off
@@ -41,6 +41,9 @@ private:
 private:
 
 	std::vector<SynthNote*>* _pianoNotes;
+
+	int _midiLow;
+	int _midiHigh;
 
 	float _frequencyShift;
 	float _frequencyShiftGain;

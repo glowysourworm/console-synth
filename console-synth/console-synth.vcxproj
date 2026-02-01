@@ -37,38 +37,38 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -162,12 +162,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;__WINDOWS_WASAPI__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <AdditionalIncludeDirectories>C:\Backup\_Source\Git\console-synth\ftxui-6.1.9-win64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\ftxui-6.1.9-win64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'">
@@ -224,6 +229,7 @@
     <ClCompile Include="..\rtaudio-master\RtAudio.cpp" />
     <ClCompile Include="AllPassFilter.cpp" />
     <ClCompile Include="AmplitudeOscillator.cpp" />
+    <ClCompile Include="AudioPlayer.cpp" />
     <ClCompile Include="Binasc.cpp" />
     <ClCompile Include="ButterworthFilter.cpp" />
     <ClCompile Include="CircularQueue.cpp" />
@@ -233,18 +239,25 @@
     <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiEventList.cpp" />
     <ClCompile Include="MidiFile.cpp" />
+    <ClCompile Include="MidiFilePlayer.cpp" />
     <ClCompile Include="MidiMessage.cpp" />
+    <ClCompile Include="MidiPlaybackDevice.cpp" />
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Options.cpp" />
+    <ClCompile Include="PlaybackDevice.cpp" />
     <ClCompile Include="Reverb.cpp" />
+    <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="Synth.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="SynthNote.cpp" />
+    <ClCompile Include="SynthPlaybackDevice.cpp" />
+    <ClCompile Include="SynthPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\rtaudio-master\RtAudio.h" />
     <ClInclude Include="AllPassFilter.h" />
     <ClInclude Include="AmplitudeOscillator.h" />
+    <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="Binasc.h" />
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="CircularQueue.h" />
@@ -255,12 +268,18 @@
     <ClInclude Include="MidiEvent.h" />
     <ClInclude Include="MidiEventList.h" />
     <ClInclude Include="MidiFile.h" />
+    <ClInclude Include="MidiFilePlayer.h" />
     <ClInclude Include="MidiMessage.h" />
+    <ClInclude Include="MidiPlaybackDevice.h" />
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Options.h" />
+    <ClInclude Include="PlaybackDevice.h" />
     <ClInclude Include="Reverb.h" />
+    <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Synth.h" />
     <ClInclude Include="SynthNote.h" />
+    <ClInclude Include="SynthPlaybackDevice.h" />
+    <ClInclude Include="SynthPlayer.h" />
     <ClInclude Include="WindowsKeyCodes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

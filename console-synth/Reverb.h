@@ -1,10 +1,10 @@
 #ifndef REVERB_H
 #define REVERB_H
 
-#include "Constant.h"
-#include "CombFilter.h"
 #include "AllPassFilter.h"
 #include "ButterworthFilter.h"
+#include "CombFilter.h"
+#include "Constant.h"
 
 // Implements Schroeder Reverb
 //

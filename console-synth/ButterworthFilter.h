@@ -3,8 +3,6 @@
 
 #define BUDDA_Q_SCALE 6.f
 
-#include <math.h>
-
 class ButterworthFilter
 {
 public:

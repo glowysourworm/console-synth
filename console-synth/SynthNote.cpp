@@ -1,4 +1,6 @@
-﻿#include "SynthNote.h"
+﻿#include "Envelope.h"
+#include "SynthNote.h"
+#include <cmath>
 
 SynthNote::SynthNote(int midiNumber)
 {

@@ -29,34 +29,34 @@
 
 namespace smf {
 
-class Option_register {
+	class Option_register {
 	public:
-		                  Option_register    (void);
-		                  Option_register    (const std::string& aDefinition,
-		                                      char aType,
-		                                      const std::string& aDefaultOption);
-		                  Option_register    (const std::string& aDefinition,
-		                                      char aType,
-		                                      const std::string& aDefaultOption,
-		                                      const std::string& aModifiedOption);
+		Option_register(void);
+		Option_register(const std::string& aDefinition,
+			char aType,
+			const std::string& aDefaultOption);
+		Option_register(const std::string& aDefinition,
+			char aType,
+			const std::string& aDefaultOption,
+			const std::string& aModifiedOption);
 
-		                 ~Option_register    ();
+		~Option_register();
 
-	  void               clearModified      (void);
-	  const std::string& getDefinition      (void);
-	  const std::string& getDefault         (void);
-	  const std::string& getOption          (void);
-	  const std::string& getModified        (void);
-	  const std::string& getDescription     (void);
-	  bool               isModified         (void);
-	  char               getType            (void);
-	  void               reset              (void);
-	  void               setDefault         (const std::string& aString);
-	  void               setDefinition      (const std::string& aString);
-	  void               setDescription     (const std::string& aString);
-	  void               setModified        (const std::string& aString);
-	  void               setType            (char aType);
-	  std::ostream&      print              (std::ostream& out);
+		void               clearModified(void);
+		const std::string& getDefinition(void);
+		const std::string& getDefault(void);
+		const std::string& getOption(void);
+		const std::string& getModified(void);
+		const std::string& getDescription(void);
+		bool               isModified(void);
+		char               getType(void);
+		void               reset(void);
+		void               setDefault(const std::string& aString);
+		void               setDefinition(const std::string& aString);
+		void               setDescription(const std::string& aString);
+		void               setModified(const std::string& aString);
+		void               setType(char aType);
+		std::ostream& print(std::ostream& out);
 
 	protected:
 		std::string       definition;
@@ -66,64 +66,64 @@ class Option_register {
 		bool              modifiedQ;
 		char              type;
 
-};
+	};
 
 
 
-class Options {
+	class Options {
 	public:
-		                   Options           (void);
-		                   Options           (int argc, char** argv);
+		Options(void);
+		Options(int argc, char** argv);
 
-		                  ~Options           ();
+		~Options();
 
-		int                argc              (void) const;
-		const std::vector<std::string>& argv (void) const;
-		int                define            (const std::string& aDefinition);
-		int                define            (const std::string& aDefinition,
-		                                      const std::string& description);
-		const std::string& getArg            (int index);
-		const std::string& getArgument       (int index);
-		int                getArgCount       (void);
-		int                getArgumentCount  (void);
-		const std::vector<std::string>& getArgList      (void);
-		const std::vector<std::string>& getArgumentList (void);
-		bool               getBoolean        (const std::string& optionName);
-		std::string        getCommand        (void);
-		const std::string& getCommandLine    (void);
-		std::string        getDefinition     (const std::string& optionName);
-		double             getDouble         (const std::string& optionName);
-		char               getFlag           (void);
-		char               getChar           (const std::string& optionName);
-		float              getFloat          (const std::string& optionName);
-		int                getInt            (const std::string& optionName);
-		int                getInteger        (const std::string& optionName);
-		std::string        getString         (const std::string& optionName);
-		char               getType           (const std::string& optionName);
-		int                optionsArg        (void);
-		std::ostream&      print             (std::ostream& out);
-		std::ostream&      printOptionList   (std::ostream& out);
-		std::ostream&      printOptionListBooleanState(std::ostream& out);
-		void               process           (int error_check = 1,
-		                                      int suppress = 0);
-		void               process           (int argc, char** argv,
-		                                      int error_check = 1,
-		                                      int suppress = 0);
-		void               reset             (void);
-		void               xverify           (int argc, char** argv,
-		                                      int error_check = 1,
-		                                      int suppress = 0);
-		void               xverify           (int error_check = 1,
-		                                      int suppress = 0);
-		void               setFlag           (char aFlag);
-		void               setModified       (const std::string& optionName,
-		                                      const std::string& optionValue);
-		void               setOptions        (int argc, char** argv);
-		void               appendOptions     (int argc, char** argv);
-		void               appendOptions     (const std::string& strang);
-		void               appendOptions     (const std::vector<std::string>& argv);
-		std::ostream&      printRegister     (std::ostream& out);
-		bool               isDefined         (const std::string& name);
+		int                argc(void) const;
+		const std::vector<std::string>& argv(void) const;
+		int                define(const std::string& aDefinition);
+		int                define(const std::string& aDefinition,
+			const std::string& description);
+		const std::string& getArg(int index);
+		const std::string& getArgument(int index);
+		int                getArgCount(void);
+		int                getArgumentCount(void);
+		const std::vector<std::string>& getArgList(void);
+		const std::vector<std::string>& getArgumentList(void);
+		bool               getBoolean(const std::string& optionName);
+		std::string        getCommand(void);
+		const std::string& getCommandLine(void);
+		std::string        getDefinition(const std::string& optionName);
+		double             getDouble(const std::string& optionName);
+		char               getFlag(void);
+		char               getChar(const std::string& optionName);
+		float              getFloat(const std::string& optionName);
+		int                getInt(const std::string& optionName);
+		int                getInteger(const std::string& optionName);
+		std::string        getString(const std::string& optionName);
+		char               getType(const std::string& optionName);
+		int                optionsArg(void);
+		std::ostream& print(std::ostream& out);
+		std::ostream& printOptionList(std::ostream& out);
+		std::ostream& printOptionListBooleanState(std::ostream& out);
+		void               process(int error_check = 1,
+			int suppress = 0);
+		void               process(int argc, char** argv,
+			int error_check = 1,
+			int suppress = 0);
+		void               reset(void);
+		void               xverify(int argc, char** argv,
+			int error_check = 1,
+			int suppress = 0);
+		void               xverify(int error_check = 1,
+			int suppress = 0);
+		void               setFlag(char aFlag);
+		void               setModified(const std::string& optionName,
+			const std::string& optionValue);
+		void               setOptions(int argc, char** argv);
+		void               appendOptions(int argc, char** argv);
+		void               appendOptions(const std::string& strang);
+		void               appendOptions(const std::vector<std::string>& argv);
+		std::ostream& printRegister(std::ostream& out);
+		bool               isDefined(const std::string& name);
 
 	protected:
 		int                           m_options_error_check;  // verify command
@@ -144,13 +144,13 @@ class Options {
 		std::vector<std::string>      m_extraArgv_strings;
 
 	private:
-		int                getRegIndex       (const std::string& optionName);
-		int                optionQ           (const std::string& aString,
-		                                      int& argp);
-		int                storeOption       (int gargp, int& position,
-		                                      int& running);
+		int                getRegIndex(const std::string& optionName);
+		int                optionQ(const std::string& aString,
+			int& argp);
+		int                storeOption(int gargp, int& position,
+			int& running);
 
-};
+	};
 
 } // end of namespace smf
 

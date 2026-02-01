@@ -1,13 +1,8 @@
 #ifndef AMPLITUDEOSCILLATOR_H
 #define AMPLITUDEOSCILLATOR_H
 
-#include <math.h>
-#include <random>
 
-#include "Constant.h"
-
-enum class AmplitudeOscillatorType
-{
+enum class AmplitudeOscillatorType {
 	Sine,
 	Square,
 	Random

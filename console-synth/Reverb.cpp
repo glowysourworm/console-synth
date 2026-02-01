@@ -1,4 +1,9 @@
-﻿#include "Reverb.h"
+﻿#include "AllPassFilter.h"
+#include "ButterworthFilter.h"
+#include "CombFilter.h"
+#include "Constant.h"
+#include "Reverb.h"
+#include <cmath>
 
 Reverb::Reverb(float delaySeconds, float gain, int samplingRate)
 {
@@ -62,7 +67,7 @@ float Reverb::Apply(float sample)
 	//float outputD = _combFilters[3]->Apply(output);
 
 	// Apply mixing matrix to comb outputs
-	
+
 	// return output;
 	// return _lowPassFilter->Apply(output);
 

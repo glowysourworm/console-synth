@@ -1,8 +1,6 @@
 #ifndef ALLPASSFILTER_H
 #define ALLPASSFILTER_H
 
-#include <queue>
-
 class AllPassFilter
 {
 public:

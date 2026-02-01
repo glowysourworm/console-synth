@@ -1,17 +1,16 @@
 #ifndef SYNTH_H
 #define SYNTH_H
 
-#include <map>
 #include <vector>
 
-#include "Constant.h"
-#include "SynthNote.h"
-#include "ButterworthFilter.h"
-#include "Reverb.h"
-#include "Envelope.h"
 #include "AmplitudeOscillator.h"
+#include "ButterworthFilter.h"
+#include "CombFilter.h"
 #include "Compressor.h"
+#include "Envelope.h"
 #include "Mixer.h"
+#include "Reverb.h"
+#include "SynthNote.h"
 
 
 // Class to define static piano notes and store their names / frequencies w.r.t. the SDL keyboard
@@ -26,6 +25,7 @@ public:
 
 	// Sets midi notes on / off
 	void Set(int midiNumber, bool pressed, float absoluteTime);
+	bool IsSet(int midiNumber);
 
 	// Synthesizes a full output at the specified time
 	float GetSample(float absoluteTime);

@@ -1,212 +1,139 @@
-#include <iostream>
+
+#include "AudioPlayer.h"
+#include "RtAudio.h"
+#include "StopWatch.h"
+#include "SynthPlayer.h"
+#include <Windows.h>
+#include <chrono>
+#include <ftxui/component/component.hpp>
+#include <ftxui/component/event.hpp>
+#include <ftxui/component/loop.hpp>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/dom/elements.hpp>
+#include <thread>
+
 #include <string>
 
-#include <Windows.h>
+// Static Instance (RT Audio) (Couldn't figure out how to cast function callbacks to the framework)
+AudioPlayer* _player;
 
-#include "Constant.h"
-#include "Synth.h"
-#include "SynthNote.h"
-#include "RtAudio.h"
-#include "MidiFile.h"
-
-using namespace smf;
-
-// Static variables for audio playback (callback is written as static)
-Synth* _synth;
-int _frameIndex;
-bool configuredForMidi;
-bool _initialized;
-float* _waveBuffer;
-int _waveBufferLength;
-
-void print(const char* str, bool newLine = true)
+int PrimaryAudioCallback(void* outputBuffer,
+	void* inputBuffer,
+	unsigned int nFrames,
+	double streamTime,
+	RtAudioStreamStatus status,
+	void* userData)
 {
-    if (!newLine)
-        std::cout << str;
-    else
-        std::cout << str << std::endl;
+	return _player->GetDevice()->RtAudioCallback(outputBuffer, inputBuffer, nFrames, streamTime, status, userData);
 }
 
-void printHeader()
-{
-    print("Console Synthesizer");
-    print("-------------------");
-    print(" ");
-    print("Waiting on input (Escape to exit)...");
-}
-
-int callback(void* outputBuffer, void* inputBuffer,
-             unsigned int nFrames,
-             double streamTime,
-             RtAudioStreamStatus status,
-             void* userData)
-{
-    if (!_initialized)
-        return 0;
-
-    // Output frames should be interleved
-    float* buffer = (float*)outputBuffer;
-    float sampleSize = (1.0 / (float)SAMPLING_RATE);
-    float systemTime = (float)_frameIndex / (float)SAMPLING_RATE;
-
-    // Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
-    for (unsigned int i = 0; (i < nFrames) && (_frameIndex < _waveBufferLength); i++)
-    {
-        float absoluteTime = (_frameIndex++) * sampleSize;
-        // float sample = _synth->GetSample(absoluteTime);
-        float sample = _waveBuffer[_frameIndex + i];
-
-        // Interleved frames
-        for (unsigned int j = 0; j < NUMBER_CHANNELS; j++)
-        {
-            // Initialize sample to zero
-            buffer[(2 * i) + j] = sample;
-        }
-    }
-
-    return 0;
-}
-
-void errorCallback(RtAudioError::Type type, const std::string& errorText)
-{
-    print(errorText.c_str(), true);
-}
-
-RtAudio* initialize()
-{
-    print("Initializing audio playback device...");
-
-    RtAudio* rtAudio = new RtAudio(RtAudio::Api::WINDOWS_WASAPI);
-
-    RtAudio::StreamParameters parameters;
-    unsigned int bufferFrames = AUDIO_BUFFER_SIZE;
-
-    RtAudio::StreamOptions options;
-    options.flags |= RTAUDIO_SCHEDULE_REALTIME;
-    options.flags |= RTAUDIO_HOG_DEVICE;
-    options.flags |= RTAUDIO_MINIMIZE_LATENCY;
-    // options.flags |= RTAUDIO_NONINTERLEAVED;
-
-    // STEREO / DEFAULT AUDIO DEVICE
-    parameters.deviceId = rtAudio->getDefaultOutputDevice();
-    parameters.firstChannel = 0;
-    parameters.nChannels = NUMBER_CHANNELS;
-
-    rtAudio->openStream(&parameters, NULL, RTAUDIO_FLOAT32, SAMPLING_RATE, &bufferFrames, &callback, NULL, &options, errorCallback);
-    rtAudio->startStream();
-
-    return rtAudio;
-}
-
-void beginKeyboardInputLoop()
+void PrimaryErrorCallback(RtAudioError::Type type, const std::string& message)
 {
 
 }
 
-void beginMidiFilePlayback(char* fileName)
+void LoopUI()
 {
-    MidiFile midi;
+	StopWatch uiStopWatch, audioStopWatch;
+	bool exit = false;
 
-    midi.read(std::string(fileName));
+	// Initialize Stop Watches
+	audioStopWatch.mark();
+	uiStopWatch.mark();
 
-    // Set "absolute ticks mode"
-    midi.absoluteTicks();
+	// Get Current Time
+	double systemTime = 0;
+	double streamLatency = 0;
+	double averageAudioTime = 0;
 
-    // Finally, try merging tracks to create a single-track song
-    // midiFile.joinTracks();
+	// FTX-UI (Terminal Loop / Renderer)
+	// 
+	// Their backend will handle interaction, resizing, and redrawing. The document should be
+	// updated on this thread (AFAIK) which is captured in the lambda function.
+	//
+	// https://arthursonzogni.github.io/FTXUI/
+	//
 
-    float secondsPerTick = midi.getFileDurationInSeconds() / midi.getFileDurationInTicks();
-    float timeCursor = 0;
+	auto screen = ftxui::ScreenInteractive::Fullscreen();
 
-    // Calculate number of midi ticks to progress during this callback
-    // double midiTicksPerFrame = (((1 / (double)NUMBER_CHANNELS) / (double)SAMPLING_RATE) * ticksPerSecond);
+	// UI BACKEND LOOP!! This will be run just for re-drawing purposes during our
+	//					 primary loop below.
+	//
+	auto renderer = ftxui::Renderer([&systemTime, &streamLatency, &averageAudioTime](bool focused)
+		{
+			// Create a simple document with three text elements.
+			return ftxui::vbox({
+			  ftxui::text("Current Time (s): " + std::to_string(systemTime / 1000.0)),
+			  ftxui::text("Stream Latency (ms): " + std::to_string(streamLatency)),
+			  ftxui::text("Sample Rate (Hz): " + std::to_string(1000.0 / averageAudioTime)) }) | ftxui::border;
+		});
 
-    _waveBufferLength = midi.getFileDurationInSeconds() * SAMPLING_RATE;
-    int waveIndex = 0;
-    int samplesPerTick = (int)(secondsPerTick * SAMPLING_RATE);
+	// Initialize Screen (sizing)
+	screen.FitComponent();
 
-    _waveBuffer = new float[_waveBufferLength];
+	// FTXUI has an option to create an event loop (this will run their backend UI code)
+	//
+	// https://arthursonzogni.com/FTXUI/doc/examples_2component_2custom_loop_8cpp-example.html#_a8
+	//
+	ftxui::Loop loop(&screen, renderer);
 
-    for (int k = 0; k < midi.getFileDurationInTicks(); k++)
-    {
-        for (int i = 0; i < midi.getTrackCount(); i++)
-        {
-            if (k >= midi[i].size())
-                continue;
+	// Primary Loop!!! We'll handle this loop - using our system timer to manage the 
+	//				   accuracy of the audio output; and also throttle events for the
+	//				   UI's backend. We should be redrawing ~10ms
+	while (true)
+	{
+		if (GetAsyncKeyState(VK_ESCAPE))
+			break;
 
-            MidiEvent midiEvent = midi[i][k];
+		// Get Current Time
+		//systemTime += rtAudio->isStreamOpen() ? rtAudio->getStreamTime() : audioStopWatch.markMilliseconds();
 
-            // Note On
-            if (midiEvent.isNoteOn())
-            {
-                _synth->Set(midiEvent.getKeyNumber(), true, timeCursor);
-            }
+		// Get Stream Latency
+		//long latency = rtAudio->isStreamOpen() ? rtAudio->getStreamLatency() : 0;
 
-            // Note Off
-            else if (midiEvent.isNoteOff())
-            {
-                _synth->Set(midiEvent.getKeyNumber(), false, timeCursor);
-            }
-        }
+		//streamLatency = (latency / (double)SAMPLING_RATE) * 2;
 
-        // Advance midi time clock
-        timeCursor += secondsPerTick;
+		// Forces a redraw
+		screen.PostEvent(ftxui::Event::Custom);
 
-        // Synthesize samples during that time period
-        for (int i = waveIndex; (i < (waveIndex + samplesPerTick)) && (i < _waveBufferLength); i++)
-        {
-            _waveBuffer[i] = _synth->GetSample(i / (float)SAMPLING_RATE);
-        }
+		// Run UI Backend
+		loop.RunOnce();
 
-        // Increment wave index
-        waveIndex += samplesPerTick;
-     }
+		std::this_thread::sleep_for(std::chrono::milliseconds(25));
+	}
 }
+
 
 int main(int argc, char* argv[], char* envp[])
 {
-    // Create the predefined piano virtual device
-    //    
-    _synth = new Synth();
+	// Initialize audio device
+	AudioPlayer* player = NULL;
 
-    // Initialize audio device
-    RtAudio* device = initialize();
+	// Read midi file
+	if (argc > 1)
+	{
+	}
 
-    // Print application header
-    printHeader();
+	// Manual keyboard input
+	else
+	{
+		_player = new SynthPlayer();
 
-    // Read midi file
-    if (argc > 1)
-    {        
-        configuredForMidi = true;
-        beginMidiFilePlayback(argv[1]);
-    }
-    // Manual keyboard input
-    else
-    {        
-        configuredForMidi = false;
-        beginKeyboardInputLoop();        
-    }
+		_player->Initialize(&PrimaryAudioCallback, &PrimaryErrorCallback);
+	}
 
-    // Unblock primary audio device callback
-    _initialized = true;
+	LoopUI();
 
-    bool exit = false;
+	if (_player->IsStreamRunning())
+		_player->StopStream();
 
-    // Listen for keyboard inputs / exit key
-    while (!exit)
-    {
-        // Exit
-        if (GetAsyncKeyState(VK_ESCAPE))
-            exit = true;
+	if (_player->IsStreamOpen())
+		_player->CloseStream();
 
-        Sleep(LOOP_INCREMENT);
-    }
+	// Delete memory for primary components
+	//
+	if (player != NULL)
+		delete player;
 
-    // Delete memory for primary components
-    //
-    delete device;
-    delete _synth;
-
-    return 0;
+	return 0;
 }

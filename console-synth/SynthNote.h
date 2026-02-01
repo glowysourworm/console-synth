@@ -1,16 +1,12 @@
 #ifndef SYNTHNOTE_H
 #define SYNTHNOTE_H
 
-#include "WindowsKeyCodes.h"
 #include "Envelope.h"
-#include <math.h>
-#include <atomic>
 
 class SynthNote
 {
-public:
-
-	SynthNote(int midiNumber);
+public:
+	SynthNote(int m);
 	~SynthNote();
 
 	const int GetMidiNumber();

@@ -1,4 +1,15 @@
+#include "AmplitudeOscillator.h"
+#include "ButterworthFilter.h"
+#include "CombFilter.h"
+#include "Compressor.h"
+#include "Constant.h"
+#include "Envelope.h"
+#include "Mixer.h"
+#include "Reverb.h"
 #include "Synth.h"
+#include "SynthNote.h"
+#include <cmath>
+#include <vector>
 
 Synth::Synth()
 {
@@ -13,7 +24,7 @@ Synth::Synth()
 	_filterEnvelope = new Envelope(1.5, 3, 0.5, 1, 0.8, 0.1);
 	_reverb = new Reverb(0.1, 0.9, SAMPLING_RATE);
 	_delay = new CombFilter(0.1, 0.35, SAMPLING_RATE);
-	_limiter = new Compressor(10, 0.6, 4, 0.2, 0.2, 0.2);	
+	_limiter = new Compressor(10, 0.6, 4, 0.2, 0.2, 0.2);
 }
 
 Synth::~Synth()
@@ -30,7 +41,9 @@ Synth::~Synth()
 
 void Synth::Set(int midiNumber, bool pressed, float absoluteTime)
 {
-	for (int i = 0; i < _pianoNotes->size(); i++)
+	bool noteFound = false;
+
+	for (int i = 0; i < _pianoNotes->size() && !noteFound; i++)
 	{
 		SynthNote* note = _pianoNotes->at(i);
 
@@ -39,18 +52,31 @@ void Synth::Set(int midiNumber, bool pressed, float absoluteTime)
 			if (!pressed)
 				note->DisEngage(absoluteTime);
 
-			else
+			else if (!note->IsEngaged())
 				note->Engage(absoluteTime);
 
-			// Don't assign new note
-			return;
+			noteFound = true;
 		}
 	}
 
 	// Assign new note
-	SynthNote* note = new SynthNote(midiNumber);
+	if (!noteFound && pressed)
+	{
+		SynthNote* note = new SynthNote(midiNumber);
 
-	_pianoNotes->push_back(note);
+		_pianoNotes->push_back(note);
+	}
+}
+
+bool Synth::IsSet(int midiNumber)
+{
+	for (int i = 0; i < _pianoNotes->size(); i++)
+	{
+		if (_pianoNotes->at(i)->GetMidiNumber() == midiNumber)
+			return true;
+	}
+
+	return false;
 }
 
 float Synth::GetSample(float absoluteTime)
@@ -61,7 +87,7 @@ float Synth::GetSample(float absoluteTime)
 	float output = 0;
 
 	// BASE OSCILLATORS
-	for (int i=_pianoNotes->size() - 1;i >= 0; i--)
+	for (int i = _pianoNotes->size() - 1; i >= 0; i--)
 	{
 		SynthNote* note = _pianoNotes->at(i);
 
@@ -71,25 +97,25 @@ float Synth::GetSample(float absoluteTime)
 		// GROOM COLLECTION
 		else
 		{
-			// delete note;
-			// _pianoNotes->pop_back();
+			delete note;
+			_pianoNotes->pop_back();
 		}
 
-			// Primary notes
-			//output += (1 - _frequencyShiftGain) *
-			//		  note->GetEnvelopeLevel(absoluteTime) * 
-			//		  GenerateTriangle(absoluteTime, note->GetFrequency());
+		// Primary notes
+		//output += (1 - _frequencyShiftGain) *
+		//		  note->GetEnvelopeLevel(absoluteTime) * 
+		//		  GenerateTriangle(absoluteTime, note->GetFrequency());
 
-			//// Frequency Shift Effect
-			//output += _frequencyShiftGain * 
-			//		  note->GetEnvelopeLevel(absoluteTime) * 
-			//		  GenerateSine(absoluteTime, note->GetFrequency() * _frequencyShift);
+		//// Frequency Shift Effect
+		//output += _frequencyShiftGain * 
+		//		  note->GetEnvelopeLevel(absoluteTime) * 
+		//		  GenerateSine(absoluteTime, note->GetFrequency() * _frequencyShift);
 
-			//// Average the two signals
-			//output *= 0.5;
+		//// Average the two signals
+		//output *= 0.5;
 
-			// Send to the mixer
-			// _mixer->SetChannel(i, output);
+		// Send to the mixer
+		// _mixer->SetChannel(i, output);
 	}
 
 	// Mixer -> AMPLITUDE OSCILLATOR (LFO)
@@ -109,7 +135,7 @@ float Synth::GetSample(float absoluteTime)
 	// wetOutput = _reverb->Apply(wetOutput);
 
 	// return _limiter->Apply(absoluteTime, wetOutput);
-	 return output;
+	return output;
 }
 
 // BASE OSCILLATORS

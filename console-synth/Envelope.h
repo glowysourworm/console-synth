@@ -1,8 +1,6 @@
 #ifndef ENVELOPE_H
 #define ENVELOPE_H
 
-#include <math.h>
-
 class Envelope
 {
 public:

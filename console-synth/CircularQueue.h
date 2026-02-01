@@ -40,7 +40,7 @@ public:
 	T Dequeue()
 	{
 
-	}	
+	}
 
 	int RemainingCapacity()
 	{
@@ -50,7 +50,7 @@ public:
 private:
 	T* _array;
 	int _capacity;
-	int _size;	
+	int _size;
 
 	int _front;
 	int _back;

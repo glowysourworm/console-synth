@@ -1,4 +1,6 @@
 #include "Mixer.h"
+#include <vector>
+#include <vector>
 
 Mixer::Mixer(int channels)
 {

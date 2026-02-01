@@ -1,4 +1,7 @@
 #include "Compressor.h"
+#include "Constant.h"
+#include <cmath>
+#include <queue>
 
 Compressor::Compressor(float gain, float threshold, float compressionRatio, float relaxationPeriod, float attack, float release)
 {

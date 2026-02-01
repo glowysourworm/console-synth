@@ -8,14 +8,17 @@ class SynthPlaybackDevice : public PlaybackDevice
 {
 public:
 
-	bool PlaybackDevice::Initialize() override;
+	bool Initialize() override;
 
-	int PlaybackDevice::RtAudioCallback(void* outputBuffer,
+	int RtAudioCallback(void* outputBuffer,
 		void* inputBuffer,
 		unsigned int nFrames,
 		double streamTime,
 		RtAudioStreamStatus status,
 		void* userData) override;
+
+	void SetNote(int midiNumber, bool pressed, double streamTime);
+	bool GetNote(int midiNumber) const;
 
 private:
 

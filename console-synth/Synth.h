@@ -24,19 +24,19 @@ public:
 	~Synth();
 
 	// Sets midi notes on / off
-	void Set(int midiNumber, bool pressed, float absoluteTime);
+	void Set(int midiNumber, bool pressed, double absoluteTime);
 	bool IsSet(int midiNumber);
 
 	// Synthesizes a full output at the specified time
-	float GetSample(float absoluteTime);
+	float GetSample(double absoluteTime);
 
 private:
 
 	// Oscillators
-	float GenerateSine(float absoluteTime, float frequency);
-	float GenerateTriangle(float absoluteTime, float frequency);
-	float GenerateSawtooth(float absoluteTime, float frequency);
-	float GenerateSquare(float absoluteTime, float frequency);
+	float GenerateSine(double absoluteTime, float frequency);
+	float GenerateTriangle(double absoluteTime, float frequency);
+	float GenerateSawtooth(double absoluteTime, float frequency);
+	float GenerateSquare(double absoluteTime, float frequency);
 
 private:
 

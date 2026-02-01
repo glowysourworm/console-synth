@@ -39,7 +39,7 @@ Synth::~Synth()
 	delete _reverb;
 }
 
-void Synth::Set(int midiNumber, bool pressed, float absoluteTime)
+void Synth::Set(int midiNumber, bool pressed, double absoluteTime)
 {
 	bool noteFound = false;
 
@@ -79,7 +79,7 @@ bool Synth::IsSet(int midiNumber)
 	return false;
 }
 
-float Synth::GetSample(float absoluteTime)
+float Synth::GetSample(double absoluteTime)
 {
 	if (_pianoNotes->size() == 0)
 		return 0;
@@ -95,11 +95,12 @@ float Synth::GetSample(float absoluteTime)
 			output += GenerateTriangle(absoluteTime, note->GetFrequency());
 
 		// GROOM COLLECTION
-		else
-		{
-			delete note;
-			_pianoNotes->pop_back();
-		}
+		//else
+		//{
+		//	_pianoNotes->pop_back();
+
+		//	delete note;
+		//}
 
 		// Primary notes
 		//output += (1 - _frequencyShiftGain) *
@@ -139,11 +140,11 @@ float Synth::GetSample(float absoluteTime)
 }
 
 // BASE OSCILLATORS
-float Synth::GenerateSine(float absoluteTime, float frequency)
+float Synth::GenerateSine(double absoluteTime, float frequency)
 {
 	return sinf(2.0 * PI * frequency * absoluteTime);
 }
-float Synth::GenerateTriangle(float absoluteTime, float frequency)
+float Synth::GenerateTriangle(double absoluteTime, float frequency)
 {
 	float period = 1.0 / (float)frequency;
 	float periodQuarter = 0.25f * period;
@@ -175,7 +176,7 @@ float Synth::GenerateTriangle(float absoluteTime, float frequency)
 		return ((4.0 / period) * (periodTime - (3.0 * periodQuarter))) - 1;
 	}
 }
-float Synth::GenerateSawtooth(float absoluteTime, float frequency)
+float Synth::GenerateSawtooth(double absoluteTime, float frequency)
 {
 	float period = 1.0 / frequency;
 
@@ -184,7 +185,7 @@ float Synth::GenerateSawtooth(float absoluteTime, float frequency)
 
 	return ((2.0 / period) * periodTime) - 1;
 }
-float Synth::GenerateSquare(float absoluteTime, float frequency)
+float Synth::GenerateSquare(double absoluteTime, float frequency)
 {
 	float period = 1.0 / frequency;
 

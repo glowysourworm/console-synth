@@ -12,6 +12,8 @@ public:
 	~AudioPlayer();
 
 	// RT Audio
+	double GetStreamTime() const;
+
 	bool IsStreamRunning() const;
 	bool IsStreamOpen() const;
 

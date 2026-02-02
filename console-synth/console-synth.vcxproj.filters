@@ -138,6 +138,21 @@
     <ClCompile Include="SynthNote.cpp">
       <Filter>Source Files\Synth</Filter>
     </ClCompile>
+    <ClCompile Include="SineOscillator.cpp">
+      <Filter>Source Files\Signal</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleOscillator.cpp">
+      <Filter>Source Files\Signal</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomOscillator.cpp">
+      <Filter>Source Files\Signal</Filter>
+    </ClCompile>
+    <ClCompile Include="SawtoothOscillator.cpp">
+      <Filter>Source Files\Signal</Filter>
+    </ClCompile>
+    <ClCompile Include="SquareOscillator.cpp">
+      <Filter>Source Files\Signal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsKeyCodes.h">
@@ -217,6 +232,21 @@
     </ClInclude>
     <ClInclude Include="..\rtaudio-master\RtAudio.h">
       <Filter>Header Files\Vendor\rt-audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SineOscillator.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="TriangleOscillator.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomOscillator.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="SawtoothOscillator.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="SquareOscillator.h">
+      <Filter>Header Files\Signal</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -244,13 +244,18 @@
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="PlaybackDevice.cpp" />
+    <ClCompile Include="RandomOscillator.cpp" />
     <ClCompile Include="Reverb.cpp" />
+    <ClCompile Include="SawtoothOscillator.cpp" />
+    <ClCompile Include="SineOscillator.cpp" />
+    <ClCompile Include="SquareOscillator.cpp" />
     <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="Synth.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="SynthNote.cpp" />
     <ClCompile Include="SynthPlaybackDevice.cpp" />
     <ClCompile Include="SynthPlayer.cpp" />
+    <ClCompile Include="TriangleOscillator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\rtaudio-master\RtAudio.h" />
@@ -272,12 +277,17 @@
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="PlaybackDevice.h" />
+    <ClInclude Include="RandomOscillator.h" />
     <ClInclude Include="Reverb.h" />
+    <ClInclude Include="SawtoothOscillator.h" />
+    <ClInclude Include="SineOscillator.h" />
+    <ClInclude Include="SquareOscillator.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Synth.h" />
     <ClInclude Include="SynthNote.h" />
     <ClInclude Include="SynthPlaybackDevice.h" />
     <ClInclude Include="SynthPlayer.h" />
+    <ClInclude Include="TriangleOscillator.h" />
     <ClInclude Include="WindowsKeyCodes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

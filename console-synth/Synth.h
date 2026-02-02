@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "AmplitudeOscillator.h"
 #include "ButterworthFilter.h"
 #include "CombFilter.h"
 #include "Compressor.h"
@@ -51,7 +50,7 @@ private:
 	Mixer* _mixer;
 
 	// Post-processing effects
-	AmplitudeOscillator* _oscillator;
+	//AmplitudeOscillator* _oscillator;
 	ButterworthFilter* _filter;
 	Envelope* _filterEnvelope;
 	Compressor* _limiter;

@@ -1,6 +1,14 @@
 #ifndef SYNTH_CONSTANT_H
 #define SYNTH_CONSTANT_H
 
+enum class AmplitudeOscillatorType {
+	Sine,
+	Square,
+	Triangle,
+	Sawtooth,
+	Random
+};
+
 const float PI = (float)3.1415926;
 const int LOOP_INCREMENT = 300;
 const unsigned int SAMPLING_RATE = 44100;
@@ -14,5 +22,7 @@ const int REVERB_COMB_SIZE = 4;
 const int REVERB_ALLPASS_SIZE = 4;
 const int MIDI_PIANO_LOW_NUMBER = 21;
 const int MIDI_PIANO_HIGH_NUMBER = 108;
+const float SIGNAL_LOW = -1;
+const float SIGNAL_HIGH = 1;
 
 #endif

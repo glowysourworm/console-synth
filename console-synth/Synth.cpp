@@ -1,4 +1,3 @@
-#include "AmplitudeOscillator.h"
 #include "ButterworthFilter.h"
 #include "CombFilter.h"
 #include "Compressor.h"
@@ -22,7 +21,7 @@ Synth::Synth(int midiLow, int midiHigh, const Envelope& noteEnvelope)
 	_midiLow = midiLow;
 
 	_mixer = new Mixer(midiHigh - midiLow + 1);
-	_oscillator = new AmplitudeOscillator(2.5, AmplitudeOscillatorType::Sine);
+	//_oscillator = new AmplitudeOscillator(2.5, AmplitudeOscillatorType::Sine);
 	_filter = new ButterworthFilter(SAMPLING_RATE, 1.0);
 	_filterEnvelope = new Envelope(noteEnvelope);
 	_reverb = new Reverb(0.1, 0.9, SAMPLING_RATE);

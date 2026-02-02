@@ -13,168 +13,210 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Signal">
+      <UniqueIdentifier>{0baa60a7-1517-49ee-8f7e-fbfadfc7509f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Filter">
+      <UniqueIdentifier>{d7a4f0e1-fc29-4796-8171-b720249ed189}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Effect">
+      <UniqueIdentifier>{e0517f71-b27f-4164-8173-fdd212b87610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Synth">
+      <UniqueIdentifier>{d89a6ed0-baf5-4089-b1d0-f4c08f1100c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Playback">
+      <UniqueIdentifier>{66465df5-183d-4490-b6af-941f18ec26a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Filter">
+      <UniqueIdentifier>{a087bd44-eac6-4f1c-9a83-9d59e1270408}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Effect">
+      <UniqueIdentifier>{8caceda7-28a6-4e0f-81e2-aaeb337ebe61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Playback">
+      <UniqueIdentifier>{4c9fc15d-eddc-4265-b12f-222c52297cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Synth">
+      <UniqueIdentifier>{35486090-8782-4b4f-ae16-cabb022def2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Signal">
+      <UniqueIdentifier>{0d1d3b8e-02d5-4db9-8764-d85c9a4b24e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vendor">
+      <UniqueIdentifier>{9843f0f0-0241-434f-b8b6-4a43612afaa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vendor\rt-audio">
+      <UniqueIdentifier>{a2fd55c5-4aac-4a16-9710-a9ffe9072b14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vendor\smf">
+      <UniqueIdentifier>{3b95484a-aeb2-46d1-bd92-365824712d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vendor">
+      <UniqueIdentifier>{2af0b071-0547-4f0c-9503-353692a448b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vendor\smf">
+      <UniqueIdentifier>{76bca306-61c2-4d7d-882d-6b8e696a1f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vendor\rt-audio">
+      <UniqueIdentifier>{d80f535b-518c-4fbb-b91a-5dee623dac33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Synth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SynthNote.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\rtaudio-master\RtAudio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Envelope.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ButterworthFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Reverb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CombFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AllPassFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AmplitudeOscillator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Compressor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mixer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CircularQueue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Binasc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MidiMessage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MidiEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MidiEventList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MidiFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Options.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StopWatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlaybackDevice.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Binasc.cpp">
+      <Filter>Source Files\Vendor\smf</Filter>
     </ClCompile>
-    <ClCompile Include="SynthPlaybackDevice.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="MidiEvent.cpp">
+      <Filter>Source Files\Vendor\smf</Filter>
     </ClCompile>
-    <ClCompile Include="MidiPlaybackDevice.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="MidiEventList.cpp">
+      <Filter>Source Files\Vendor\smf</Filter>
     </ClCompile>
-    <ClCompile Include="MidiFilePlayer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="MidiFile.cpp">
+      <Filter>Source Files\Vendor\smf</Filter>
+    </ClCompile>
+    <ClCompile Include="MidiMessage.cpp">
+      <Filter>Source Files\Vendor\smf</Filter>
+    </ClCompile>
+    <ClCompile Include="Options.cpp">
+      <Filter>Source Files\Vendor\smf</Filter>
+    </ClCompile>
+    <ClCompile Include="AllPassFilter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="AmplitudeOscillator.cpp">
+      <Filter>Source Files\Signal</Filter>
     </ClCompile>
     <ClCompile Include="AudioPlayer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="ButterworthFilter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="CombFilter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Compressor.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Envelope.cpp">
+      <Filter>Source Files\Signal</Filter>
+    </ClCompile>
+    <ClCompile Include="MidiFilePlayer.cpp">
+      <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="MidiPlaybackDevice.cpp">
+      <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaybackDevice.cpp">
+      <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="SynthPlaybackDevice.cpp">
+      <Filter>Source Files\Playback</Filter>
     </ClCompile>
     <ClCompile Include="SynthPlayer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="Mixer.cpp">
+      <Filter>Source Files\Signal</Filter>
+    </ClCompile>
+    <ClCompile Include="Reverb.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rtaudio-master\RtAudio.cpp">
+      <Filter>Source Files\Vendor\rt-audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Synth.cpp">
+      <Filter>Source Files\Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="SynthNote.cpp">
+      <Filter>Source Files\Synth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Synth.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WindowsKeyCodes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SynthNote.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Constant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\rtaudio-master\RtAudio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Envelope.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ButterworthFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Reverb.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CombFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AllPassFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AmplitudeOscillator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Compressor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mixer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CircularQueue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Binasc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MidiEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MidiEventList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MidiFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MidiMessage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Options.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StopWatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlaybackDevice.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Options.h">
+      <Filter>Header Files\Vendor\smf</Filter>
     </ClInclude>
-    <ClInclude Include="SynthPlaybackDevice.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MidiEvent.h">
+      <Filter>Header Files\Vendor\smf</Filter>
     </ClInclude>
-    <ClInclude Include="MidiPlaybackDevice.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MidiEventList.h">
+      <Filter>Header Files\Vendor\smf</Filter>
     </ClInclude>
-    <ClInclude Include="MidiFilePlayer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MidiFile.h">
+      <Filter>Header Files\Vendor\smf</Filter>
     </ClInclude>
-    <ClInclude Include="AudioPlayer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MidiMessage.h">
+      <Filter>Header Files\Vendor\smf</Filter>
+    </ClInclude>
+    <ClInclude Include="Binasc.h">
+      <Filter>Header Files\Vendor\smf</Filter>
+    </ClInclude>
+    <ClInclude Include="AmplitudeOscillator.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="AllPassFilter.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="ButterworthFilter.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="CombFilter.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Envelope.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="Mixer.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="Reverb.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Compressor.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Synth.h">
+      <Filter>Header Files\Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="SynthNote.h">
+      <Filter>Header Files\Synth</Filter>
     </ClInclude>
     <ClInclude Include="SynthPlayer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="SynthPlaybackDevice.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioPlayer.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="MidiFilePlayer.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="MidiPlaybackDevice.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaybackDevice.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rtaudio-master\RtAudio.h">
+      <Filter>Header Files\Vendor\rt-audio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

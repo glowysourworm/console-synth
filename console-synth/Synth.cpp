@@ -26,7 +26,7 @@ Synth::Synth(int midiLow, int midiHigh, const Envelope& noteEnvelope)
 	_filter = new ButterworthFilter(SAMPLING_RATE, 1.0);
 	_filterEnvelope = new Envelope(noteEnvelope);
 	_reverb = new Reverb(0.1, 0.9, SAMPLING_RATE);
-	_delay = new CombFilter(0.1, 0.35, SAMPLING_RATE);
+	_delay = new CombFilter(1, 0.8, SAMPLING_RATE);
 	_limiter = new Compressor(10, 0.6, 4, 0.2, 0.2, 0.2, true);
 
 	// Initialize Piano
@@ -78,7 +78,7 @@ float Synth::GetSample(double absoluteTime)
 		// Primary notes
 		if (note->HasOutput(absoluteTime))
 		{
-			output += note->GetEnvelopeLevel(absoluteTime) * GenerateSawtooth(absoluteTime, note->GetFrequency());
+			output += note->GetEnvelopeLevel(absoluteTime) * GenerateSine(absoluteTime, note->GetFrequency());
 		}
 
 
@@ -93,14 +93,14 @@ float Synth::GetSample(double absoluteTime)
 	// FILTER SWEEP
 	//if (_filterEnvelope->HasOutput(absoluteTime))
 	//{
-	_filter->Set(fabs((float)(MAX_FREQUENCY * GenerateTriangle(absoluteTime, 3))), 0.15);
+	//_filter->Set(fabs((float)(MAX_FREQUENCY * GenerateTriangle(absoluteTime, 3))), 0.15);
 	//_filter->Set((float)MAX_FREQUENCY * _filterEnvelope->GetEnvelopeLevel(absoluteTime), 0.9);
 
-	wetOutput = _filter->Apply(wetOutput);
+	//wetOutput = _filter->Apply(wetOutput);
 	//}
 
 	// OUTPUT EFFECTS	
-	//wetOutput = _delay->Apply(wetOutput);
+	wetOutput = _delay->Apply(wetOutput);
 	//wetOutput = _reverb->Apply(wetOutput);
 
 	//return _limiter->Apply(absoluteTime, wetOutput);

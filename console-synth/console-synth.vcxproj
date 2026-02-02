@@ -232,7 +232,6 @@
     <ClCompile Include="AudioPlayer.cpp" />
     <ClCompile Include="Binasc.cpp" />
     <ClCompile Include="ButterworthFilter.cpp" />
-    <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="CombFilter.cpp" />
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Envelope.cpp" />
@@ -260,7 +259,6 @@
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="Binasc.h" />
     <ClInclude Include="ButterworthFilter.h" />
-    <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="CombFilter.h" />
     <ClInclude Include="Compressor.h" />
     <ClInclude Include="Constant.h" />

@@ -17,7 +17,8 @@
 #include <string>
 namespace smf {
 #include <istream>
-	typedef unsigned char uchar;
+
+	typedef unsigned char uchar;
 	typedef unsigned short ushort;
 	typedef unsigned long ulong;
 

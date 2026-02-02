@@ -1,6 +1,5 @@
 #include "ButterworthFilter.h"
 #include <cmath>
-#include <cmath>
 
 ButterworthFilter::ButterworthFilter(int samplingRate, float gain)
 {

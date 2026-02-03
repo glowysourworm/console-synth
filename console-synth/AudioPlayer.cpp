@@ -32,10 +32,10 @@ bool AudioPlayer::Initialize(RtAudioCallback audioCallback, RtAudioErrorCallback
 	unsigned int bufferFrames = AUDIO_BUFFER_SIZE;
 
 	RtAudio::StreamOptions options;
-	options.flags |= RTAUDIO_SCHEDULE_REALTIME;
+	//options.flags |= RTAUDIO_SCHEDULE_REALTIME;					
 	options.numberOfBuffers = NUMBER_OF_BUFFERS;
-	//options.flags |= RTAUDIO_HOG_DEVICE;
-	//options.flags |= RTAUDIO_MINIMIZE_LATENCY;
+	options.flags |= RTAUDIO_HOG_DEVICE;
+	options.flags |= RTAUDIO_MINIMIZE_LATENCY;
 	// options.flags |= RTAUDIO_NONINTERLEAVED;
 
 	// STEREO / DEFAULT AUDIO DEVICE
@@ -77,6 +77,17 @@ bool AudioPlayer::IsStreamOpen() const
 		throw std::exception("RT Audio not initialized:  AudioPlayer.cpp");
 
 	return _rtAudio->isStreamOpen();
+}
+
+void AudioPlayer::StartStream() const
+{
+	if (_rtAudio == NULL)
+		throw std::exception("RT Audio not initialized:  AudioPlayer.cpp");
+
+	if (_rtAudio->isStreamRunning())
+		throw std::exception("RT Audio already running! Must first stop the stream.");
+
+	_rtAudio->startStream();
 }
 
 void AudioPlayer::StopStream() const

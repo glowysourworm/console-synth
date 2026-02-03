@@ -8,11 +8,16 @@ public:
 
 	SynthConfiguration();
 	SynthConfiguration(const SynthConfiguration& copy);
-	~SynthConfiguration();
+	~SynthConfiguration();	
 
-	AmplitudeOscillatorType GetOscillatorType() const;
+	bool IsDirty() const;
+
+	void ClearDirty();
 
 	void SetOscillatorType(AmplitudeOscillatorType value);
+
+	void SetMidiLow(int value);
+	void SetMidiHigh(int value);
 
 	void SetHasDelay(bool value);
 	void SetHasCompressor(bool value);
@@ -31,6 +36,11 @@ public:
 
 	void SetDelaySeconds(float value);
 	void SetDelayFeedback(bool value);
+
+	int GetMidiLow() const;
+	int GetMidiHigh() const;
+
+	AmplitudeOscillatorType GetOscillatorType() const;
 
 	bool GetHasDelay() const;
 	bool GetHasCompressor() const;
@@ -52,6 +62,12 @@ public:
 	bool GetDelayFeedback() const;
 
 private:
+
+	// Tracks changes to the configuration
+	bool _isDirty;
+
+	int _midiLow;
+	int _midiHigh;
 
 	AmplitudeOscillatorType _oscillatorType;
 

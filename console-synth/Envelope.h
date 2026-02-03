@@ -24,6 +24,13 @@ public:
 	float GetAttackPeak() const;
 	float GetSustainPeak() const;
 
+	bool operator!=(const Envelope& envelope);
+	bool operator==(const Envelope& envelope);
+
+private:
+
+	bool Compare(const Envelope& envelope);
+
 private:
 
 	// Times in seconds

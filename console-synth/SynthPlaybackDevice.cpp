@@ -12,7 +12,7 @@ bool SynthPlaybackDevice::Initialize()
 	//
 	SynthConfiguration configuration;
 
-	_synth = new Synth(MIDI_PIANO_LOW_NUMBER, MIDI_PIANO_HIGH_NUMBER, configuration);
+	_synth = new Synth(configuration);
 
 	return _initialized;
 }
@@ -65,4 +65,9 @@ void SynthPlaybackDevice::SetNote(int midiNumber, bool pressed, double streamTim
 bool SynthPlaybackDevice::GetNote(int midiNumber) const
 {
 	return _synth->IsSet(midiNumber);
+}
+
+void SynthPlaybackDevice::UpdateSynth(const SynthConfiguration& configuration)
+{
+	_synth->SetConfiguration(configuration);
 }

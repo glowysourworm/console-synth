@@ -3,6 +3,7 @@
 #include "PlaybackDevice.h"
 #include "RtAudio.h"
 #include "Synth.h"
+#include "SynthConfiguration.h"
 
 class SynthPlaybackDevice : public PlaybackDevice
 {
@@ -19,6 +20,8 @@ public:
 
 	void SetNote(int midiNumber, bool pressed, double streamTime);
 	bool GetNote(int midiNumber) const;
+
+	void UpdateSynth(const SynthConfiguration& configuration);
 
 private:
 

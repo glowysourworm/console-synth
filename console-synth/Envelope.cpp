@@ -7,8 +7,8 @@ Envelope::Envelope()
 	_sustain = 0.2;
 	_release = 0.3;
 
-	_attackPeak = 1;
-	_sustainPeak = 0.4;
+	_attackPeak = 0.8;
+	_sustainPeak = 0.5;
 
 	_engaged = false;
 	_hasEngaged = false;
@@ -79,6 +79,9 @@ void Envelope::Engage(float absoluteTime)
 
 void Envelope::DisEngage(float absoluteTime)
 {
+	if (!_engaged)
+		return;
+
 	// Store envelope level to calculate release value
 	//
 	// CALL BEFORE DIS-ENGAGING
@@ -104,7 +107,18 @@ bool Envelope::HasOutput(float absoluteTime)
 		// Calculate time along the release
 		float envelopeTime = absoluteTime - _disEngagedTime;
 
-		return envelopeTime < _release;
+		// Check release time
+		bool hasOutput = envelopeTime < _release;
+
+		// Reset
+		if (!hasOutput)
+		{
+			_hasEngaged = false;
+			_engaged = false;
+			_disEngagedLevel = 0;
+			_engagedTime = 0;
+			_disEngagedTime = 0;
+		}
 	}
 }
 
@@ -136,6 +150,26 @@ float Envelope::GetAttackPeak() const
 float Envelope::GetSustainPeak() const
 {
 	return _sustainPeak;
+}
+
+bool Envelope::operator!=(const Envelope& envelope)
+{
+	return !Compare(envelope);
+}
+
+bool Envelope::operator==(const Envelope& envelope)
+{
+	return Compare(envelope);
+}
+
+bool Envelope::Compare(const Envelope& envelope)
+{
+	return _attack == envelope.GetAttack() &&
+		_sustain == envelope.GetSustain() &&
+		_decay == envelope.GetDecay() &&
+		_release == envelope.GetRelease() &&
+		_attackPeak == envelope.GetAttackPeak() &&
+		_sustainPeak == envelope.GetSustainPeak();
 }
 
 float Envelope::GetEngageTime()

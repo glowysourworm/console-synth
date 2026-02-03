@@ -7,20 +7,26 @@
 #include "SynthNote.h"
 #include <vector>
 
-Synth::Synth(int midiLow, int midiHigh, const SynthConfiguration& configuration)
+Synth::Synth(const SynthConfiguration& configuration)
 {
+	this->Initialize(configuration);
+}
+
+void Synth::Initialize(const SynthConfiguration& configuration)
+{
+	// DESTRUCTOR!
+	if (_configuration != nullptr)
+		this->~Synth();
+
 	_configuration = new SynthConfiguration(configuration);
 	_pianoNotes = new std::vector<SynthNote*>();
 
-	_midiHigh = midiHigh;
-	_midiLow = midiLow;
-
-	_mixer = new Mixer(midiHigh - midiLow + 1);
+	_mixer = new Mixer(configuration.GetMidiHigh() - configuration.GetMidiLow() + 1);
 	_delay = new CombFilter(configuration.GetDelaySeconds(), 0.8, SAMPLING_RATE, configuration.GetDelayFeedback());
 	_compressor = new Compressor(10, SAMPLING_RATE, configuration.GetCompressorThreshold(), configuration.GetCompressionRatio(), configuration.GetCompressorRelaxationPeriod(), configuration.GetCompressorAttack(), configuration.GetCompressorRelease());
 
 	// Initialize Piano
-	for (int midiNote = midiLow; midiNote <= midiHigh; midiNote++)
+	for (int midiNote = configuration.GetMidiLow(); midiNote <= configuration.GetMidiHigh(); midiNote++)
 	{
 		_pianoNotes->push_back(new SynthNote(midiNote, configuration));
 	}
@@ -35,16 +41,21 @@ Synth::~Synth()
 		delete _pianoNotes->at(i);
 	}
 
-	delete[] _pianoNotes;
+	delete _pianoNotes;
 	delete _mixer;
 	delete _envelopeFilter;
 	delete _delay;
 	delete _compressor;
 }
 
+void Synth::SetConfiguration(const SynthConfiguration& configuration)
+{
+	this->Initialize(configuration);
+}
+
 void Synth::Set(int midiNumber, bool pressed, double absoluteTime)
 {
-	SynthNote* note = _pianoNotes->at(midiNumber - _midiLow);
+	SynthNote* note = _pianoNotes->at(midiNumber - _configuration->GetMidiLow());
 
 	if (!pressed)
 		note->DisEngage(absoluteTime);
@@ -55,7 +66,7 @@ void Synth::Set(int midiNumber, bool pressed, double absoluteTime)
 
 bool Synth::IsSet(int midiNumber)
 {
-	return _pianoNotes->at(midiNumber - _midiLow)->IsEngaged();
+	return _pianoNotes->at(midiNumber - _configuration->GetMidiLow())->IsEngaged();
 }
 
 float Synth::GetSample(double absoluteTime)

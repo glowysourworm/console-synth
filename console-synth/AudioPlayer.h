@@ -17,6 +17,7 @@ public:
 	bool IsStreamRunning() const;
 	bool IsStreamOpen() const;
 
+	void StartStream() const;
 	void StopStream() const;
 	void CloseStream() const;
 

@@ -17,8 +17,11 @@ class Synth
 {
 
 public:
-	Synth(int midiLow, int midiHigh, const SynthConfiguration& configuration);
+	Synth(const SynthConfiguration& configuration);
 	~Synth();
+
+	// Update Configuration
+	void SetConfiguration(const SynthConfiguration& configuration);
 
 	// Sets midi notes on / off
 	void Set(int midiNumber, bool pressed, double absoluteTime);
@@ -29,10 +32,11 @@ public:
 
 private:
 
-	std::vector<SynthNote*>* _pianoNotes;
+	void Initialize(const SynthConfiguration& configuration);
 
-	int _midiLow;
-	int _midiHigh;
+private:
+
+	std::vector<SynthNote*>* _pianoNotes;
 
 	Mixer* _mixer;
 

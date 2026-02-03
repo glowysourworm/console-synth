@@ -4,17 +4,17 @@
 #include "AllPassFilter.h"
 #include "ButterworthFilter.h"
 #include "CombFilter.h"
-#include "Constant.h"
+#include "FilterBase.h"
 
 // Implements Schroeder Reverb
 //
-class Reverb
+class Reverb : public FilterBase
 {
 public:
 	Reverb(float delaySeconds, float gain, int samplingRate);
 	~Reverb();
 
-	float Apply(float sample);
+	float Apply(float sample, float absoluteTime) override;
 
 private:
 	CombFilter** _combFilters;

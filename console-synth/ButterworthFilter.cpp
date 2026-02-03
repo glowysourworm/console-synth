@@ -1,16 +1,17 @@
 #include "ButterworthFilter.h"
+#include "FilterBase.h"
 #include <cmath>
 
-ButterworthFilter::ButterworthFilter(int samplingRate, float gain)
+ButterworthFilter::ButterworthFilter(int samplingRate, float gain) : FilterBase(gain, samplingRate)
 {
 	this->history1 = 0.f;
 	this->history2 = 0.f;
 	this->history3 = 0.f;
 	this->history4 = 0.f;
 
-	this->gain = gain;
-	this->SetSampleRate((float)samplingRate);
+	this->outputGain = gain;
 	this->Set(samplingRate / 2.0f, 0.0);
+	this->Initialize();
 }
 
 ButterworthFilter::~ButterworthFilter()
@@ -18,8 +19,9 @@ ButterworthFilter::~ButterworthFilter()
 
 }
 
-void ButterworthFilter::SetSampleRate(float samplingRate)
+void ButterworthFilter::Initialize()
 {
+	float samplingRate = this->GetSamplingRate();
 	float pi = 4.f * atanf(1.f);
 
 	this->t0 = 4.f * samplingRate * samplingRate;
@@ -56,7 +58,7 @@ void ButterworthFilter::Set(float cutoffFrequency, float resonance)
 
 	bd = 1.f / (bd_tmp + this->t2 * b1);
 
-	this->gain = bd * 0.5f;
+	this->outputGain = bd * 0.5f;
 
 	this->coef2 = (2.f - this->t1 * b2);
 
@@ -67,14 +69,14 @@ void ButterworthFilter::Set(float cutoffFrequency, float resonance)
 
 	bd = 1.f / (bd_tmp + this->t2 * b1);
 
-	this->gain *= bd;
+	this->outputGain *= bd;
 	this->coef2 *= bd;
 	this->coef3 = (bd_tmp - this->t2 * b1) * bd;
 }
 
-float ButterworthFilter::Apply(float sample)
+float ButterworthFilter::Apply(float sample, float absoluteTime)
 {
-	float output = sample * this->gain;
+	float output = sample * this->outputGain;
 	float new_hist;
 
 	output -= this->history1 * this->coef0;

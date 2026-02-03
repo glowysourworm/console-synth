@@ -153,6 +153,15 @@
     <ClCompile Include="SquareOscillator.cpp">
       <Filter>Source Files\Signal</Filter>
     </ClCompile>
+    <ClCompile Include="FilterBase.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="SynthConfiguration.cpp">
+      <Filter>Source Files\Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvelopeFilter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsKeyCodes.h">
@@ -247,6 +256,15 @@
     </ClInclude>
     <ClInclude Include="SquareOscillator.h">
       <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterBase.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="SynthConfiguration.h">
+      <Filter>Header Files\Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvelopeFilter.h">
+      <Filter>Header Files\Filter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

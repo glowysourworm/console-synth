@@ -1,13 +1,12 @@
 #include "CombFilter.h"
-#include <queue>
+#include "FilterBase.h"
 #include <queue>
 
-CombFilter::CombFilter(float delaySeconds, float gain, int samplingRate, bool feedbackForm)
+CombFilter::CombFilter(float delaySeconds, float gain, int samplingRate, bool feedbackForm) : FilterBase(gain, samplingRate)
 {
 	int bufferSize = (int)(delaySeconds * samplingRate);
 
 	_buffer = new std::queue<float>();
-	_gain = gain;
 	_feedbackForm = feedbackForm;
 
 	// Initialize the queue
@@ -18,10 +17,10 @@ CombFilter::~CombFilter()
 {
 	delete _buffer;
 }
-float CombFilter::Apply(float sample)
+float CombFilter::Apply(float sample, float absoluteTime)
 {
 	// Calculate sample from front of the queue (SAME FOR BOTH FORMS)
-	float result = sample + (_gain * _buffer->front());;
+	float result = sample + (this->GetGain() * _buffer->front());;
 
 	// Remove used sample
 	_buffer->pop();

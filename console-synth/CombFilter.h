@@ -1,9 +1,10 @@
 #ifndef COMBFILTER_H
 #define COMBFILTER_H
 
+#include "FilterBase.h"
 #include <queue>
 
-class CombFilter
+class CombFilter : FilterBase
 {
 public:
 
@@ -11,13 +12,12 @@ public:
 	CombFilter(float delaySeconds, float gain, int samplingRate, bool feedbackForm = true);
 	~CombFilter();
 
-	float Apply(float sample);
+	float Apply(float sample, float absoluteTime) override;
 
 private:
 
 	std::queue<float>* _buffer;
 
-	float _gain;
 	bool _feedbackForm;
 };
 

@@ -4,6 +4,7 @@
 class Envelope
 {
 public:
+	Envelope();
 	Envelope(float attack, float decay, float sustain, float release, float attackPeak, float sustainPeak);
 	Envelope(const Envelope& copy);
 	~Envelope();

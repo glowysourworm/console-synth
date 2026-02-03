@@ -1,18 +1,22 @@
 #ifndef SYNTHNOTE_H
 #define SYNTHNOTE_H
 
+#include "AmplitudeOscillator.h"
 #include "Envelope.h"
+#include "EnvelopeFilter.h"
+#include "SynthConfiguration.h"
 
 class SynthNote
 {
 public:
 
-	SynthNote(int midiNote, const Envelope& envelope);
+	SynthNote(int midiNumber, const SynthConfiguration& configuration);
 	~SynthNote();
 
-	const int GetMidiNumber();
-	const float GetFrequency();
-	float GetEnvelopeLevel(float absoluteTime);
+	int GetMidiNumber() const;
+	float GetFrequency() const;
+	float GetSample(float absoluteTime) const;
+
 
 	bool IsEngaged();
 	bool HasOutput(float absoluteTime);
@@ -23,6 +27,8 @@ private:
 
 	int  _midiNumber;
 	Envelope* _envelope;
+	EnvelopeFilter* _envelopeFilter;
+	AmplitudeOscillator* _oscillator;
 };
 
 #endif

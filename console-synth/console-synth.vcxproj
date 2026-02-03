@@ -235,6 +235,8 @@
     <ClCompile Include="CombFilter.cpp" />
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Envelope.cpp" />
+    <ClCompile Include="EnvelopeFilter.cpp" />
+    <ClCompile Include="FilterBase.cpp" />
     <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiEventList.cpp" />
     <ClCompile Include="MidiFile.cpp" />
@@ -252,6 +254,7 @@
     <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="Synth.cpp" />
     <ClCompile Include="program.cpp" />
+    <ClCompile Include="SynthConfiguration.cpp" />
     <ClCompile Include="SynthNote.cpp" />
     <ClCompile Include="SynthPlaybackDevice.cpp" />
     <ClCompile Include="SynthPlayer.cpp" />
@@ -268,6 +271,8 @@
     <ClInclude Include="Compressor.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Envelope.h" />
+    <ClInclude Include="EnvelopeFilter.h" />
+    <ClInclude Include="FilterBase.h" />
     <ClInclude Include="MidiEvent.h" />
     <ClInclude Include="MidiEventList.h" />
     <ClInclude Include="MidiFile.h" />
@@ -284,6 +289,7 @@
     <ClInclude Include="SquareOscillator.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Synth.h" />
+    <ClInclude Include="SynthConfiguration.h" />
     <ClInclude Include="SynthNote.h" />
     <ClInclude Include="SynthPlaybackDevice.h" />
     <ClInclude Include="SynthPlayer.h" />

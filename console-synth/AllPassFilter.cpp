@@ -1,6 +1,7 @@
 ﻿#include "AllPassFilter.h"
+#include "FilterBase.h"
 
-AllPassFilter::AllPassFilter(float delaySeconds, float gain, int samplingRate)
+AllPassFilter::AllPassFilter(float delaySeconds, float gain, int samplingRate) : FilterBase(gain, samplingRate)
 {
 	int bufferSize = (int)(delaySeconds * samplingRate);
 
@@ -13,7 +14,7 @@ AllPassFilter::~AllPassFilter()
 	delete _delayedInput;
 	delete _delayedOutput;
 }
-float AllPassFilter::Apply(float sample)
+float AllPassFilter::Apply(float sample, float absoluteTime)
 {
 	// https://medium.com/the-seekers-project/coding-a-basic-reverb-algorithm-part-2-an-introduction-to-audio-programming-4db79dd4e325
 	//

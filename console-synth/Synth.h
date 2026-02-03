@@ -3,14 +3,12 @@
 
 #include <vector>
 
-#include "ButterworthFilter.h"
 #include "CombFilter.h"
 #include "Compressor.h"
-#include "Envelope.h"
+#include "EnvelopeFilter.h"
 #include "Mixer.h"
-#include "Reverb.h"
+#include "SynthConfiguration.h"
 #include "SynthNote.h"
-
 
 // Class to define static piano notes and store their names / frequencies w.r.t. the SDL keyboard
 // defined inputs.
@@ -19,7 +17,7 @@ class Synth
 {
 
 public:
-	Synth(int midiLow, int midiHigh, const Envelope& noteEnvelope);
+	Synth(int midiLow, int midiHigh, const SynthConfiguration& configuration);
 	~Synth();
 
 	// Sets midi notes on / off
@@ -31,31 +29,19 @@ public:
 
 private:
 
-	// Oscillators
-	float GenerateSine(double absoluteTime, float frequency);
-	float GenerateTriangle(double absoluteTime, float frequency);
-	float GenerateSawtooth(double absoluteTime, float frequency);
-	float GenerateSquare(double absoluteTime, float frequency);
-
-private:
-
 	std::vector<SynthNote*>* _pianoNotes;
 
 	int _midiLow;
 	int _midiHigh;
 
-	float _frequencyShift;
-	float _frequencyShiftGain;
-
 	Mixer* _mixer;
 
-	// Post-processing effects
-	//AmplitudeOscillator* _oscillator;
-	ButterworthFilter* _filter;
-	Envelope* _filterEnvelope;
-	Compressor* _limiter;
-	Reverb* _reverb;
+	// Post-processing effects	
+	EnvelopeFilter* _envelopeFilter;
+	Compressor* _compressor;
 	CombFilter* _delay;
+
+	SynthConfiguration* _configuration;
 };
 
 #endif

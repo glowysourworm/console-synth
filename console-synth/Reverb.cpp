@@ -2,10 +2,11 @@
 #include "ButterworthFilter.h"
 #include "CombFilter.h"
 #include "Constant.h"
+#include "FilterBase.h"
 #include "Reverb.h"
 #include <cmath>
 
-Reverb::Reverb(float delaySeconds, float gain, int samplingRate)
+Reverb::Reverb(float delaySeconds, float gain, int samplingRate) : FilterBase(gain, samplingRate)
 {
 	_combFilters = new CombFilter * [REVERB_COMB_SIZE];
 	_allPassFilters = new AllPassFilter * [REVERB_ALLPASS_SIZE];
@@ -38,7 +39,7 @@ Reverb::~Reverb()
 	delete[] _combFilters;
 	delete[] _allPassFilters;
 }
-float Reverb::Apply(float sample)
+float Reverb::Apply(float sample, float absoluteTime)
 {
 	// https://ccrma.stanford.edu/~jos/pasp/Schroeder_Reverberators.html
 	//
@@ -51,10 +52,10 @@ float Reverb::Apply(float sample)
 
 	// All pass taps
 	//
-	float outputA = _allPassFilters[0]->Apply(output);
-	float outputB = _allPassFilters[1]->Apply(outputA);
-	float outputC = _allPassFilters[2]->Apply(outputB);
-	float outputD = _allPassFilters[3]->Apply(outputC);
+	float outputA = _allPassFilters[0]->Apply(output, absoluteTime);
+	float outputB = _allPassFilters[1]->Apply(outputA, absoluteTime);
+	float outputC = _allPassFilters[2]->Apply(outputB, absoluteTime);
+	float outputD = _allPassFilters[3]->Apply(outputC, absoluteTime);
 
 	// Series all pass filters
 	//for (int i = 0; i < REVERB_ALLPASS_SIZE; i++)

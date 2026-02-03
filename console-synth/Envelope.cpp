@@ -1,5 +1,23 @@
 #include "Envelope.h"
 
+Envelope::Envelope()
+{
+	_attack = 0.1;
+	_decay = 0.2;
+	_sustain = 0.2;
+	_release = 0.3;
+
+	_attackPeak = 1;
+	_sustainPeak = 0.4;
+
+	_engaged = false;
+	_hasEngaged = false;
+
+	_disEngagedLevel = 0;
+	_engagedTime = 0;
+	_disEngagedTime = 0;
+}
+
 Envelope::Envelope(float attack, float decay, float sustain, float release, float attackPeak, float sustainPeak)
 {
 	_attack = attack;

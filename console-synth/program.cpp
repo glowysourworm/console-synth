@@ -10,12 +10,18 @@
 #include <chrono>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
+#include <ftxui/component/component_options.hpp>
+#include <ftxui/component/event.hpp>
+#include <ftxui/component/event.hpp>
 #include <ftxui/component/loop.hpp>
 #include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/dom/direction.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <ftxui/screen/color.hpp>
 #include <mutex>
 #include <string>
 #include <thread>
+#include <vector>
 
 
 // Static Instance (RT Audio) (Couldn't figure out how to cast function callbacks to the framework)
@@ -208,31 +214,82 @@ void LoopUI()
 	float noteDecay = envelope.GetDecay();
 	float noteRelease = envelope.GetRelease();
 
+	std::string attackStr;
+	std::string sustainStr;
+	std::string decayStr;
+	std::string releaseStr;
+
+	int oscillatorChoice = 0;
+
+	auto oscillatorStrs = std::vector<std::string>({
+		"Sine",
+		"Triangle",
+		"Square",
+		"Sawtooth"
+	});
+
+	auto oscillatorUI = ftxui::Radiobox(&oscillatorStrs, &oscillatorChoice);
+
 	auto envelopeUI = ftxui::Container::Vertical(
 	{
-		ftxui::Slider("Attack  (s) " + std::to_string(noteAttack), &noteAttack, envelopeMin, envelopeMax, envelopeIncrement),
-		ftxui::Slider("Sustain (s) " + std::to_string(noteSustain), &noteSustain, envelopeMin, envelopeMax, envelopeIncrement),
-		ftxui::Slider("Decay   (s) " + std::to_string(noteDecay), &noteDecay, envelopeMin, envelopeMax, envelopeIncrement),
-		ftxui::Slider("Release (s) " + std::to_string(noteRelease), &noteRelease, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Renderer([&] { return ftxui::text("Input Envelope") | ftxui::color(ftxui::Color(0,88,255,255)); }),
+		ftxui::Renderer([&] {return ftxui::separator(); }),
+		ftxui::Slider(&attackStr, &noteAttack, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&sustainStr, &noteSustain, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&decayStr, &noteDecay, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&releaseStr, &noteRelease, envelopeMin, envelopeMax, envelopeIncrement),
 	});
+
+	auto oscillatorUIRenderer = ftxui::Renderer(oscillatorUI, [&]
+	{
+		return ftxui::vbox(
+		{
+			ftxui::text("Oscillator") | ftxui::color(ftxui::Color(0, 88, 255, 255)),
+			ftxui::separator(),
+			oscillatorUI->Render()
+		});
+	});
+
+	auto envelopeUIRenderer = ftxui::Renderer(envelopeUI, [&]
+	{
+		attackStr = "Attack  (s) " + std::to_string(noteAttack);
+		sustainStr = "Sustain (s) " + std::to_string(noteSustain);
+		decayStr = "Decay   (s) " + std::to_string(noteDecay);
+		releaseStr = "Release (s) " + std::to_string(noteRelease);
+
+		return envelopeUI->Render();
+	});
+
+	auto synthSettings = ftxui::Container::Horizontal({
+		oscillatorUIRenderer | ftxui::flex_grow | ftxui::border,
+		envelopeUIRenderer | ftxui::flex_grow | ftxui::border
+	}) | ftxui::flex_grow;
 
 	// UI BACKEND LOOP!! This will be run just for re-drawing purposes during our
 	//					 primary loop below.
 	//
-	auto renderer = ftxui::Renderer(envelopeUI, [&]
+	auto renderer = ftxui::Renderer(synthSettings, [&]
 	{
-		// Text Elements
-		return ftxui::vbox(
-			{
-				ftxui::text("Current Time (s): " + std::to_string(systemTime / 1000.0)),
-				ftxui::text("Stream Latency (ms): " + std::to_string(streamLatency)),
-				ftxui::text("Sample Rate (Hz): " + std::to_string(1000.0 / averageAudioTime)),
+		// Synth Information
+		auto synthInformation = ftxui::vbox(
+		{
+			ftxui::text("Current Time (s): " + std::to_string(systemTime / 1000.0)),
+			ftxui::text("Stream Latency (ms): " + std::to_string(streamLatency)),
+			ftxui::text("Sample Rate (Hz): " + std::to_string(1000.0 / averageAudioTime)),
 
-				// Inputs
-				envelopeUI->Render(),
+		}) | ftxui::border;
 
-			}) | ftxui::border;
 
+		// Borderless Layout Grid
+		auto container = ftxui::vbox({
+
+			ftxui::text("Terminal Synth") | ftxui::color(ftxui::Color(0,255,0,255)),
+
+			synthInformation,
+			synthSettings->Render()
+		}) | ftxui::flex_grow;
+
+		return container;
 	});
 
 	// Initialize Screen (sizing)

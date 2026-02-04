@@ -59,6 +59,9 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 
 	_envelopeFilterCutoff = copy.GetEnvelopeFilterCutoff();
 	_envelopeFilterResonance = copy.GetEnvelopeFilterResonance();
+	_envelopeFilterOscillatorFrequency = copy.GetEnvelopeFilterOscillatorFrequency();
+	_envelopeFilterType = copy.GetEnvelopeFilterType();
+	_envelopeFilterOscillatorType = copy.GetEnvelopeFilterOscillatorType();
 
 	_compressorThreshold = copy.GetCompressorThreshold();
 	_compressionRatio = copy.GetCompressionRatio();
@@ -125,6 +128,18 @@ float SynthConfiguration::GetEnvelopeFilterResonance() const
 {
 	return _envelopeFilterResonance;
 }
+EnvelopeFilterType SynthConfiguration::GetEnvelopeFilterType() const
+{
+	return _envelopeFilterType;
+}
+AmplitudeOscillatorType SynthConfiguration::GetEnvelopeFilterOscillatorType() const
+{
+	return _envelopeFilterOscillatorType;
+}
+float SynthConfiguration::GetEnvelopeFilterOscillatorFrequency() const
+{
+	return _envelopeFilterOscillatorFrequency;
+}
 float SynthConfiguration::GetCompressorThreshold() const
 {
 	return _compressorThreshold;
@@ -187,6 +202,20 @@ void SynthConfiguration::SetOscillatorType(AmplitudeOscillatorType value)
 		_isDirty = true;
 
 	_oscillatorType = value;
+}
+void SynthConfiguration::SetEnvelopeFilterType(EnvelopeFilterType value)
+{
+	if (_envelopeFilterType != value)
+		_isDirty = true;
+
+	_envelopeFilterType = value;
+}
+void SynthConfiguration::SetEnvelopeFilterOscillatorType(AmplitudeOscillatorType value)
+{
+	if (_envelopeFilterOscillatorType != value)
+		_isDirty = true;
+
+	_envelopeFilterOscillatorType = value;
 }
 void SynthConfiguration::SetMidiLow(int value)
 {
@@ -263,6 +292,13 @@ void SynthConfiguration::SetEnvelopeFilterResonance(float value)
 		_isDirty = true;
 
 	_envelopeFilterResonance = value;
+}
+void SynthConfiguration::SetEnvelopeFilterOscillatorFrequency(float value)
+{
+	if (_envelopeFilterOscillatorFrequency != value)
+		_isDirty = true;
+
+	_envelopeFilterOscillatorFrequency = value;
 }
 void SynthConfiguration::SetCompressorThreshold(float value)
 {

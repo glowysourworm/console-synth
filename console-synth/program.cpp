@@ -9,6 +9,7 @@
 #include <Windows.h>
 #include <chrono>
 #include <cstdio>
+#include <exception>
 #include <format>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -233,6 +234,11 @@ void LoopUI()
 	float filterCutoff = _configuration->GetEnvelopeFilterCutoff();
 	float filterResonance = _configuration->GetEnvelopeFilterResonance();
 
+	float filterOscillatorFrequency = _configuration->GetEnvelopeFilterOscillatorFrequency();
+	float filterOscillatorFrequencyLow = 0.5;
+	float filterOscillatorFrequencyHigh = 5;
+	float filterOscillatorFrequencyIncr = 0.1;
+
 	std::string attackStr;
 	std::string sustainStr;
 	std::string decayStr;
@@ -246,13 +252,28 @@ void LoopUI()
 	std::string filterCutoffStr;
 	std::string filterResonanceStr;
 
-	int oscillatorChoice = 0;
+	std::string filterOscillatorStr;
+
+	int oscillatorChoice = (int)_configuration->GetOscillatorType();
+	int envelopeFilterEnabled = _configuration->GetHasEnvelopeFilter() ? 0 : 1;
+	int envelopeFilterTypeChoice = (int)_configuration->GetEnvelopeFilterType();
+	int envelopeOscillatorChoice = (int)_configuration->GetEnvelopeFilterOscillatorType();
 
 	auto oscillatorStrs = std::vector<std::string>({
 		"Sine",
 		"Square",
 		"Triangle",
-		"Sawtooth"
+		"Sawtooth",
+		"Random"
+	});
+	auto envelopeFilterStrs = std::vector<std::string>({
+		"On",
+		"Off"
+	});
+	auto envelopeFilterTypeStrs = std::vector<std::string>({
+		"Manual",
+		"Oscillator",
+		"Sweep"
 	});
 
 	// Oscillator
@@ -262,23 +283,82 @@ void LoopUI()
 	auto envelopeUI = ftxui::Container::Vertical(
 	{
 		ftxui::Renderer([&] { return ftxui::text("Input Envelope") | ftxui::color(ftxui::Color(0,88,255,255)); }),
-		ftxui::Renderer([&] {return ftxui::separator(); }),
+		ftxui::Renderer([&] { return ftxui::separator(); }),
 		ftxui::Slider(&attackStr, &noteAttack, envelopeMin, envelopeMax, envelopeIncrement) | ftxui::color(ftxui::Color::White),
 		ftxui::Slider(&sustainStr, &noteSustain, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&decayStr, &noteDecay, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&releaseStr, &noteRelease, envelopeMin, envelopeMax, envelopeIncrement),
 	});
 
-	// Envelope Filter
-	auto envelopeFilterUI = ftxui::Container::Vertical(
-	{
-		ftxui::Renderer([&] { return ftxui::text("Envelope Filter") | ftxui::color(ftxui::Color(255,0,255,255)); }),
-		ftxui::Renderer([&] {return ftxui::separator(); }),
+	// Envelope Filter Label (Enable)
+	auto envelopeFilterLabelUI = ftxui::Container::Horizontal({
 
+		ftxui::Renderer([&] { return ftxui::text("Envelope Filter") | ftxui::color(ftxui::Color(255,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(envelopeFilterStrs, &envelopeFilterEnabled) | ftxui::align_right,
+	});
+
+	// Envelope Filter Type Label (Toggle)
+	auto envelopeFilterTypeLabelUI = ftxui::Container::Horizontal({
+
+		ftxui::Renderer([&] { return ftxui::text("Filter Type") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(envelopeFilterTypeStrs, &envelopeFilterTypeChoice) | ftxui::align_right,
+	});
+
+	// Envelope Filter (Oscillator)
+	auto envelopeOscillatorUI = ftxui::Container::Vertical({
+		ftxui::Renderer([&] { return ftxui::text("Oscillator Type (VCO)"); }),
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+		ftxui::Radiobox(&oscillatorStrs, &envelopeOscillatorChoice),
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+		ftxui::Slider(&filterOscillatorStr, &filterOscillatorFrequency, filterOscillatorFrequencyLow, filterOscillatorFrequencyHigh, filterOscillatorFrequencyIncr),
+	});
+
+	// Envelope Filter (Sweep)
+	auto envelopeSweepUI = ftxui::Container::Vertical({
 		ftxui::Slider(&filterAttackStr, &filterAttack, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&filterSustainStr, &filterSustain, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&filterDecayStr, &filterDecay, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&filterReleaseStr, &filterRelease, envelopeMin, envelopeMax, envelopeIncrement),
+	});
+
+	//auto envelopeTypeUI = ftxui::Renderer([&] {
+
+	//	// Manual 
+	//	if (envelopeFilterTypeChoice == 0)
+	//		return ftxui::text("Manual Settings");
+
+	//	// Oscillator
+	//	else if (envelopeFilterTypeChoice == 1)
+	//	{
+	//		return envelopeOscillatorUI->Render();
+	//	}
+
+	//	// Sweep
+	//	else if (envelopeFilterTypeChoice == 2)
+	//	{
+	//		return envelopeSweepUI->Render();
+	//	}
+
+	//	else
+	//		throw new std::exception("Unhandled Envelope Filter Type Choice");
+	//});
+
+	auto envelopeTypeUI = ftxui::Container::Vertical({
+		ftxui::Renderer([&] { return ftxui::text("Manual Settings"); }) | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 0; }),
+		envelopeOscillatorUI | ftxui::Maybe([&]{ return envelopeFilterTypeChoice == 1; }),
+		envelopeSweepUI | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 2; })
+	});
+
+	// Envelope Filter
+	auto envelopeFilterUI = ftxui::Container::Vertical(
+	{
+		envelopeFilterLabelUI,
+		ftxui::Renderer([&] {return ftxui::separator(); }),
+
+		envelopeFilterTypeLabelUI,
+		ftxui::Renderer([&] {return ftxui::separator(); }),
+
+		envelopeTypeUI,
 
 		ftxui::Renderer([&] {return ftxui::separator(); }),
 
@@ -286,6 +366,7 @@ void LoopUI()
 		ftxui::Slider(&filterResonanceStr, &filterResonance, filterResonanceMin, filterResonanceMax, filterResonanceIncr),
 	});
 
+	// Source Oscillator
 	auto oscillatorUIRenderer = ftxui::Renderer(oscillatorUI, [&]
 	{
 		return ftxui::vbox(
@@ -296,6 +377,7 @@ void LoopUI()
 		});
 	});
 
+	// Source Envelope
 	auto envelopeUIRenderer = ftxui::Renderer(envelopeUI, [&]
 	{
 		attackStr = "Attack  (s) " + std::format("{:.2f}", noteAttack);
@@ -306,6 +388,7 @@ void LoopUI()
 		return envelopeUI->Render();
 	});
 
+	// Envelope Filter
 	auto filterUIRenderer = ftxui::Renderer(envelopeFilterUI, [&]
 	{
 		filterAttackStr = "Attack  (s) " + std::format("{:.2f}", filterAttack);
@@ -315,6 +398,8 @@ void LoopUI()
 
 		filterCutoffStr = "Cutoff (Hz) " + std::to_string((int)filterCutoff);
 		filterResonanceStr = "Resonance   " + std::format("{:.2f}", filterResonance);
+
+		filterOscillatorStr = "Oscillator (Hz) " + std::format("{:.1f}", filterOscillatorFrequency);
 
 		return envelopeFilterUI->Render();
 	});
@@ -450,8 +535,12 @@ void LoopUI()
 			_configuration->SetNoteEnvelope(Envelope(noteAttack, noteDecay, noteSustain, noteRelease, envelope.GetAttackPeak(), envelope.GetSustainPeak()));
 			_configuration->SetEnvelopeFilter(Envelope(filterAttack, filterDecay, filterSustain, filterRelease, filter.GetAttackPeak(), filter.GetSustainPeak()));
 			_configuration->SetOscillatorType((AmplitudeOscillatorType)oscillatorChoice);
+			_configuration->SetEnvelopeFilterType((EnvelopeFilterType)envelopeFilterTypeChoice);
 			_configuration->SetEnvelopeFilterCutoff(filterCutoff);
 			_configuration->SetEnvelopeFilterResonance(filterResonance);
+			_configuration->SetEnvelopeFilterOscillatorFrequency(filterOscillatorFrequency);
+			_configuration->SetEnvelopeFilterOscillatorType((AmplitudeOscillatorType)envelopeOscillatorChoice);
+			_configuration->SetHasEnvelopeFilter(envelopeFilterEnabled == 0);
 		}
 
 		// Only update if changes were made (~100ms)

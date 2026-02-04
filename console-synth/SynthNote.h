@@ -2,6 +2,7 @@
 #define SYNTHNOTE_H
 
 #include "AmplitudeOscillator.h"
+#include "Constant.h"
 #include "Envelope.h"
 #include "EnvelopeFilter.h"
 #include "SynthConfiguration.h"
@@ -28,7 +29,9 @@ private:
 	int  _midiNumber;
 	Envelope* _envelope;
 	EnvelopeFilter* _envelopeFilter;
-	AmplitudeOscillator* _oscillator;
+	AmplitudeOscillator* _oscillator; 
+
+	bool _envelopeFilterEnabled;
 };
 
 #endif

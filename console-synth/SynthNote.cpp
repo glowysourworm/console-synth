@@ -15,7 +15,16 @@ SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration)
 {
 	_midiNumber = midiNumber;
 	_envelope = new Envelope(configuration.GetNoteEnvelope());
-	_envelopeFilter = new EnvelopeFilter(1.0, SAMPLING_RATE, configuration.GetEnvelopeFilterCutoff(), configuration.GetEnvelopeFilterResonance(), configuration.GetEnvelopeFilter());
+	_envelopeFilter = new EnvelopeFilter(1.0, 
+		SAMPLING_RATE,
+		configuration.GetEnvelopeFilterCutoff(),
+		configuration.GetEnvelopeFilterResonance(),
+		configuration.GetEnvelopeFilterType(),
+		configuration.GetEnvelopeFilterOscillatorType(),
+		configuration.GetEnvelopeFilterOscillatorFrequency(),
+		configuration.GetEnvelopeFilter());
+
+	_envelopeFilterEnabled = configuration.GetHasEnvelopeFilter();
 
 	// Initialize Oscillator
 	switch (configuration.GetOscillatorType())
@@ -24,7 +33,7 @@ SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration)
 		_oscillator = new SineOscillator(this->GetFrequency());
 		break;
 	case AmplitudeOscillatorType::Random:
-		_oscillator = new RandomOscillator(this->GetFrequency(), SIGNAL_LOW, SIGNAL_HIGH, 8);
+		_oscillator = new RandomOscillator(this->GetFrequency(), SIGNAL_LOW, SIGNAL_HIGH, 4);
 		break;
 	case AmplitudeOscillatorType::Square:
 		_oscillator = new SquareOscillator(this->GetFrequency());
@@ -56,7 +65,7 @@ float SynthNote::GetSample(float absoluteTime) const
 	float output = _envelope->GetEnvelopeLevel(absoluteTime) * _oscillator->GetSample(absoluteTime);
 
 	// FILTER SWEEP: Check envelope filter for output
-	if (_envelopeFilter->HasOutput(absoluteTime))
+	if (_envelopeFilterEnabled && _envelopeFilter->HasOutput(absoluteTime))
 	{
 		output = _envelopeFilter->Apply(output, absoluteTime);
 	}

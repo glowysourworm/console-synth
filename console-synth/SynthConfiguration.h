@@ -17,6 +17,8 @@ public:
 	void ClearDirty();
 
 	void SetOscillatorType(AmplitudeOscillatorType value);
+	void SetEnvelopeFilterType(EnvelopeFilterType value);	
+	void SetEnvelopeFilterOscillatorType(AmplitudeOscillatorType value);
 
 	void SetMidiLow(int value);
 	void SetMidiHigh(int value);
@@ -31,6 +33,7 @@ public:
 	void SetEnvelopeFilter(const Envelope& value);
 	void SetEnvelopeFilterCutoff(int value);
 	void SetEnvelopeFilterResonance(float value);
+	void SetEnvelopeFilterOscillatorFrequency(float value);
 
 	void SetCompressorThreshold(float value);
 	void SetCompressionRatio(float value);
@@ -59,6 +62,9 @@ public:
 
 	int GetEnvelopeFilterCutoff() const;
 	float GetEnvelopeFilterResonance() const;
+	EnvelopeFilterType GetEnvelopeFilterType() const;
+	AmplitudeOscillatorType GetEnvelopeFilterOscillatorType() const;
+	float GetEnvelopeFilterOscillatorFrequency() const;
 
 	float GetCompressorThreshold() const;
 	float GetCompressionRatio() const;
@@ -84,6 +90,7 @@ private:
 	int _midiHigh;
 
 	AmplitudeOscillatorType _oscillatorType;
+	EnvelopeFilterType _envelopeFilterType;
 
 	bool _hasDelay;
 	bool _hasCompressor;
@@ -92,8 +99,10 @@ private:
 	Envelope* _noteEnvelope;
 
 	Envelope* _envelopeFilter;
+	AmplitudeOscillatorType _envelopeFilterOscillatorType;
 	int _envelopeFilterCutoff;
-	float _envelopeFilterResonance;
+	float _envelopeFilterResonance;	
+	float _envelopeFilterOscillatorFrequency;
 
 	float _compressorThreshold;
 	float _compressionRatio;

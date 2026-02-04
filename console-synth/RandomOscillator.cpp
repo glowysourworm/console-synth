@@ -9,11 +9,11 @@ RandomOscillator::RandomOscillator(float frequency, float low, float high, int n
 	if (numberOfDivisions <= 0)
 		throw std::exception("Number of divisions of a RandomOscillator must be greater than zero");
 
-	// Size of a period division
-	_periodDivisionTime = this->GetPeriod() / _numberOfDivisions;
-
 	_numberOfDivisions = numberOfDivisions;
 	_randomValues = new float[numberOfDivisions];
+
+	// Size of a period division
+	_periodDivisionTime = this->GetPeriod() / _numberOfDivisions;
 
 	for (int index = 0; index < numberOfDivisions; index++)
 	{
@@ -34,7 +34,7 @@ float RandomOscillator::GetSample(float absoluteTime)
 	float periodTime = fmodf(absoluteTime, this->GetPeriod());
 
 	// Index into the random array
-	int index = (int)fmodf(periodTime, _periodDivisionTime);
+	int index = (int)std::floorf(periodTime / _periodDivisionTime);
 
 	return _randomValues[index];
 }

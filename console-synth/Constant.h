@@ -1,12 +1,18 @@
 #ifndef SYNTH_CONSTANT_H
 #define SYNTH_CONSTANT_H
 
-enum class AmplitudeOscillatorType {
-	Sine,
+enum class AmplitudeOscillatorType : int {
+	Sine = 0,
 	Square,
 	Triangle,
 	Sawtooth,
 	Random
+};
+
+enum class EnvelopeFilterType : int {
+	Constant = 0,
+	Oscillator,
+	EnvelopeSweep
 };
 
 const float PI = (float)3.1415926;

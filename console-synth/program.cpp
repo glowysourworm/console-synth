@@ -7,14 +7,15 @@
 #include "SynthPlayer.h"
 #include "WindowsKeyCodes.h"
 #include <Windows.h>
+#include <chrono>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
-#include <ftxui/component/event.hpp>
 #include <ftxui/component/loop.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <mutex>
 #include <string>
+#include <thread>
 
 
 // Static Instance (RT Audio) (Couldn't figure out how to cast function callbacks to the framework)
@@ -250,10 +251,13 @@ void LoopUI()
 	{
 		//_lock->lock();
 
-		//if (GetAsyncKeyState(VK_ESCAPE))
-		//	break;
-
 		lastUIUpdate += audioStopWatch.markMilliseconds();
+
+		if (GetAsyncKeyState(VK_ESCAPE))
+		{
+			screen.ExitLoopClosure();
+			break;
+		}
 
 		_lock->lock();
 
@@ -262,7 +266,12 @@ void LoopUI()
 		for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
 		{
 			// Check that enum is defined
-			if ((int)(WindowsKeyCodes)keyCode != keyCode)
+			if (keyCode < 0x30 ||
+				keyCode == 0x40 ||
+				(keyCode > 0x5A && keyCode < 0x80) ||
+				(keyCode > 0x80 && keyCode < 0xBB) ||
+				(keyCode > 0xBF && keyCode < 0xDB) ||
+				(keyCode > 0xDE))
 				continue;
 
 			if (!_configuration->HasMidiNote((WindowsKeyCodes)keyCode))
@@ -328,7 +337,7 @@ void LoopUI()
 
 		loop.RunOnce();
 
-		//std::this_thread::sleep_for(std::chrono::microseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 		//_lock->unlock();
 	}
@@ -363,8 +372,8 @@ int main(int argc, char* argv[], char* envp[])
 
 	// Delete memory for primary components
 	//
-	if (_player != NULL)
-		delete _player;
+	//if (_player != NULL)
+	//	delete _player;
 
 	return 0;
 }

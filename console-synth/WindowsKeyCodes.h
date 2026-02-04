@@ -48,15 +48,17 @@ enum class WindowsKeyCodes : int
 	
 
 	SEMICOLON = 0x80,			// VK_OEM_1
+
 	PLUS = 0xBB,				// VK_OEM_PLUS
+	COMMA = 0xBC,				// VK_OEM_COMMA
+	MINUS = 0xBD,				// VK_OEM_MINUS
+	PERIOD = 0xBE,				// VK_OEM_PERIOD
 	QUESTION_MARK = 0xBF,		// VK_OEM_2
+
 	LEFT_BRACKET = 0xDB,		// VK_OEM_4 (left bracket)
 	BACKSLASH = 0xDC,			// VK_OEM_5 (backslash / pipe)
 	RIGHT_BRACKET = 0xDD,		// VK_OEM_6 (right bracket)	
 	APOSTROPHE = 0xDE,			// VK_OEM_7
-	COMMA = 0xBC,				// VK_OEM_COMMA
-	MINUS = 0xBD,				// VK_OEM_MINUS
-	PERIOD = 0xBE				// VK_OEM_PERIOD
 };
 
 #endif

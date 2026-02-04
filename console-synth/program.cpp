@@ -8,6 +8,8 @@
 #include "WindowsKeyCodes.h"
 #include <Windows.h>
 #include <chrono>
+#include <cstdio>
+#include <format>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/component_options.hpp>
@@ -204,40 +206,84 @@ void LoopUI()
 	// Synth Configuration
 	bool configurationChange = false;
 	Envelope envelope = _configuration->GetNoteEnvelope();
+	Envelope filter = _configuration->GetEnvelopeFilter();
 
 	float envelopeMin = 0.01f;
-	float envelopeMax = 1.0f;
+	float envelopeMax = 3.0f;
 	float envelopeIncrement = 0.01f;
+
+	float filterCutoffMin = 60;
+	float filterCutoffMax = MAX_FREQUENCY;
+	float filterCutoffIncr = 10;
+
+	float filterResonanceMin = 0.0f;
+	float filterResonanceMax = 1.0f;
+	float filterResonanceIncr = 0.01f;
 
 	float noteAttack = envelope.GetAttack();
 	float noteSustain = envelope.GetSustain();
 	float noteDecay = envelope.GetDecay();
 	float noteRelease = envelope.GetRelease();
 
+	float filterAttack = filter.GetAttack();
+	float filterSustain = filter.GetSustain();
+	float filterDecay = filter.GetDecay();
+	float filterRelease = filter.GetRelease();
+
+	float filterCutoff = _configuration->GetEnvelopeFilterCutoff();
+	float filterResonance = _configuration->GetEnvelopeFilterResonance();
+
 	std::string attackStr;
 	std::string sustainStr;
 	std::string decayStr;
 	std::string releaseStr;
 
+	std::string filterAttackStr;
+	std::string filterSustainStr;
+	std::string filterDecayStr;
+	std::string filterReleaseStr;
+
+	std::string filterCutoffStr;
+	std::string filterResonanceStr;
+
 	int oscillatorChoice = 0;
 
 	auto oscillatorStrs = std::vector<std::string>({
 		"Sine",
-		"Triangle",
 		"Square",
+		"Triangle",
 		"Sawtooth"
 	});
 
+	// Oscillator
 	auto oscillatorUI = ftxui::Radiobox(&oscillatorStrs, &oscillatorChoice);
 
+	// Note Envelope
 	auto envelopeUI = ftxui::Container::Vertical(
 	{
 		ftxui::Renderer([&] { return ftxui::text("Input Envelope") | ftxui::color(ftxui::Color(0,88,255,255)); }),
 		ftxui::Renderer([&] {return ftxui::separator(); }),
-		ftxui::Slider(&attackStr, &noteAttack, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&attackStr, &noteAttack, envelopeMin, envelopeMax, envelopeIncrement) | ftxui::color(ftxui::Color::White),
 		ftxui::Slider(&sustainStr, &noteSustain, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&decayStr, &noteDecay, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&releaseStr, &noteRelease, envelopeMin, envelopeMax, envelopeIncrement),
+	});
+
+	// Envelope Filter
+	auto envelopeFilterUI = ftxui::Container::Vertical(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Envelope Filter") | ftxui::color(ftxui::Color(255,0,255,255)); }),
+		ftxui::Renderer([&] {return ftxui::separator(); }),
+
+		ftxui::Slider(&filterAttackStr, &filterAttack, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&filterSustainStr, &filterSustain, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&filterDecayStr, &filterDecay, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&filterReleaseStr, &filterRelease, envelopeMin, envelopeMax, envelopeIncrement),
+
+		ftxui::Renderer([&] {return ftxui::separator(); }),
+
+		ftxui::Slider(&filterCutoffStr, &filterCutoff, filterCutoffMin, filterCutoffMax, filterCutoffIncr),
+		ftxui::Slider(&filterResonanceStr, &filterResonance, filterResonanceMin, filterResonanceMax, filterResonanceIncr),
 	});
 
 	auto oscillatorUIRenderer = ftxui::Renderer(oscillatorUI, [&]
@@ -252,17 +298,33 @@ void LoopUI()
 
 	auto envelopeUIRenderer = ftxui::Renderer(envelopeUI, [&]
 	{
-		attackStr = "Attack  (s) " + std::to_string(noteAttack);
-		sustainStr = "Sustain (s) " + std::to_string(noteSustain);
-		decayStr = "Decay   (s) " + std::to_string(noteDecay);
-		releaseStr = "Release (s) " + std::to_string(noteRelease);
+		attackStr = "Attack  (s) " + std::format("{:.2f}", noteAttack);
+		sustainStr = "Sustain (s) " + std::format("{:.2f}", noteSustain);
+		decayStr = "Decay   (s) " + std::format("{:.2f}", noteDecay);
+		releaseStr = "Release (s) " + std::format("{:.2f}", noteRelease);
 
 		return envelopeUI->Render();
 	});
 
+	auto filterUIRenderer = ftxui::Renderer(envelopeFilterUI, [&]
+	{
+		filterAttackStr = "Attack  (s) " + std::format("{:.2f}", filterAttack);
+		filterSustainStr = "Sustain (s) " + std::format("{:.2f}", filterSustain);
+		filterDecayStr = "Decay   (s) " + std::format("{:.2f}", filterDecay);
+		filterReleaseStr = "Release (s) " + std::format("{:.2f}", filterRelease);
+
+		filterCutoffStr = "Cutoff (Hz) " + std::to_string((int)filterCutoff);
+		filterResonanceStr = "Resonance   " + std::format("{:.2f}", filterResonance);
+
+		return envelopeFilterUI->Render();
+	});
+
 	auto synthSettings = ftxui::Container::Horizontal({
+
 		oscillatorUIRenderer | ftxui::flex_grow | ftxui::border,
-		envelopeUIRenderer | ftxui::flex_grow | ftxui::border
+		envelopeUIRenderer | ftxui::flex_grow | ftxui::border,
+		filterUIRenderer | ftxui::flex_grow | ftxui::border
+
 	}) | ftxui::flex_grow;
 
 	// UI BACKEND LOOP!! This will be run just for re-drawing purposes during our
@@ -287,6 +349,7 @@ void LoopUI()
 
 			synthInformation,
 			synthSettings->Render()
+
 		}) | ftxui::flex_grow;
 
 		return container;
@@ -316,6 +379,11 @@ void LoopUI()
 			break;
 		}
 
+		// CRITICAL SECTION: This section is for updating the piano notes. So, this should be a fast loop; and 
+		//					 able to run before the playback thread has to wait too long 
+		// 
+		//					 (less than a sample, ideally)
+		//
 		_lock->lock();
 
 		// Iterate Key Codes (probably the most direct method)
@@ -374,22 +442,40 @@ void LoopUI()
 		//if (noteEnvelope != envelope)
 		//	_configuration->SetNoteEnvelope(noteEnvelope);
 
-		// Only update if changes were made
-		//if (_configuration->IsDirty())
-		//{
-		//	//_lock->lock();
+		// Synth Configuration:  Our copy is updated on the UI Update timer
+		//
+		if (lastUIUpdate > 100)
+		{
+			// Update Configuration
+			_configuration->SetNoteEnvelope(Envelope(noteAttack, noteDecay, noteSustain, noteRelease, envelope.GetAttackPeak(), envelope.GetSustainPeak()));
+			_configuration->SetEnvelopeFilter(Envelope(filterAttack, filterDecay, filterSustain, filterRelease, filter.GetAttackPeak(), filter.GetSustainPeak()));
+			_configuration->SetOscillatorType((AmplitudeOscillatorType)oscillatorChoice);
+			_configuration->SetEnvelopeFilterCutoff(filterCutoff);
+			_configuration->SetEnvelopeFilterResonance(filterResonance);
+		}
 
-		//	_player->StopStream();
+		// Only update if changes were made (~100ms)
+		if (_configuration->IsDirty())
+		{
+			// CRITICAL SECTION:  This is an update from the UI, which will reset the synth parameters. So,
+			//					  it is only allowed every ~100ms at the most.
+			//
+			_lock->lock();
 
-		//	((SynthPlaybackDevice*)_player->GetDevice())->UpdateSynth(*_configuration);
+			//_player->StopStream();
 
-		//	_player->StartStream();
+			((SynthPlaybackDevice*)_player->GetDevice())->UpdateSynth(*_configuration);
 
-		//	//_lock->unlock();
+			//_player->StartStream();
 
-		//	// Reset Configuration Flag
-		//	_configuration->ClearDirty();
-		//}
+			// Reset Configuration Flag
+			_configuration->ClearDirty();
+
+			// Reset UI Update Time
+			lastUIUpdate = 0;
+
+			_lock->unlock();
+		}
 			
 
 		loop.RunOnce();

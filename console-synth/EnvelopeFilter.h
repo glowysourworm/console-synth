@@ -12,6 +12,10 @@ public:
 
 	float Apply(float sample, float absoluteTime) override;
 
+	void Engage(float absoluteTime);
+	void DisEngage(float absoluteTime);
+	bool HasOutput(float absoluteTime);
+
 private:
 
 	int _cutoffFrequency;

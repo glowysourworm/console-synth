@@ -52,16 +52,16 @@ int SynthNote::GetMidiNumber() const
 
 float SynthNote::GetSample(float absoluteTime) const
 {
-	// FILTER SWEEP
-	//if (_filterEnvelope->HasOutput(absoluteTime))
-	//{
-	//_filter->Set(fabs((float)(MAX_FREQUENCY * GenerateTriangle(absoluteTime, 3))), 0.15);
-	//_filter->Set((float)MAX_FREQUENCY * _filterEnvelope->GetEnvelopeLevel(absoluteTime), 0.9);
+	// BASE TONE:  Includes note envelope
+	float output = _envelope->GetEnvelopeLevel(absoluteTime) * _oscillator->GetSample(absoluteTime);
 
-	//wetOutput = _filter->Apply(wetOutput);
-	//}
+	// FILTER SWEEP: Check envelope filter for output
+	if (_envelopeFilter->HasOutput(absoluteTime))
+	{
+		output = _envelopeFilter->Apply(output, absoluteTime);
+	}
 
-	return _envelope->GetEnvelopeLevel(absoluteTime) * _oscillator->GetSample(absoluteTime);
+	return output;
 }
 
 float SynthNote::GetFrequency() const
@@ -82,9 +82,11 @@ bool SynthNote::HasOutput(float absoluteTime)
 void SynthNote::Engage(float absoluteTime)
 {
 	_envelope->Engage(absoluteTime);
+	_envelopeFilter->Engage(absoluteTime);
 }
 
 void SynthNote::DisEngage(float absoluteTime)
 {
 	_envelope->DisEngage(absoluteTime);
+	_envelopeFilter->DisEngage(absoluteTime);
 }

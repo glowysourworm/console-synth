@@ -7,6 +7,9 @@ EnvelopeFilter::EnvelopeFilter(float gain, int samplingRate, int cutoffFrequency
 {
 	_filter = new ButterworthFilter(samplingRate, gain);
 	_filterEnvelope = new Envelope(envelope);
+
+	_cutoffFrequency = cutoffFrequency;
+	_resonance = resonance;
 }
 EnvelopeFilter::~EnvelopeFilter()
 {
@@ -24,4 +27,19 @@ float EnvelopeFilter::Apply(float sample, float absoluteTime)
 
 	// Return filtered output
 	return _filter->Apply(sample, absoluteTime);
+}
+
+void EnvelopeFilter::Engage(float absoluteTime)
+{
+	_filterEnvelope->Engage(absoluteTime);
+}
+
+void EnvelopeFilter::DisEngage(float absoluteTime)
+{
+	_filterEnvelope->DisEngage(absoluteTime);
+}
+
+bool EnvelopeFilter::HasOutput(float absoluteTime)
+{
+	return _filterEnvelope->HasOutput(absoluteTime);
 }

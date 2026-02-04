@@ -1,9 +1,13 @@
 #include "Constant.h"
 #include "Envelope.h"
 #include "SynthConfiguration.h"
+#include "SynthNoteMap.h"
+#include "WindowsKeyCodes.h"
 
 SynthConfiguration::SynthConfiguration()
 {
+	_keyMap = new SynthNoteMap();
+
 	_isDirty = false;
 
 	_oscillatorType = AmplitudeOscillatorType::Sine;
@@ -32,6 +36,9 @@ SynthConfiguration::SynthConfiguration()
 }
 SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 {
+	if (_keyMap != nullptr)
+		delete _keyMap;
+
 	if (_noteEnvelope != nullptr)
 		delete _noteEnvelope;
 
@@ -64,6 +71,9 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 }
 SynthConfiguration::~SynthConfiguration()
 {
+	if (_keyMap != nullptr)
+		delete _keyMap;
+
 	if (_noteEnvelope != nullptr)
 		delete _noteEnvelope;
 
@@ -143,6 +153,10 @@ bool SynthConfiguration::GetDelayFeedback() const
 {
 	return _delayFeedback;
 }
+void SynthConfiguration::IterateKeymap(SynthNoteMap::KeymapIterationCallback callback) const
+{
+	_keyMap->Iterate(callback);
+}
 int SynthConfiguration::GetMidiLow() const
 {
 	return _midiLow;
@@ -150,6 +164,21 @@ int SynthConfiguration::GetMidiLow() const
 int SynthConfiguration::GetMidiHigh() const
 {
 	return _midiHigh;
+}
+
+bool SynthConfiguration::HasMidiNote(WindowsKeyCodes keyCode) const
+{
+	return _keyMap->HasMidiNote(keyCode);
+}
+
+int SynthConfiguration::GetMidiNote(WindowsKeyCodes keyCode) const
+{
+	return _keyMap->GetMidiNote(keyCode);
+}
+
+WindowsKeyCodes SynthConfiguration::GetKeyCode(int midiNote) const
+{
+	return _keyMap->GetKeyCode(midiNote);
 }
 
 void SynthConfiguration::SetOscillatorType(AmplitudeOscillatorType value)
@@ -172,6 +201,10 @@ void SynthConfiguration::SetMidiHigh(int value)
 		_isDirty = true;
 
 	_midiHigh = value;
+}
+void SynthConfiguration::SetMidiNote(WindowsKeyCodes keyCode, int midiNote)
+{
+	_keyMap->Add(keyCode, midiNote);
 }
 void SynthConfiguration::SetHasDelay(bool value)
 {

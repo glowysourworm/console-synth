@@ -1,21 +1,31 @@
 #include "Mixer.h"
-#include <vector>
+#include <exception>
+#include <map>
 
-Mixer::Mixer(int channels)
+Mixer::Mixer()
 {
-	_channels = new std::vector<Mixer::MixerChannel>(channels);
-
-	for (int i = 0; i < channels; i++)
-		_channels->push_back(Mixer::MixerChannel(0, 0));
+	_channels = new std::map<int, Mixer::MixerChannel>();
 }
 Mixer::~Mixer()
 {
 	delete _channels;
 }
 
-void Mixer::SetChannel(int index, float sample, float relativeMix)
+void Mixer::SetChannel(int channelKey, float sample, float relativeMix)
 {
-	_channels->at(index).Set(sample, relativeMix);
+	if (_channels->contains(channelKey))
+		_channels->at(channelKey).Set(sample, relativeMix);
+
+	else
+		_channels->insert({ channelKey, Mixer::MixerChannel(sample, relativeMix) });
+}
+
+void Mixer::ClearChannel(int channelKey)
+{
+	if (!_channels->contains(channelKey))
+		throw new std::exception("Mixer channel not contained within the mixer!");
+
+	_channels->erase(channelKey);
 }
 
 float Mixer::Get()
@@ -31,18 +41,13 @@ float Mixer::Get()
 	//}
 
 	// Do a relative weighting
-	for (int i = 0; i < (int)_channels->size(); i++)
+	for (auto iter = _channels->begin(); iter != _channels->end(); ++iter)
 	{
-		if (_channels->at(i).sample > 0 ||
-			_channels->at(i).sample < 0)
-		{
-			result += _channels->at(i).sample * _channels->at(i).mixLevel;
-			engagedChannels++;
-		}
+		result += iter->second.sample * iter->second.mixLevel;
 	}
 
-	if (engagedChannels > 0)
-		result = result / (double)engagedChannels;
+	if (_channels->size() > 0)
+		result = result / (double)_channels->size();
 	else
 		result = 0;
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "Constant.h"
 #include "Envelope.h"
+#include "SynthNoteMap.h"
+#include "WindowsKeyCodes.h"
 
 class SynthConfiguration
 {
@@ -18,6 +20,8 @@ public:
 
 	void SetMidiLow(int value);
 	void SetMidiHigh(int value);
+
+	void SetMidiNote(WindowsKeyCodes keyCode, int midiNote);
 
 	void SetHasDelay(bool value);
 	void SetHasCompressor(bool value);
@@ -40,6 +44,10 @@ public:
 	int GetMidiLow() const;
 	int GetMidiHigh() const;
 
+	bool HasMidiNote(WindowsKeyCodes keyCode) const;
+	int GetMidiNote(WindowsKeyCodes keyCode) const;
+	WindowsKeyCodes GetKeyCode(int midiNote) const;
+
 	AmplitudeOscillatorType GetOscillatorType() const;
 
 	bool GetHasDelay() const;
@@ -61,7 +69,13 @@ public:
 	float GetDelaySeconds() const;
 	bool GetDelayFeedback() const;
 
+public:
+
+	void IterateKeymap(SynthNoteMap::KeymapIterationCallback callback) const;
+
 private:
+
+	SynthNoteMap* _keyMap;
 
 	// Tracks changes to the configuration
 	bool _isDirty;

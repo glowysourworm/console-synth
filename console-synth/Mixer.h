@@ -1,7 +1,7 @@
 #ifndef MIXER_H
 #define MIXER_H
 
-#include <vector>
+#include <map>
 
 class Mixer
 {
@@ -32,17 +32,18 @@ public:
 	};
 
 	// Creates a mixer with the specified number of channels
-	Mixer(int channels);
+	Mixer();
 	~Mixer();
 
-	void SetChannel(int index, float sample, float relativeMix = 1.0);
+	void SetChannel(int channelKey, float sample, float relativeMix = 1.0);
+	void ClearChannel(int channelKey);
 
 	// Returns mix vor current sample frame
 	float Get();
 
 private:
 
-	std::vector<Mixer::MixerChannel>* _channels;
+	std::map<int, Mixer::MixerChannel>* _channels;
 };
 
 #endif

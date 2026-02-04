@@ -5,11 +5,25 @@
 #include "Synth.h"
 #include "SynthConfiguration.h"
 #include "SynthNote.h"
-#include <vector>
+#include <map>
+#include <utility>
 
 Synth::Synth(const SynthConfiguration& configuration)
 {
 	this->Initialize(configuration);
+}
+
+void Synth::GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const
+{
+	int index = 0;
+
+	// Get Number of Active Notes
+	arrayLength = _pianoNotes->size();
+
+	for (auto iter = _pianoNotes->begin(); iter != _pianoNotes->end(); ++iter)
+	{
+		array[index++] = iter->first;
+	}
 }
 
 void Synth::Initialize(const SynthConfiguration& configuration)
@@ -19,26 +33,20 @@ void Synth::Initialize(const SynthConfiguration& configuration)
 		this->~Synth();
 
 	_configuration = new SynthConfiguration(configuration);
-	_pianoNotes = new std::vector<SynthNote*>();
+	_pianoNotes = new std::map<int, SynthNote*>();
 
-	_mixer = new Mixer(configuration.GetMidiHigh() - configuration.GetMidiLow() + 1);
+	_mixer = new Mixer();
 	_delay = new CombFilter(configuration.GetDelaySeconds(), 0.8, SAMPLING_RATE, configuration.GetDelayFeedback());
 	_compressor = new Compressor(10, SAMPLING_RATE, configuration.GetCompressorThreshold(), configuration.GetCompressionRatio(), configuration.GetCompressorRelaxationPeriod(), configuration.GetCompressorAttack(), configuration.GetCompressorRelease());
-
-	// Initialize Piano
-	for (int midiNote = configuration.GetMidiLow(); midiNote <= configuration.GetMidiHigh(); midiNote++)
-	{
-		_pianoNotes->push_back(new SynthNote(midiNote, configuration));
-	}
 }
 
 Synth::~Synth()
 {
 	delete _configuration;
 
-	for (int i = 0; i < _pianoNotes->size(); i++)
+	for (auto iter = _pianoNotes->begin(); iter != _pianoNotes->end(); ++iter)
 	{
-		delete _pianoNotes->at(i);
+		delete iter->second;
 	}
 
 	delete _pianoNotes;
@@ -55,7 +63,21 @@ void Synth::SetConfiguration(const SynthConfiguration& configuration)
 
 void Synth::Set(int midiNumber, bool pressed, double absoluteTime)
 {
-	SynthNote* note = _pianoNotes->at(midiNumber - _configuration->GetMidiLow());
+	SynthNote* note = nullptr;
+
+	// New Note
+	if (!_pianoNotes->contains(midiNumber))
+	{
+		note = new SynthNote(midiNumber, *_configuration);
+
+		_pianoNotes->insert(std::make_pair(midiNumber, note));
+	}
+
+	else
+	{
+		note = _pianoNotes->at(midiNumber);
+	}
+	
 
 	if (!pressed)
 		note->DisEngage(absoluteTime);
@@ -64,9 +86,36 @@ void Synth::Set(int midiNumber, bool pressed, double absoluteTime)
 		note->Engage(absoluteTime);
 }
 
+void Synth::Clear(double absoluteTime)
+{
+	// Careful with iterator: cpp reference is not a bad place for "documentation"
+	//
+	for (auto iter = _pianoNotes->begin(); iter != _pianoNotes->end();)
+	{
+		if (!iter->second->HasOutput(absoluteTime))
+		{
+			// Deallocate synth note
+			delete iter->second;
+
+			// Remove from the mixer
+			_mixer->ClearChannel(iter->first);
+
+			// Remove from collection
+			iter = _pianoNotes->erase(iter);
+		}
+		else
+			++iter;
+	}
+}
+
 bool Synth::IsSet(int midiNumber)
 {
-	return _pianoNotes->at(midiNumber - _configuration->GetMidiLow())->IsEngaged();
+	return _pianoNotes->at(midiNumber)->IsEngaged();
+}
+
+bool Synth::HasNote(int midiNumber)
+{
+	return _pianoNotes->contains(midiNumber);
 }
 
 float Synth::GetSample(double absoluteTime)
@@ -75,9 +124,9 @@ float Synth::GetSample(double absoluteTime)
 		return 0;
 
 	// BASE OSCILLATORS
-	for (int i = _pianoNotes->size() - 1; i >= 0; i--)
+	for (auto iter = _pianoNotes->begin(); iter != _pianoNotes->end(); ++iter)
 	{
-		SynthNote* note = _pianoNotes->at(i);
+		SynthNote* note = iter->second;
 		float output = 0;
 
 		// Primary notes
@@ -87,7 +136,7 @@ float Synth::GetSample(double absoluteTime)
 		}
 
 		// Send to the mixer
-		_mixer->SetChannel(i, output);
+		_mixer->SetChannel(note->GetMidiNumber(), output);
 	}
 
 	// Mixer -> AMPLITUDE OSCILLATOR (LFO)

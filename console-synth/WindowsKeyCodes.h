@@ -1,37 +1,62 @@
 #ifndef WINDOWS_KEY_CODES_H
 #define WINDOWS_KEY_CODES_H
 
+
+// https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+//
 // KEY CODES THAT AREN'T DEFINED IN WINUSER.H (??)
-class WindowsKeyCodes
+//
+enum class WindowsKeyCodes : int
 {
-public:
-	static const int A = 0x41;
-	static const int B = 0x42;
-	static const int C = 0x43;
-	static const int D = 0x44;
-	static const int E = 0x45;
-	static const int F = 0x46;
-	static const int G = 0x47;
-	static const int H = 0x48;
-	static const int I = 0x49;
-	static const int J = 0x4A;
-	static const int K = 0x4B;
-	static const int L = 0x4C;
-	static const int M = 0x4D;
-	static const int N = 0x4E;
-	static const int O = 0x4F;
-	static const int P = 0x50;
-	static const int Q = 0x51;
-	static const int R = 0x52;
-	static const int S = 0x53;
-	static const int T = 0x54;
-	static const int U = 0x55;
-	static const int V = 0x56;
-	static const int W = 0x57;
-	static const int X = 0x58;
-	static const int Y = 0x59;
-	static const int Z = 0x5A;
-	static const int SEMICOLON = 0x8000;
+	NUMBER_0 = 0x30,
+	NUMBER_1 = 0x31,
+	NUMBER_2 = 0x32,
+	NUMBER_3 = 0x33,
+	NUMBER_4 = 0x34,
+	NUMBER_5 = 0x35,
+	NUMBER_6 = 0x36,
+	NUMBER_7 = 0x37,
+	NUMBER_8 = 0x38,
+	NUMBER_9 = 0x39,
+
+	A = 0x41,
+	B = 0x42,
+	C = 0x43,
+	D = 0x44,
+	E = 0x45,
+	F = 0x46,
+	G = 0x47,
+	H = 0x48,
+	I = 0x49,
+	J = 0x4A,
+	K = 0x4B,
+	L = 0x4C,
+	M = 0x4D,
+	N = 0x4E,
+	O = 0x4F,
+	P = 0x50,
+	Q = 0x51,
+	R = 0x52,
+	S = 0x53,
+	T = 0x54,
+	U = 0x55,
+	V = 0x56,
+	W = 0x57,
+	X = 0x58,
+	Y = 0x59,
+	Z = 0x5A,
+	
+
+	SEMICOLON = 0x80,			// VK_OEM_1
+	PLUS = 0xBB,				// VK_OEM_PLUS
+	QUESTION_MARK = 0xBF,		// VK_OEM_2
+	LEFT_BRACKET = 0xDB,		// VK_OEM_4 (left bracket)
+	BACKSLASH = 0xDC,			// VK_OEM_5 (backslash / pipe)
+	RIGHT_BRACKET = 0xDD,		// VK_OEM_6 (right bracket)	
+	APOSTROPHE = 0xDE,			// VK_OEM_7
+	COMMA = 0xBC,				// VK_OEM_COMMA
+	MINUS = 0xBD,				// VK_OEM_MINUS
+	PERIOD = 0xBE				// VK_OEM_PERIOD
 };
 
 #endif

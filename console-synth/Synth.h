@@ -1,10 +1,11 @@
 #ifndef SYNTH_H
 #define SYNTH_H
 
-#include <vector>
+#include <map>
 
 #include "CombFilter.h"
 #include "Compressor.h"
+#include "Constant.h"
 #include "EnvelopeFilter.h"
 #include "Mixer.h"
 #include "SynthConfiguration.h"
@@ -25,10 +26,33 @@ public:
 
 	// Sets midi notes on / off
 	void Set(int midiNumber, bool pressed, double absoluteTime);
+
+	/// <summary>
+	/// Returns true if there is output from the midi numbered synth note
+	/// </summary>
 	bool IsSet(int midiNumber);
 
-	// Synthesizes a full output at the specified time
+	/// <summary>
+	/// Returns true if there is an active note for this midi number
+	/// </summary>
+	bool HasNote(int midiNumber);
+
+	/// <summary>
+	/// Synthesizes a full output at the specified stream time
+	/// </summary>
 	float GetSample(double absoluteTime);
+
+	/// <summary>
+	/// Clears out notes that have no ouptut
+	/// </summary>
+	void Clear(double absoluteTime);
+
+public:
+
+	/// <summary>
+	/// Iterates currently active notes in the synth
+	/// </summary>
+	void GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const;
 
 private:
 
@@ -36,7 +60,8 @@ private:
 
 private:
 
-	std::vector<SynthNote*>* _pianoNotes;
+	// Synth Notes by Midi Number
+	std::map<int, SynthNote*>* _pianoNotes;
 
 	Mixer* _mixer;
 

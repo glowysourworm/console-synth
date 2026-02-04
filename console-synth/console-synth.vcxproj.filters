@@ -162,6 +162,9 @@
     <ClCompile Include="EnvelopeFilter.cpp">
       <Filter>Source Files\Filter</Filter>
     </ClCompile>
+    <ClCompile Include="SynthNoteMap.cpp">
+      <Filter>Source Files\Synth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsKeyCodes.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="EnvelopeFilter.h">
       <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="SynthNoteMap.h">
+      <Filter>Header Files\Synth</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

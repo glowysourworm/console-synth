@@ -67,7 +67,22 @@ bool SynthPlaybackDevice::GetNote(int midiNumber) const
 	return _synth->IsSet(midiNumber);
 }
 
+bool SynthPlaybackDevice::HasNote(int midiNumber) const
+{
+	return _synth->HasNote(midiNumber);
+}
+
+void SynthPlaybackDevice::ClearUnused(double streamTime)
+{
+	_synth->Clear(streamTime);
+}
+
 void SynthPlaybackDevice::UpdateSynth(const SynthConfiguration& configuration)
 {
 	_synth->SetConfiguration(configuration);
+}
+
+void SynthPlaybackDevice::GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const
+{
+	_synth->GetNotes(array, arrayLength);
 }

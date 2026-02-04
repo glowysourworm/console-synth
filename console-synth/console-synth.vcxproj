@@ -256,6 +256,7 @@
     <ClCompile Include="program.cpp" />
     <ClCompile Include="SynthConfiguration.cpp" />
     <ClCompile Include="SynthNote.cpp" />
+    <ClCompile Include="SynthNoteMap.cpp" />
     <ClCompile Include="SynthPlaybackDevice.cpp" />
     <ClCompile Include="SynthPlayer.cpp" />
     <ClCompile Include="TriangleOscillator.cpp" />
@@ -291,6 +292,7 @@
     <ClInclude Include="Synth.h" />
     <ClInclude Include="SynthConfiguration.h" />
     <ClInclude Include="SynthNote.h" />
+    <ClInclude Include="SynthNoteMap.h" />
     <ClInclude Include="SynthPlaybackDevice.h" />
     <ClInclude Include="SynthPlayer.h" />
     <ClInclude Include="TriangleOscillator.h" />

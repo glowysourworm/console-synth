@@ -94,7 +94,7 @@ void Synth::Clear(double absoluteTime)
 			delete iter->second;
 
 			// Remove from the mixer
-			_mixer->ClearChannel(iter->first);
+			//_mixer->ClearChannel(iter->first);
 
 			// Remove from collection
 			iter = _pianoNotes->erase(iter);
@@ -116,24 +116,22 @@ bool Synth::HasNote(int midiNumber)
 
 float Synth::GetSample(double absoluteTime)
 {
+	float output = 0;
+
 	// BASE OSCILLATORS
 	for (auto iter = _pianoNotes->begin(); iter != _pianoNotes->end(); ++iter)
 	{
 		SynthNote* note = iter->second;
-		float output = 0;
 
 		// Primary notes
 		if (note->HasOutput(absoluteTime))
 		{
 			output += note->GetSample(absoluteTime);
 		}
-
-		// Send to the mixer
-		_mixer->SetChannel(note->GetMidiNumber(), output);
 	}
 
-	// Mixer -> Dry Output -> Mix Effects
-	float dryOutput = _mixer->Get();
+	// Dry Output -> Mixer -> Wet + Dry (Output)
+	float dryOutput = output;
 	float wetOutput = dryOutput;
 
 	// OUTPUT EFFECTS	

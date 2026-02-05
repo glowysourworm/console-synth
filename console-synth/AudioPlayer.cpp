@@ -64,6 +64,14 @@ double AudioPlayer::GetStreamTime() const
 	return _rtAudio->getStreamTime();
 }
 
+double AudioPlayer::GetStreamLatency() const
+{
+	if (_rtAudio == NULL)
+		throw std::exception("RT Audio not initialized:  AudioPlayer.cpp");
+
+	return _rtAudio->getStreamLatency();
+}
+
 bool AudioPlayer::IsStreamRunning() const
 {
 	if (_rtAudio == NULL)

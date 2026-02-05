@@ -8,12 +8,9 @@
 #include "WindowsKeyCodes.h"
 #include <Windows.h>
 #include <chrono>
-#include <cstdio>
-#include <exception>
 #include <format>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
-#include <ftxui/component/component_options.hpp>
 #include <ftxui/component/event.hpp>
 #include <ftxui/component/loop.hpp>
 #include <ftxui/component/screen_interactive.hpp>
@@ -582,9 +579,10 @@ void LoopUI()
 		// Synth Information
 		auto synthInformation = ftxui::vbox(
 		{
-			ftxui::text("Current Time (s): " + std::to_string(systemTime / 1000.0)),
+			ftxui::text("RT Audio Version:    " + _player->GetVersion()),
+			ftxui::text("Current Time (s):    " + std::to_string(systemTime)),
 			ftxui::text("Stream Latency (ms): " + std::to_string(streamLatency)),
-			ftxui::text("Sample Rate (Hz): " + std::to_string(1000.0 / averageAudioTime)),
+			ftxui::text("Sample Rate (Hz):    " + std::to_string(SAMPLING_RATE)),
 
 		}) | ftxui::border;
 
@@ -669,30 +667,17 @@ void LoopUI()
 
 		_lock->unlock();
 
-		// Get Current Time
-		//systemTime += rtAudio->isStreamOpen() ? rtAudio->getStreamTime() : audioStopWatch.markMilliseconds();
-
-		// Get Stream Latency
-		//long latency = rtAudio->isStreamOpen() ? rtAudio->getStreamLatency() : 0;
-
-		//streamLatency = (latency / (double)SAMPLING_RATE) * 2;
-
-		// Forces a redraw
-		//screen.PostEvent(ftxui::Event::Custom);
-
-		// Run UI Backend
-		//if (lastUIUpdate > 100)
-		//	loop.RunOnce();
-
-		//Envelope noteEnvelope(noteAttack, noteDecay, noteSustain, noteRelease, envelope.GetAttackPeak(), envelope.GetSustainPeak());
-
-		//if (noteEnvelope != envelope)
-		//	_configuration->SetNoteEnvelope(noteEnvelope);
-
 		// Synth Configuration:  Our copy is updated on the UI Update timer
 		//
 		if (lastUIUpdate > 100)
 		{
+			// Update Stream Parameters
+			systemTime = _player->GetStreamTime();
+			streamLatency = _player->GetStreamLatency();
+
+			// Use custom event to force one UI update
+			screen.PostEvent(ftxui::Event::Custom);
+
 			// Update Configuration
 			_configuration->SetNoteEnvelope(Envelope(noteAttack, noteDecay, noteSustain, noteRelease, envelope.GetAttackPeak(), envelope.GetSustainPeak()));
 			_configuration->SetEnvelopeFilter(Envelope(filterAttack, filterDecay, filterSustain, filterRelease, filter.GetAttackPeak(), filter.GetSustainPeak()));
@@ -748,9 +733,6 @@ void LoopUI()
 
 		//_lock->unlock();
 	}
-
-	// This may be required for some UI loop functions that did / did not exit properly
-	//screen.Exit();
 }
 
 

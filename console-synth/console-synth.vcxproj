@@ -55,9 +55,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>
+    </PreferredToolArchitecture>
+    <UseDynamicDebugging>true</UseDynamicDebugging>
+    <UseDebugLibraries>true</UseDebugLibraries>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -113,7 +116,7 @@
     <LibraryPath>C:\Backup\_Source\Git\console-synth\rtaudio-master\.libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -166,12 +169,12 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\Backup\_Source\Git\console-synth\ftxui-6.1.9-win64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\ftxui-6.1.9-win64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -226,7 +229,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\rtaudio-master\RtAudio.cpp" />
+    <ClCompile Include="..\vendor\rtaudio-master\RtAudio.cpp" />
     <ClCompile Include="AllPassFilter.cpp" />
     <ClCompile Include="AmplitudeOscillator.cpp" />
     <ClCompile Include="AudioPlayer.cpp" />
@@ -262,7 +265,7 @@
     <ClCompile Include="TriangleOscillator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\rtaudio-master\RtAudio.h" />
+    <ClInclude Include="..\vendor\rtaudio-master\RtAudio.h" />
     <ClInclude Include="AllPassFilter.h" />
     <ClInclude Include="AmplitudeOscillator.h" />
     <ClInclude Include="AudioPlayer.h" />

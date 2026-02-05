@@ -129,9 +129,6 @@
     <ClCompile Include="Reverb.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\rtaudio-master\RtAudio.cpp">
-      <Filter>Source Files\Vendor\rt-audio</Filter>
-    </ClCompile>
     <ClCompile Include="Synth.cpp">
       <Filter>Source Files\Synth</Filter>
     </ClCompile>
@@ -164,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="SynthNoteMap.cpp">
       <Filter>Source Files\Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\rtaudio-master\RtAudio.cpp">
+      <Filter>Source Files\Vendor\rt-audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,9 +242,6 @@
     <ClInclude Include="PlaybackDevice.h">
       <Filter>Header Files\Playback</Filter>
     </ClInclude>
-    <ClInclude Include="..\rtaudio-master\RtAudio.h">
-      <Filter>Header Files\Vendor\rt-audio</Filter>
-    </ClInclude>
     <ClInclude Include="SineOscillator.h">
       <Filter>Header Files\Signal</Filter>
     </ClInclude>
@@ -271,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="SynthNoteMap.h">
       <Filter>Header Files\Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\rtaudio-master\RtAudio.h">
+      <Filter>Header Files\Vendor\rt-audio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

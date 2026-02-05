@@ -13,6 +13,7 @@ public:
 
 	// RT Audio
 	double GetStreamTime() const;
+	double GetStreamLatency() const;
 
 	bool IsStreamRunning() const;
 	bool IsStreamOpen() const;

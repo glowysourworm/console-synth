@@ -24,15 +24,20 @@ SynthConfiguration::SynthConfiguration()
 
 	_envelopeFilterCutoff = 5000;
 	_envelopeFilterResonance = 1;
+	_envelopeFilterType = EnvelopeFilterType::Constant;
+	_envelopeFilterOscillatorType = AmplitudeOscillatorType::Sine;
+	_envelopeFilterOscillatorFrequency = 1.0;
 
 	_compressorThreshold = 0.5;
 	_compressionRatio = 1;
 	_compressorRelaxationPeriod = 1;
 	_compressorAttack = 0.2;
 	_compressorRelease = 0.3;
+	_compressorGain = 1.0;
 
 	_delaySeconds = 0.5;
 	_delayFeedback = false;
+	_delayGain = 0.6;
 }
 SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 {
@@ -68,6 +73,7 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 	_compressorRelaxationPeriod = copy.GetCompressorRelaxationPeriod();
 	_compressorAttack = copy.GetCompressorAttack();
 	_compressorRelease = copy.GetCompressorRelease();
+	_compressorGain = copy.GetCompressorGain();
 
 	_delaySeconds = copy.GetDelaySeconds();
 	_delayFeedback = copy.GetDelayFeedback();
@@ -160,9 +166,17 @@ float SynthConfiguration::GetCompressorRelease() const
 {
 	return _compressorRelease;
 }
+float SynthConfiguration::GetCompressorGain() const
+{
+	return _compressorGain;
+}
 float SynthConfiguration::GetDelaySeconds() const
 {
 	return _delaySeconds;
+}
+float SynthConfiguration::GetDelayGain() const
+{
+	return _delayGain;
 }
 bool SynthConfiguration::GetDelayFeedback() const
 {
@@ -335,12 +349,26 @@ void SynthConfiguration::SetCompressorRelease(float value)
 
 	_compressorRelease = value;
 }
+void SynthConfiguration::SetCompressorGain(float value)
+{
+	if (_compressorGain != value)
+		_isDirty = true;
+
+	_compressorGain = value;
+}
 void SynthConfiguration::SetDelaySeconds(float value)
 {
 	if (_delaySeconds != value)
 		_isDirty = true;
 
 	_delaySeconds = value;
+}
+void SynthConfiguration::SetDelayGain(float value)
+{
+	if (_delayGain != value)
+		_isDirty = true;
+
+	_delayGain = value;
 }
 void SynthConfiguration::SetDelayFeedback(bool value)
 {

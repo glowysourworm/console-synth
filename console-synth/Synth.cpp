@@ -51,7 +51,6 @@ Synth::~Synth()
 
 	delete _pianoNotes;
 	delete _mixer;
-	delete _envelopeFilter;
 	delete _delay;
 	delete _compressor;
 }

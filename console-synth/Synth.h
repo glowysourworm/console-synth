@@ -66,7 +66,6 @@ private:
 	Mixer* _mixer;
 
 	// Post-processing effects	
-	EnvelopeFilter* _envelopeFilter;
 	Compressor* _compressor;
 	CombFilter* _delay;
 

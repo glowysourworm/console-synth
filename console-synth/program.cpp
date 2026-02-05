@@ -15,10 +15,8 @@
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/component_options.hpp>
 #include <ftxui/component/event.hpp>
-#include <ftxui/component/event.hpp>
 #include <ftxui/component/loop.hpp>
 #include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/direction.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
 #include <mutex>
@@ -209,6 +207,10 @@ void LoopUI()
 	Envelope envelope = _configuration->GetNoteEnvelope();
 	Envelope filter = _configuration->GetEnvelopeFilter();
 
+	float lineMin = 0.00f;
+	float lineMax = 1.00f;
+	float lineIncr = 0.01f;
+
 	float envelopeMin = 0.01f;
 	float envelopeMax = 3.0f;
 	float envelopeIncrement = 0.01f;
@@ -216,10 +218,6 @@ void LoopUI()
 	float filterCutoffMin = 60;
 	float filterCutoffMax = MAX_FREQUENCY;
 	float filterCutoffIncr = 10;
-
-	float filterResonanceMin = 0.0f;
-	float filterResonanceMax = 1.0f;
-	float filterResonanceIncr = 0.01f;
 
 	float noteAttack = envelope.GetAttack();
 	float noteSustain = envelope.GetSustain();
@@ -239,6 +237,26 @@ void LoopUI()
 	float filterOscillatorFrequencyHigh = 5;
 	float filterOscillatorFrequencyIncr = 0.1;
 
+	float delaySeconds = _configuration->GetDelaySeconds();
+	float delayGain = _configuration->GetDelayGain();
+	float delaySecondsMin = 0.1f;
+	float delaySecondsMax = 3.0f;
+	float delaySecondsIncr = 0.1f;
+
+	float compressorGain = _configuration->GetCompressorGain();
+	float compressorThreshold = _configuration->GetCompressorThreshold();
+	float compressorAttack = _configuration->GetCompressorAttack();
+	float compressorRelease = _configuration->GetCompressorRelease();
+	float compressorRatio = _configuration->GetCompressionRatio();
+
+	float compressorGainLow = 0.0f;
+	float compressorGainHigh = 10.0f;
+	float compressorGainIncr = 0.01f;
+
+	float compressorRatioLow = 1.0f;
+	float compressorRatioHigh = 10.0f;
+	float compressorRatioIncr = 1.0f;
+
 	std::string attackStr;
 	std::string sustainStr;
 	std::string decayStr;
@@ -254,10 +272,24 @@ void LoopUI()
 
 	std::string filterOscillatorStr;
 
+	std::string delayStr;
+	std::string delayGainStr;
+
+	std::string compressorGainStr;
+	std::string compressorThresholdStr;
+	std::string compressorRatioStr;
+	std::string compressorAttackStr;
+	std::string compressorReleaseStr;
+
 	int oscillatorChoice = (int)_configuration->GetOscillatorType();
 	int envelopeFilterEnabled = _configuration->GetHasEnvelopeFilter() ? 0 : 1;
 	int envelopeFilterTypeChoice = (int)_configuration->GetEnvelopeFilterType();
 	int envelopeOscillatorChoice = (int)_configuration->GetEnvelopeFilterOscillatorType();
+
+	int delayEnabled = _configuration->GetHasDelay() ? 0 : 1;
+	int delayFeedbackEnabled = _configuration->GetDelayFeedback() ? 0 : 1;
+
+	int compressorEnabled = _configuration->GetHasCompressor() ? 0 : 1;
 
 	auto oscillatorStrs = std::vector<std::string>({
 		"Sine",
@@ -266,7 +298,7 @@ void LoopUI()
 		"Sawtooth",
 		"Random"
 	});
-	auto envelopeFilterStrs = std::vector<std::string>({
+	auto onOffStrs = std::vector<std::string>({
 		"On",
 		"Off"
 	});
@@ -294,7 +326,7 @@ void LoopUI()
 	auto envelopeFilterLabelUI = ftxui::Container::Horizontal({
 
 		ftxui::Renderer([&] { return ftxui::text("Envelope Filter") | ftxui::color(ftxui::Color(255,0,255,255)); }) | ftxui::flex_grow,
-		ftxui::Toggle(envelopeFilterStrs, &envelopeFilterEnabled) | ftxui::align_right,
+		ftxui::Toggle(onOffStrs, &envelopeFilterEnabled) | ftxui::align_right,
 	});
 
 	// Envelope Filter Type Label (Toggle)
@@ -321,31 +353,79 @@ void LoopUI()
 		ftxui::Slider(&filterReleaseStr, &filterRelease, envelopeMin, envelopeMax, envelopeIncrement),
 	});
 
-	//auto envelopeTypeUI = ftxui::Renderer([&] {
+	// Delay (Enable)
+	auto delayEnableUI = ftxui::Container::Horizontal({
 
-	//	// Manual 
-	//	if (envelopeFilterTypeChoice == 0)
-	//		return ftxui::text("Manual Settings");
+		ftxui::Renderer([&] { return ftxui::text("Delay") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &delayEnabled) | ftxui::align_right,
 
-	//	// Oscillator
-	//	else if (envelopeFilterTypeChoice == 1)
-	//	{
-	//		return envelopeOscillatorUI->Render();
-	//	}
+	});
 
-	//	// Sweep
-	//	else if (envelopeFilterTypeChoice == 2)
-	//	{
-	//		return envelopeSweepUI->Render();
-	//	}
+	// Delay Feedback Enable (Toggle)
+	auto delayFeedbackUI = ftxui::Container::Horizontal({
 
-	//	else
-	//		throw new std::exception("Unhandled Envelope Filter Type Choice");
-	//});
+		ftxui::Renderer([&] { return ftxui::text("Feedback") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &delayFeedbackEnabled) | ftxui::align_right,
 
+	});
+
+	// Delay
+	auto delayUI = ftxui::Container::Vertical({
+
+		delayEnableUI,
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+
+		// Feedback (Enable)
+		delayFeedbackUI,
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+
+		// Delay (s)
+		ftxui::Slider(&delayStr, &delaySeconds, delaySecondsMin, delaySecondsMax, delaySecondsIncr),
+
+		// Gain
+		ftxui::Slider(&delayGainStr, &delayGain, lineMin, lineMax, lineIncr),
+	});
+
+	// Compressor (Enable)
+	auto compressorEnableUI = ftxui::Container::Horizontal({
+
+		ftxui::Renderer([&] { return ftxui::text("Compressor") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &compressorEnabled) | ftxui::align_right,
+
+	});
+
+	// Compressor
+	auto compressorUI = ftxui::Container::Vertical({
+
+		compressorEnableUI,
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+
+		// Threshold
+		ftxui::Slider(&compressorThresholdStr, &compressorThreshold, lineMin, lineMax, lineIncr),
+
+		// Gain
+		ftxui::Slider(&compressorGainStr, &compressorGain, compressorGainLow, compressorGainHigh, compressorGainIncr),
+
+		// Attack
+		ftxui::Slider(&compressorAttackStr, &compressorAttack, lineMin, lineMax, lineIncr),
+
+		// Release
+		ftxui::Slider(&compressorReleaseStr, &compressorRelease, lineMin, lineMax, lineIncr),
+
+		// Compression Ratio
+		ftxui::Slider(&compressorRatioStr, &compressorRatio, compressorRatioLow, compressorRatioHigh, compressorRatioIncr),
+	});
+
+	// Envelope Type Chooser
 	auto envelopeTypeUI = ftxui::Container::Vertical({
+
+		// Manual 
 		ftxui::Renderer([&] { return ftxui::text("Manual Settings"); }) | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 0; }),
+
+		// Oscillator
 		envelopeOscillatorUI | ftxui::Maybe([&]{ return envelopeFilterTypeChoice == 1; }),
+
+		// Sweep
 		envelopeSweepUI | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 2; })
 	});
 
@@ -363,7 +443,7 @@ void LoopUI()
 		ftxui::Renderer([&] {return ftxui::separator(); }),
 
 		ftxui::Slider(&filterCutoffStr, &filterCutoff, filterCutoffMin, filterCutoffMax, filterCutoffIncr),
-		ftxui::Slider(&filterResonanceStr, &filterResonance, filterResonanceMin, filterResonanceMax, filterResonanceIncr),
+		ftxui::Slider(&filterResonanceStr, &filterResonance, lineMin, lineMax, lineIncr),
 	});
 
 	// Source Oscillator
@@ -404,13 +484,52 @@ void LoopUI()
 		return envelopeFilterUI->Render();
 	});
 
-	auto synthSettings = ftxui::Container::Horizontal({
+	// Delay
+	auto delayUIRenderer = ftxui::Renderer(delayUI, [&] {
+
+		delayStr = "Delay (s) " + std::format("{:.2f}", delaySeconds);
+		delayGainStr = "Gain      " + std::format("{:.2f}", delayGain);
+
+		return delayUI->Render();
+	});
+
+	// Compressor
+	auto compressorUIRenderer = ftxui::Renderer(compressorUI, [&] {
+
+		compressorThresholdStr = "Threshold    " + std::format("{:.2f}", compressorThreshold) + " ";
+		compressorGainStr = "Gain         " + std::format("{:.2f}", compressorGain) + " ";
+		compressorAttackStr = "Attack  (s)  " + std::format("{:.2f}", compressorAttack) + " ";
+		compressorReleaseStr = "Release (s)  " + std::format("{:.2f}", compressorRelease) + " ";
+
+		// Align Labels
+		if (compressorRatio == 10.0f)
+			compressorRatioStr = "Comp. Ratio  " + std::format("{:.2f}", compressorRatio);
+
+		else
+			compressorRatioStr = "Comp. Ratio  " + std::format("{:.2f}", compressorRatio) + " ";
+
+		return compressorUI->Render();
+	});
+
+	auto synthInputSettings = ftxui::Container::Horizontal({
 
 		oscillatorUIRenderer | ftxui::flex_grow | ftxui::border,
 		envelopeUIRenderer | ftxui::flex_grow | ftxui::border,
 		filterUIRenderer | ftxui::flex_grow | ftxui::border
 
 	}) | ftxui::flex_grow;
+
+	auto synthOutputSettings = ftxui::Container::Horizontal({
+
+		compressorUIRenderer | ftxui::flex_grow | ftxui::border,
+		delayUIRenderer | ftxui::flex_grow | ftxui::border
+
+	});
+
+	auto synthSettings = ftxui::Container::Vertical({
+		synthInputSettings,
+		synthOutputSettings
+	});
 
 	// UI BACKEND LOOP!! This will be run just for re-drawing purposes during our
 	//					 primary loop below.
@@ -541,6 +660,16 @@ void LoopUI()
 			_configuration->SetEnvelopeFilterOscillatorFrequency(filterOscillatorFrequency);
 			_configuration->SetEnvelopeFilterOscillatorType((AmplitudeOscillatorType)envelopeOscillatorChoice);
 			_configuration->SetHasEnvelopeFilter(envelopeFilterEnabled == 0);
+			_configuration->SetHasDelay(delayEnabled == 0);
+			_configuration->SetHasCompressor(compressorEnabled == 0);
+			_configuration->SetDelayFeedback(delayFeedbackEnabled == 0);
+			_configuration->SetDelaySeconds(delaySeconds);
+			_configuration->SetDelayGain(delayGain);
+			_configuration->SetCompressionRatio(compressorRatio);
+			_configuration->SetCompressorAttack(compressorAttack);
+			_configuration->SetCompressorGain(compressorGain);
+			_configuration->SetCompressorRelease(compressorRelease);
+			_configuration->SetCompressorThreshold(compressorThreshold);
 		}
 
 		// Only update if changes were made (~100ms)

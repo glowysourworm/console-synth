@@ -40,8 +40,10 @@ public:
 	void SetCompressorRelaxationPeriod(float value);
 	void SetCompressorAttack(float value);
 	void SetCompressorRelease(float value);
+	void SetCompressorGain(float value);
 
 	void SetDelaySeconds(float value);
+	void SetDelayGain(float value);
 	void SetDelayFeedback(bool value);
 
 	int GetMidiLow() const;
@@ -71,8 +73,10 @@ public:
 	float GetCompressorRelaxationPeriod() const;
 	float GetCompressorAttack() const;
 	float GetCompressorRelease() const;
+	float GetCompressorGain() const;
 
 	float GetDelaySeconds() const;
+	float GetDelayGain() const;
 	bool GetDelayFeedback() const;
 
 public:
@@ -104,6 +108,7 @@ private:
 	float _envelopeFilterResonance;	
 	float _envelopeFilterOscillatorFrequency;
 
+	float _compressorGain;
 	float _compressorThreshold;
 	float _compressionRatio;
 	float _compressorRelaxationPeriod;
@@ -111,6 +116,7 @@ private:
 	float _compressorRelease;
 
 	float _delaySeconds;
+	float _delayGain;
 	bool _delayFeedback;
 };
 

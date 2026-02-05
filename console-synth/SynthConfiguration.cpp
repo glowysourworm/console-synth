@@ -55,6 +55,7 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 
 	_oscillatorType = copy.GetOscillatorType();
 
+	_hasReverb = copy.GetHasReverb();
 	_hasDelay = copy.GetHasDelay();
 	_hasCompressor = copy.GetHasCompressor();
 	_hasEnvelopeFilter = copy.GetHasEnvelopeFilter();
@@ -74,6 +75,9 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 	_compressorAttack = copy.GetCompressorAttack();
 	_compressorRelease = copy.GetCompressorRelease();
 	_compressorGain = copy.GetCompressorGain();
+
+	_reverbDelaySeconds = copy.GetReverbDelaySeconds();
+	_reverbGain = copy.GetReverbGain();
 
 	_delaySeconds = copy.GetDelaySeconds();
 	_delayFeedback = copy.GetDelayFeedback();
@@ -103,6 +107,10 @@ void SynthConfiguration::ClearDirty()
 AmplitudeOscillatorType SynthConfiguration::GetOscillatorType() const
 {
 	return _oscillatorType;
+}
+bool SynthConfiguration::GetHasReverb() const
+{
+	return _hasReverb;
 }
 bool SynthConfiguration::GetHasDelay() const
 {
@@ -169,6 +177,14 @@ float SynthConfiguration::GetCompressorRelease() const
 float SynthConfiguration::GetCompressorGain() const
 {
 	return _compressorGain;
+}
+float SynthConfiguration::GetReverbDelaySeconds() const
+{
+	return _reverbDelaySeconds;
+}
+float SynthConfiguration::GetReverbGain() const
+{
+	return _reverbGain;
 }
 float SynthConfiguration::GetDelaySeconds() const
 {
@@ -248,6 +264,13 @@ void SynthConfiguration::SetMidiHigh(int value)
 void SynthConfiguration::SetMidiNote(WindowsKeyCodes keyCode, int midiNote)
 {
 	_keyMap->Add(keyCode, midiNote);
+}
+void SynthConfiguration::SetHasReverb(bool value)
+{
+	if (_hasReverb != value)
+		_isDirty = true;
+
+	_hasReverb = value;
 }
 void SynthConfiguration::SetHasDelay(bool value)
 {
@@ -355,6 +378,20 @@ void SynthConfiguration::SetCompressorGain(float value)
 		_isDirty = true;
 
 	_compressorGain = value;
+}
+void SynthConfiguration::SetReverbSeconds(float value)
+{
+	if (_reverbDelaySeconds != value)
+		_isDirty = true;
+
+	_reverbDelaySeconds = value;
+}
+void SynthConfiguration::SetReverbGain(float value)
+{
+	if (_reverbGain != value)
+		_isDirty = true;
+
+	_reverbGain = value;
 }
 void SynthConfiguration::SetDelaySeconds(float value)
 {

@@ -1,6 +1,7 @@
 #include "CombFilter.h"
 #include "Constant.h"
 #include "Mixer.h"
+#include "Reverb.h"
 #include "Synth.h"
 #include "SynthConfiguration.h"
 #include "SynthNote.h"
@@ -36,6 +37,7 @@ void Synth::Initialize(const SynthConfiguration& configuration)
 
 	_mixer = new Mixer();
 	_delay = new CombFilter(configuration.GetDelaySeconds(), 0.8, SAMPLING_RATE, configuration.GetDelayFeedback());
+	_reverb = new Reverb(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), SAMPLING_RATE);
 }
 
 Synth::~Synth()
@@ -50,6 +52,7 @@ Synth::~Synth()
 	delete _pianoNotes;
 	delete _mixer;
 	delete _delay;
+	delete _reverb;
 }
 
 void Synth::SetConfiguration(const SynthConfiguration& configuration)
@@ -93,9 +96,6 @@ void Synth::Clear(double absoluteTime)
 			// Deallocate synth note
 			delete iter->second;
 
-			// Remove from the mixer
-			//_mixer->ClearChannel(iter->first);
-
 			// Remove from collection
 			iter = _pianoNotes->erase(iter);
 		}
@@ -135,6 +135,9 @@ float Synth::GetSample(double absoluteTime)
 	float wetOutput = dryOutput;
 
 	// OUTPUT EFFECTS	
+	if (_configuration->GetHasReverb() && _reverb->HasOutput(absoluteTime))
+		wetOutput = _reverb->Apply(wetOutput, absoluteTime);
+
 	if (_configuration->GetHasDelay() && _delay->HasOutput(absoluteTime))
 		wetOutput = _delay->Apply(wetOutput, absoluteTime);
 

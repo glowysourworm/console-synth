@@ -3,6 +3,8 @@
 
 #include "FilterBase.h"
 
+#include <queue>
+
 class AllPassFilter : public FilterBase
 {
 public:
@@ -14,10 +16,9 @@ public:
 
 private:
 
-	float* _delayedInput;
-	float* _delayedOutput;
-
-	float _gain;
+	int _bufferSize;
+	std::queue<float>* _delayedInput;
+	std::queue<float>* _delayedOutput;
 };
 
 #endif

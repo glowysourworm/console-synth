@@ -6,6 +6,7 @@
 #include "CombFilter.h"
 #include "Constant.h"
 #include "Mixer.h"
+#include "Reverb.h"
 #include "SynthConfiguration.h"
 #include "SynthNote.h"
 
@@ -64,6 +65,7 @@ private:
 	Mixer* _mixer;
 
 	// Post-processing effects	
+	Reverb* _reverb;
 	CombFilter* _delay;
 
 	SynthConfiguration* _configuration;

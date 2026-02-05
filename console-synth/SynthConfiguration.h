@@ -25,6 +25,7 @@ public:
 
 	void SetMidiNote(WindowsKeyCodes keyCode, int midiNote);
 
+	void SetHasReverb(bool value);
 	void SetHasDelay(bool value);
 	void SetHasCompressor(bool value);
 	void SetHasEnvelopeFilter(bool value);
@@ -42,6 +43,9 @@ public:
 	void SetCompressorRelease(float value);
 	void SetCompressorGain(float value);
 
+	void SetReverbSeconds(float value);
+	void SetReverbGain(float value);
+
 	void SetDelaySeconds(float value);
 	void SetDelayGain(float value);
 	void SetDelayFeedback(bool value);
@@ -55,6 +59,7 @@ public:
 
 	AmplitudeOscillatorType GetOscillatorType() const;
 
+	bool GetHasReverb() const;
 	bool GetHasDelay() const;
 	bool GetHasCompressor() const;
 	bool GetHasEnvelopeFilter() const;
@@ -74,6 +79,9 @@ public:
 	float GetCompressorAttack() const;
 	float GetCompressorRelease() const;
 	float GetCompressorGain() const;
+
+	float GetReverbDelaySeconds() const;
+	float GetReverbGain() const;
 
 	float GetDelaySeconds() const;
 	float GetDelayGain() const;
@@ -96,6 +104,7 @@ private:
 	AmplitudeOscillatorType _oscillatorType;
 	EnvelopeFilterType _envelopeFilterType;
 
+	bool _hasReverb;
 	bool _hasDelay;
 	bool _hasCompressor;
 	bool _hasEnvelopeFilter;
@@ -114,6 +123,9 @@ private:
 	float _compressorRelaxationPeriod;
 	float _compressorAttack;
 	float _compressorRelease;
+
+	float _reverbDelaySeconds;
+	float _reverbGain;
 
 	float _delaySeconds;
 	float _delayGain;

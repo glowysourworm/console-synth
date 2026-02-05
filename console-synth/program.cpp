@@ -243,6 +243,13 @@ void LoopUI()
 	float delaySecondsMax = 3.0f;
 	float delaySecondsIncr = 0.1f;
 
+	float reverbDelaySeconds = _configuration->GetReverbDelaySeconds();
+	float reverbGain = _configuration->GetReverbGain();
+
+	float reverbDelayMin = 0.001f;
+	float reverbDelayMax = 0.500f;
+	float reverbDelayIncr = 0.001f;
+
 	float compressorGain = _configuration->GetCompressorGain();
 	float compressorThreshold = _configuration->GetCompressorThreshold();
 	float compressorAttack = _configuration->GetCompressorAttack();
@@ -272,6 +279,9 @@ void LoopUI()
 
 	std::string filterOscillatorStr;
 
+	std::string reverbDelayStr;
+	std::string reverbGainStr;
+
 	std::string delayStr;
 	std::string delayGainStr;
 
@@ -285,6 +295,8 @@ void LoopUI()
 	int envelopeFilterEnabled = _configuration->GetHasEnvelopeFilter() ? 0 : 1;
 	int envelopeFilterTypeChoice = (int)_configuration->GetEnvelopeFilterType();
 	int envelopeOscillatorChoice = (int)_configuration->GetEnvelopeFilterOscillatorType();
+
+	int reverbEnabled = _configuration->GetHasReverb() ? 0 : 1;
 
 	int delayEnabled = _configuration->GetHasDelay() ? 0 : 1;
 	int delayFeedbackEnabled = _configuration->GetDelayFeedback() ? 0 : 1;
@@ -351,6 +363,27 @@ void LoopUI()
 		ftxui::Slider(&filterSustainStr, &filterSustain, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&filterDecayStr, &filterDecay, envelopeMin, envelopeMax, envelopeIncrement),
 		ftxui::Slider(&filterReleaseStr, &filterRelease, envelopeMin, envelopeMax, envelopeIncrement),
+	});
+
+	// Reverb (Enable)
+	auto reverbEnableUI = ftxui::Container::Horizontal({
+
+		ftxui::Renderer([&] { return ftxui::text("Reverb") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &reverbEnabled) | ftxui::align_right,
+
+	});
+
+	// Reverb
+	auto reverbUI = ftxui::Container::Vertical({
+
+		reverbEnableUI,
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+
+		// Delay (s)
+		ftxui::Slider(&reverbDelayStr, &reverbDelaySeconds, reverbDelayMin, reverbDelayMax, reverbDelayIncr),
+
+		// Gain
+		ftxui::Slider(&reverbGainStr, &reverbGain, lineMin, lineMax, lineIncr),
 	});
 
 	// Delay (Enable)
@@ -484,6 +517,15 @@ void LoopUI()
 		return envelopeFilterUI->Render();
 	});
 
+	// Reverb
+	auto reverbUIRenderer = ftxui::Renderer(reverbUI, [&] {
+
+		reverbDelayStr = "Delay (s) " + std::format("{:.4f}", reverbDelaySeconds);
+		reverbGainStr = "Gain      " + std::format("{:.2f}", reverbGain) + "  ";
+
+		return reverbUI->Render();
+	});
+
 	// Delay
 	auto delayUIRenderer = ftxui::Renderer(delayUI, [&] {
 
@@ -522,6 +564,7 @@ void LoopUI()
 	auto synthOutputSettings = ftxui::Container::Horizontal({
 
 		compressorUIRenderer | ftxui::flex_grow | ftxui::border,
+		reverbUIRenderer | ftxui::flex_grow | ftxui::border,
 		delayUIRenderer | ftxui::flex_grow | ftxui::border
 
 	});
@@ -662,6 +705,9 @@ void LoopUI()
 			_configuration->SetHasEnvelopeFilter(envelopeFilterEnabled == 0);
 			_configuration->SetHasDelay(delayEnabled == 0);
 			_configuration->SetHasCompressor(compressorEnabled == 0);
+			_configuration->SetHasReverb(reverbEnabled == 0);
+			_configuration->SetReverbSeconds(reverbDelaySeconds);
+			_configuration->SetReverbGain(reverbGain);
 			_configuration->SetDelayFeedback(delayFeedbackEnabled == 0);
 			_configuration->SetDelaySeconds(delaySeconds);
 			_configuration->SetDelayGain(delayGain);
@@ -711,6 +757,10 @@ void LoopUI()
 int main(int argc, char* argv[], char* envp[])
 {
 	_lock = new std::mutex();
+
+	std::string title = "Terminal Synth";
+
+	SetConsoleTitleA(title.c_str());
 
 	// Read midi file
 	if (argc > 1)

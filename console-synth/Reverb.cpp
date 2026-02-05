@@ -52,32 +52,37 @@ float Reverb::Apply(float sample, float absoluteTime)
 
 	// All pass taps
 	//
-	float outputA = _allPassFilters[0]->Apply(output, absoluteTime);
-	float outputB = _allPassFilters[1]->Apply(outputA, absoluteTime);
-	float outputC = _allPassFilters[2]->Apply(outputB, absoluteTime);
-	float outputD = _allPassFilters[3]->Apply(outputC, absoluteTime);
+	//float outputA = _allPassFilters[0]->Apply(output, absoluteTime);
+	//float outputB = _allPassFilters[1]->Apply(outputA, absoluteTime);
+	//float outputC = _allPassFilters[2]->Apply(outputB, absoluteTime);
+	//float outputD = _allPassFilters[3]->Apply(outputC, absoluteTime);
 
 	// Series all pass filters
-	//for (int i = 0; i < REVERB_ALLPASS_SIZE; i++)
-	//	output = _allPassFilters[i]->Apply(output);
+	for (int i = 0; i < REVERB_ALLPASS_SIZE; i++)
+		output = _allPassFilters[i]->Apply(output, absoluteTime);
 
 	// Calculate comb filter outputs
-	//float outputA = _combFilters[0]->Apply(output);
-	//float outputB = _combFilters[1]->Apply(output);
-	//float outputC = _combFilters[2]->Apply(output);
-	//float outputD = _combFilters[3]->Apply(output);
-
+	float outputA = _combFilters[0]->Apply(output, absoluteTime);
+	float outputB = _combFilters[1]->Apply(output, absoluteTime);
+	float outputC = _combFilters[2]->Apply(output, absoluteTime);
+	float outputD = _combFilters[3]->Apply(output, absoluteTime);	
+	
 	// Apply mixing matrix to comb outputs
+	float mixedOutput = (0.5 * output + 0.6 * outputA + 0.7 * outputB + 0.85 * outputC + outputD);
 
-	// return output;
-	// return _lowPassFilter->Apply(output);
-
-	return (0.5 * output + 0.6 * outputA + 0.7 * outputB + 0.85 * outputC + outputD);
+	return _lowPassFilter->Apply(mixedOutput, absoluteTime);
 }
 
 bool Reverb::HasOutput(float absoluteTime) const
 {
-	// Ringing is based on comb filters
+	// Ringing based on all pass filters
+	for (int index = 0; index < REVERB_ALLPASS_SIZE; index++)
+	{
+		if (_allPassFilters[index]->HasOutput(absoluteTime))
+			return true;
+	}
+
+	// Ringing based on comb filters
 	for (int index = 0; index < REVERB_COMB_SIZE; index++)
 	{
 		if (_combFilters[index]->HasOutput(absoluteTime))

@@ -38,5 +38,9 @@ float CombFilter::Apply(float sample, float absoluteTime)
 
 bool CombFilter::HasOutput(float absoluteTime) const
 {
-	return _buffer->size() > 0;
+	//return _buffer->size() > 0 &&
+	//	   _buffer->front() > 0 &&
+	//	   this->GetGain() > 0;
+
+	return this->GetGain() > 0;
 }

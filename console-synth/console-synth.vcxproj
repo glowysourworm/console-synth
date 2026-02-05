@@ -117,6 +117,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>C:\Backup\_Source\Git\portaudio\build\Debug;$(LibraryPath)</LibraryPath>
+    <CopyLocalProjectReference>true</CopyLocalProjectReference>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -169,13 +171,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\include;C:\Backup\_Source\Git\portaudio\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\lib;C:\Backup\_Source\Git\portaudio\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;portaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'">
@@ -229,10 +231,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\vendor\rtaudio-master\RtAudio.cpp" />
     <ClCompile Include="AllPassFilter.cpp" />
     <ClCompile Include="AmplitudeOscillator.cpp" />
-    <ClCompile Include="AudioPlayer.cpp" />
     <ClCompile Include="Binasc.cpp" />
     <ClCompile Include="ButterworthFilter.cpp" />
     <ClCompile Include="CombFilter.cpp" />
@@ -243,7 +243,6 @@
     <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiEventList.cpp" />
     <ClCompile Include="MidiFile.cpp" />
-    <ClCompile Include="MidiFilePlayer.cpp" />
     <ClCompile Include="MidiMessage.cpp" />
     <ClCompile Include="MidiPlaybackDevice.cpp" />
     <ClCompile Include="Mixer.cpp" />
@@ -261,14 +260,11 @@
     <ClCompile Include="SynthNote.cpp" />
     <ClCompile Include="SynthNoteMap.cpp" />
     <ClCompile Include="SynthPlaybackDevice.cpp" />
-    <ClCompile Include="SynthPlayer.cpp" />
     <ClCompile Include="TriangleOscillator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\vendor\rtaudio-master\RtAudio.h" />
     <ClInclude Include="AllPassFilter.h" />
     <ClInclude Include="AmplitudeOscillator.h" />
-    <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="Binasc.h" />
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="CombFilter.h" />
@@ -280,7 +276,6 @@
     <ClInclude Include="MidiEvent.h" />
     <ClInclude Include="MidiEventList.h" />
     <ClInclude Include="MidiFile.h" />
-    <ClInclude Include="MidiFilePlayer.h" />
     <ClInclude Include="MidiMessage.h" />
     <ClInclude Include="MidiPlaybackDevice.h" />
     <ClInclude Include="Mixer.h" />
@@ -297,7 +292,6 @@
     <ClInclude Include="SynthNote.h" />
     <ClInclude Include="SynthNoteMap.h" />
     <ClInclude Include="SynthPlaybackDevice.h" />
-    <ClInclude Include="SynthPlayer.h" />
     <ClInclude Include="TriangleOscillator.h" />
     <ClInclude Include="WindowsKeyCodes.h" />
   </ItemGroup>

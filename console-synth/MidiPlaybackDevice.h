@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PlaybackDevice.h"
-#include "RtAudio.h"
 #include "Synth.h"
 
 class MidiPlaybackDevice : public PlaybackDevice
@@ -10,12 +9,10 @@ public:
 
 	bool Initialize() override;
 
-	int RtAudioCallback(void* outputBuffer,
-		void* inputBuffer,
-		unsigned int nFrames,
-		double streamTime,
-		RtAudioStreamStatus status,
-		void* userData) override;
+	int StreamCallback(void* outputBuffer,
+		unsigned int numberOfFrames,
+		unsigned int numberOfChannels,
+		double streamTime) override;
 
 private:
 

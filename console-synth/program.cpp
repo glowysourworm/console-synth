@@ -1,13 +1,13 @@
 #include "Constant.h"
 #include "Envelope.h"
-#include "RtAudio.h"
 #include "StopWatch.h"
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
-#include "SynthPlayer.h"
 #include "WindowsKeyCodes.h"
 #include <Windows.h>
-#include <chrono>
+#include <portaudio.h>
+//#include <chrono>
+//#include <exception>
 #include <format>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -16,48 +16,130 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
-#include <mutex>
 #include <string>
-#include <thread>
 #include <vector>
 
 
 // Static Instance (RT Audio) (Couldn't figure out how to cast function callbacks to the framework)
-SynthPlayer* _player;
+PaStream* _audioStream;
+SynthPlaybackDevice* _synthDevice;
 SynthConfiguration* _configuration;
-std::mutex* _lock;
 
 /// <summary>
 /// Primary RT Audio callback - which happens on RT Audio's thread!!!  
 /// </summary>
-int PrimaryAudioCallback(void* outputBuffer,
-	void* inputBuffer,
-	unsigned int nFrames,
-	double streamTime,
-	RtAudioStreamStatus status,
-	void* userData)
+//int PrimaryAudioCallback(void* outputBuffer,
+//	void* inputBuffer,
+//	unsigned int nFrames,
+//	double streamTime,
+//	RtAudioStreamStatus status,
+//	void* userData)
+//{
+//	return _synthDevice->RtAudioCallback(outputBuffer, inputBuffer, nFrames, streamTime, status, userData);
+//}
+
+//void PrimaryErrorCallback(RtAudioError::Type type, const std::string& message)
+//{
+//
+//}
+
+void HandleError(PaError error)
 {
-	_lock->lock();
 
-	int returnValue = _player->GetDevice()->RtAudioCallback(outputBuffer, inputBuffer, nFrames, streamTime, status, userData);
-
-	_lock->unlock();
-
-	return returnValue;
 }
 
-void PrimaryErrorCallback(RtAudioError::Type type, const std::string& message)
+bool InitializePortAudio()
 {
+	// Port Audio: RT Audio dis-continued their blocking callback (single threaded functionality)
+	//			   We need to be able to update the synth possibly on each tick. So, using locks
+	//			   may have degraded audio quality and caused glitches.
+	// 
+	// https://files.portaudio.com/docs/v19-doxydocs/tutorial_start.html
+	//
 
+	// Initialize Port Audio
+	PaError error = Pa_Initialize();
+
+	if (error != PaErrorCode::paNoError)
+	{
+		HandleError(error);
+		return false;
+	}
+
+	PaStreamParameters inputParameters;
+	PaStreamParameters outputParameters;
+
+	inputParameters.device = Pa_GetDefaultInputDevice();
+	inputParameters.channelCount = NUMBER_CHANNELS;
+	inputParameters.sampleFormat = paFloat32;
+	inputParameters.suggestedLatency = Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency;
+	inputParameters.hostApiSpecificStreamInfo = NULL;
+
+	outputParameters.device = Pa_GetDefaultOutputDevice(); /* default output device */
+	outputParameters.channelCount = NUMBER_CHANNELS;
+	outputParameters.sampleFormat = paFloat32;
+	outputParameters.suggestedLatency = Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency;
+	outputParameters.hostApiSpecificStreamInfo = NULL;
+
+	/* -- setup stream -- */
+	error = Pa_OpenStream(
+			&_audioStream,
+			&inputParameters,
+			&outputParameters,
+			SAMPLING_RATE,
+			AUDIO_BUFFER_SIZE,
+			paClipOff,				/* we won't output out of range samples so don't bother clipping them */
+			NULL,					/* no callback, use blocking API */
+			NULL);					/* no callback, so no callback userData */
+
+	if (error != PaErrorCode::paNoError)
+	{
+		HandleError(error);
+		return false;
+	}
+
+	error = Pa_StartStream(_audioStream);
+
+	if (error != PaErrorCode::paNoError)
+	{
+		HandleError(error);
+		return false;
+	}
+}
+
+bool DisposePortAudio()
+{
+	PaError error = Pa_StopStream(_audioStream);	
+
+	if (error != PaErrorCode::paNoError)
+	{
+		HandleError(error);
+		return false;
+	}
+
+	error = Pa_CloseStream(_audioStream);
+
+	if (error != PaErrorCode::paNoError)
+	{
+		HandleError(error);
+		return false;
+	}
+}
+
+bool WritePlaybackStream()
+{
+	//Pa_WriteStream(_audioStream, buffer, AUDIO_BUFFER_SIZE);
+
+	return true;
 }
 
 /// <summary>
 /// Initialization function for the synth backend. This must be called before starting the player!
 /// </summary>
-void Initialize()
+void InitializePlayback()
 {
 	_configuration = new SynthConfiguration();
-	_player = new SynthPlayer();
+	_synthDevice = new SynthPlaybackDevice();
 
 	// Octave 1
 	_configuration->SetMidiNote(WindowsKeyCodes::Z, 21);
@@ -112,66 +194,7 @@ void Initialize()
 	_configuration->SetMidiNote(WindowsKeyCodes::MINUS, 66);
 	_configuration->SetMidiNote(WindowsKeyCodes::PLUS, 67);
 
-	_player->Initialize(&PrimaryAudioCallback, &PrimaryErrorCallback);
-}
-
-/// <summary>
-/// Returns true if the key should be processed by FTXUI
-/// </summary>
-bool HandleKeysPressed(const std::string& ftxuiCharacters)
-{
-	// Favor the synth notes for keys pressed
-	bool synthMapped = false;
-
-	_lock->lock();
-
-	// WINAPI (Need to get the character's pressed to translate back to the key codes entered)
-	//
-	// https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-vkkeyscanexa?redirectedfrom=MSDN
-	//
-	for (int index = 0; index < ftxuiCharacters.size(); index++)
-	{
-		// Translate character to key code
-		WindowsKeyCodes keyCode = (WindowsKeyCodes)VkKeyScanA(ftxuiCharacters[index]);
-
-		if (!_configuration->HasMidiNote(keyCode))
-			continue;
-
-		synthMapped = true;
-
-		// Get Midi Note from configuration
-		int midiNote = _configuration->GetMidiNote(keyCode);
-
-		// Set New Note! (MEMORY!)
-		((SynthPlaybackDevice*)_player->GetDevice())->SetNote(midiNote, true, _player->GetStreamTime());
-	}
-
-	// Unset Active Notes
-	int midiNotes[MIDI_PIANO_SIZE];
-	int midiNotesLength = 0;
-
-	((SynthPlaybackDevice*)_player->GetDevice())->GetNotes(midiNotes, midiNotesLength);
-
-	// Iterate small array of midi notes to see what notes aren't being pressed
-	for (int index = 0; index < midiNotesLength; index++)
-	{
-		// Get key code for this midi note
-		WindowsKeyCodes keyCode = _configuration->GetKeyCode(midiNotes[index]);
-
-		// WINAPI map key code back to character
-		char character = MapVirtualKeyA((int)keyCode, MAPVK_VK_TO_CHAR);
-
-		// Unset Note!
-		if (!ftxuiCharacters.contains(character))
-			((SynthPlaybackDevice*)_player->GetDevice())->SetNote(midiNotes[index], false, _player->GetStreamTime());
-	}
-
-	// Clear out any unused notes (MEMORY!)
-	((SynthPlaybackDevice*)_player->GetDevice())->ClearUnused(_player->GetStreamTime());
-
-	_lock->unlock();
-
-	return synthMapped;
+	_synthDevice->Initialize();
 }
 
 void LoopUI()
@@ -184,7 +207,8 @@ void LoopUI()
 	audioStopWatch.mark();
 	uiStopWatch.mark();
 
-	// Get Current Time
+	// Port Audio Variables
+	std::string version = Pa_GetVersionInfo()->versionText;
 	double systemTime = 0;
 	double streamLatency = 0;
 	double averageAudioTime = 0;
@@ -579,7 +603,7 @@ void LoopUI()
 		// Synth Information
 		auto synthInformation = ftxui::vbox(
 		{
-			ftxui::text("RT Audio Version:    " + _player->GetVersion()),
+			ftxui::text("Port Audio Version:    " + version),
 			ftxui::text("Current Time (s):    " + std::to_string(systemTime)),
 			ftxui::text("Stream Latency (ms): " + std::to_string(streamLatency)),
 			ftxui::text("Sample Rate (Hz):    " + std::to_string(SAMPLING_RATE)),
@@ -629,7 +653,8 @@ void LoopUI()
 		// 
 		//					 (less than a sample, ideally)
 		//
-		_lock->lock();
+
+		systemTime = Pa_GetStreamTime(_audioStream);
 
 		// Iterate Key Codes (probably the most direct method)
 		//
@@ -654,27 +679,21 @@ void LoopUI()
 			int midiNote = _configuration->GetMidiNote((WindowsKeyCodes)keyCode);
 
 			// Dis-Engage
-			if (((SynthPlaybackDevice*)_player->GetDevice())->HasNote(midiNote) && !isPressed)
-				((SynthPlaybackDevice*)_player->GetDevice())->SetNote(midiNote, false, _player->GetStreamTime());
+			if (_synthDevice->HasNote(midiNote) && !isPressed)
+				_synthDevice->SetNote(midiNote, false, systemTime);
 
 			// Engage
-			else if (!((SynthPlaybackDevice*)_player->GetDevice())->HasNote(midiNote) && isPressed)
-				((SynthPlaybackDevice*)_player->GetDevice())->SetNote(midiNote, true, _player->GetStreamTime());
+			else if (!_synthDevice->HasNote(midiNote) && isPressed)
+				_synthDevice->SetNote(midiNote, true, systemTime);
 		}
 
 		// Clean Up Synth Notes
-		((SynthPlaybackDevice*)_player->GetDevice())->ClearUnused(_player->GetStreamTime());
-
-		_lock->unlock();
+		_synthDevice->ClearUnused(systemTime);
 
 		// Synth Configuration:  Our copy is updated on the UI Update timer
 		//
 		if (lastUIUpdate > 100)
 		{
-			// Update Stream Parameters
-			systemTime = _player->GetStreamTime();
-			streamLatency = _player->GetStreamLatency();
-
 			// Use custom event to force one UI update
 			screen.PostEvent(ftxui::Event::Custom);
 
@@ -709,11 +728,10 @@ void LoopUI()
 			// CRITICAL SECTION:  This is an update from the UI, which will reset the synth parameters. So,
 			//					  it is only allowed every ~100ms at the most.
 			//
-			_lock->lock();
 
 			//_player->StopStream();
 
-			((SynthPlaybackDevice*)_player->GetDevice())->UpdateSynth(*_configuration);
+			_synthDevice->UpdateSynth(*_configuration);
 
 			//_player->StartStream();
 
@@ -722,14 +740,17 @@ void LoopUI()
 
 			// Reset UI Update Time
 			lastUIUpdate = 0;
-
-			_lock->unlock();
 		}
-			
+		
+		// PA Audio Callback
+		
 
 		loop.RunOnce();
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+
+
+		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 		//_lock->unlock();
 	}
@@ -738,11 +759,7 @@ void LoopUI()
 
 int main(int argc, char* argv[], char* envp[])
 {
-	_lock = new std::mutex();
-
-	std::string title = "Terminal Synth";
-
-	SetConsoleTitleA(title.c_str());
+	SetConsoleTitleA("Terminal Synth");
 
 	// Read midi file
 	if (argc > 1)
@@ -752,21 +769,13 @@ int main(int argc, char* argv[], char* envp[])
 	// Manual keyboard input
 	else
 	{
-		Initialize();
+		InitializePortAudio();
+		InitializePlayback();
 	}
 
 	LoopUI();
 
-	if (_player->IsStreamRunning())
-		_player->StopStream();
-
-	if (_player->IsStreamOpen())
-		_player->CloseStream();
-
-	// Delete memory for primary components
-	//
-	//if (_player != NULL)
-	//	delete _player;
+	DisposePortAudio();
 
 	return 0;
 }

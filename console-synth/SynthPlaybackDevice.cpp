@@ -1,5 +1,4 @@
 #include "Constant.h"
-#include "RtAudio.h"
 #include "Synth.h"
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
@@ -17,30 +16,16 @@ bool SynthPlaybackDevice::Initialize()
 	return _initialized;
 }
 
-int SynthPlaybackDevice::RtAudioCallback(void* outputBuffer,
-	void* inputBuffer,
-	unsigned int nFrames,
-	double streamTime,
-	RtAudioStreamStatus status,
-	void* userData)
+int SynthPlaybackDevice::StreamCallback(void* outputBuffer, unsigned int numberOfFrames, unsigned int numberOfChannels, double streamTime)
 {
 	if (!_initialized)
 		return 0;
-
-	if (status == RTAUDIO_INPUT_OVERFLOW)
-	{
-		int foo = 34;
-	}
-	else if (status == RTAUDIO_OUTPUT_UNDERFLOW)
-	{
-		int foowewe = 2;
-	}
 
 	// Output frames should be interleved
 	float* buffer = (float*)outputBuffer;
 
 	// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
-	for (unsigned int i = 0; i < nFrames; i++)
+	for (unsigned int i = 0; i < numberOfFrames; i++)
 	{
 		double absoluteTime = streamTime + (i / (double)SAMPLING_RATE);
 

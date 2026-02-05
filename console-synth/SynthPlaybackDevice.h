@@ -2,7 +2,6 @@
 
 #include "Constant.h"
 #include "PlaybackDevice.h"
-#include "RtAudio.h"
 #include "Synth.h"
 #include "SynthConfiguration.h"
 
@@ -12,12 +11,10 @@ public:
 
 	bool Initialize() override;
 
-	int RtAudioCallback(void* outputBuffer,
-		void* inputBuffer,
-		unsigned int nFrames,
-		double streamTime,
-		RtAudioStreamStatus status,
-		void* userData) override;
+	int StreamCallback(void* outputBuffer,
+		unsigned int numberOfFrames,
+		unsigned int numberOfChannels,
+		double streamTime) override;
 
 	void SetNote(int midiNumber, bool pressed, double streamTime);
 	bool GetNote(int midiNumber) const;

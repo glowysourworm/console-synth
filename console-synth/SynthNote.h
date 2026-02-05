@@ -3,7 +3,6 @@
 
 #include "AmplitudeOscillator.h"
 #include "Compressor.h"
-#include "Constant.h"
 #include "Envelope.h"
 #include "EnvelopeFilter.h"
 #include "SynthConfiguration.h"

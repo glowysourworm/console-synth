@@ -6,11 +6,13 @@ public:
 	virtual ~FilterBase();
 
 	virtual float Apply(float sample, float absoluteTime) = 0;
+	virtual bool HasOutput(float absoluteTime) const = 0;
 
 public:
 
 	float GetSamplingRate() const;
 	float GetGain() const;
+	
 
 private:
 

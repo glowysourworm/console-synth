@@ -2,6 +2,7 @@
 #define SYNTHNOTE_H
 
 #include "AmplitudeOscillator.h"
+#include "Compressor.h"
 #include "Constant.h"
 #include "Envelope.h"
 #include "EnvelopeFilter.h"
@@ -30,8 +31,10 @@ private:
 	Envelope* _envelope;
 	EnvelopeFilter* _envelopeFilter;
 	AmplitudeOscillator* _oscillator; 
+	Compressor* _compressor;
 
 	bool _envelopeFilterEnabled;
+	bool _compressorEnabled;
 };
 
 #endif

@@ -13,6 +13,7 @@ public:
 	~ButterworthFilter();
 
 	float Apply(float sample, float absoluteTime) override;
+	bool HasOutput(float absoluteTime) const override;
 
 	void Set(float cutoffFrequency, float resonance);
 

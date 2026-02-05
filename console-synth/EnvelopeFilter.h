@@ -23,7 +23,7 @@ public:
 
 	void Engage(float absoluteTime);
 	void DisEngage(float absoluteTime);
-	bool HasOutput(float absoluteTime);
+	bool HasOutput(float absoluteTime) const override;
 
 private:
 

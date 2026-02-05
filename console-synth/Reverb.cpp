@@ -74,3 +74,15 @@ float Reverb::Apply(float sample, float absoluteTime)
 
 	return (0.5 * output + 0.6 * outputA + 0.7 * outputB + 0.85 * outputC + outputD);
 }
+
+bool Reverb::HasOutput(float absoluteTime) const
+{
+	// Ringing is based on comb filters
+	for (int index = 0; index < REVERB_COMB_SIZE; index++)
+	{
+		if (_combFilters[index]->HasOutput(absoluteTime))
+			return true;
+	}
+
+	return false;
+}

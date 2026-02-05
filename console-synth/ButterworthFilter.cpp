@@ -99,3 +99,8 @@ float ButterworthFilter::Apply(float sample, float absoluteTime)
 
 	return output;
 }
+
+bool ButterworthFilter::HasOutput(float absoluteTime) const
+{
+	return true;
+}

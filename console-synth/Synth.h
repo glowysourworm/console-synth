@@ -4,9 +4,7 @@
 #include <map>
 
 #include "CombFilter.h"
-#include "Compressor.h"
 #include "Constant.h"
-#include "EnvelopeFilter.h"
 #include "Mixer.h"
 #include "SynthConfiguration.h"
 #include "SynthNote.h"
@@ -66,7 +64,6 @@ private:
 	Mixer* _mixer;
 
 	// Post-processing effects	
-	Compressor* _compressor;
 	CombFilter* _delay;
 
 	SynthConfiguration* _configuration;

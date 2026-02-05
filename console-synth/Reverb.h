@@ -15,6 +15,7 @@ public:
 	~Reverb();
 
 	float Apply(float sample, float absoluteTime) override;
+	bool HasOutput(float absoluteTime) const override;
 
 private:
 	CombFilter** _combFilters;

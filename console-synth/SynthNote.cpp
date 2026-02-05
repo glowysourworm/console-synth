@@ -1,4 +1,5 @@
-﻿#include "Constant.h"
+﻿#include "Compressor.h"
+#include "Constant.h"
 #include "Envelope.h"
 #include "EnvelopeFilter.h"
 #include "RandomOscillator.h"
@@ -24,7 +25,16 @@ SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration)
 		configuration.GetEnvelopeFilterOscillatorFrequency(),
 		configuration.GetEnvelopeFilter());
 
+	_compressor = new Compressor(configuration.GetCompressorGain(), 
+		SAMPLING_RATE, 
+		configuration.GetCompressorThreshold(), 
+		configuration.GetCompressionRatio(), 
+		configuration.GetCompressorRelaxationPeriod(), 
+		configuration.GetCompressorAttack(), 
+		configuration.GetCompressorRelease());
+
 	_envelopeFilterEnabled = configuration.GetHasEnvelopeFilter();
+	_compressorEnabled = configuration.GetHasCompressor();
 
 	// Initialize Oscillator
 	switch (configuration.GetOscillatorType())
@@ -66,6 +76,12 @@ float SynthNote::GetSample(float absoluteTime) const
 
 	// FILTER SWEEP: Check envelope filter for output
 	if (_envelopeFilterEnabled && _envelopeFilter->HasOutput(absoluteTime))
+	{
+		output = _envelopeFilter->Apply(output, absoluteTime);
+	}
+
+	// COMPRESSOR: Apply Compression
+	if (_compressorEnabled && _compressor->HasOutput(absoluteTime))
 	{
 		output = _envelopeFilter->Apply(output, absoluteTime);
 	}

@@ -46,3 +46,8 @@ float Compressor::Apply(float sample, float absoluteTime)
 
 	return result;
 }
+
+bool Compressor::HasOutput(float absoluteTime) const
+{
+	return true;
+}

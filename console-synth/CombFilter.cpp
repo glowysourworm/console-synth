@@ -20,7 +20,7 @@ CombFilter::~CombFilter()
 float CombFilter::Apply(float sample, float absoluteTime)
 {
 	// Calculate sample from front of the queue (SAME FOR BOTH FORMS)
-	float result = sample + (this->GetGain() * _buffer->front());;
+	float result = sample + (this->GetGain() * _buffer->front());
 
 	// Remove used sample
 	_buffer->pop();
@@ -34,4 +34,9 @@ float CombFilter::Apply(float sample, float absoluteTime)
 		_buffer->push(result);
 
 	return result;
+}
+
+bool CombFilter::HasOutput(float absoluteTime) const
+{
+	return _buffer->size() > 0;
 }

@@ -1,5 +1,4 @@
 #include "CombFilter.h"
-#include "Compressor.h"
 #include "Constant.h"
 #include "Mixer.h"
 #include "Synth.h"
@@ -37,7 +36,6 @@ void Synth::Initialize(const SynthConfiguration& configuration)
 
 	_mixer = new Mixer();
 	_delay = new CombFilter(configuration.GetDelaySeconds(), 0.8, SAMPLING_RATE, configuration.GetDelayFeedback());
-	_compressor = new Compressor(10, SAMPLING_RATE, configuration.GetCompressorThreshold(), configuration.GetCompressionRatio(), configuration.GetCompressorRelaxationPeriod(), configuration.GetCompressorAttack(), configuration.GetCompressorRelease());
 }
 
 Synth::~Synth()
@@ -52,7 +50,6 @@ Synth::~Synth()
 	delete _pianoNotes;
 	delete _mixer;
 	delete _delay;
-	delete _compressor;
 }
 
 void Synth::SetConfiguration(const SynthConfiguration& configuration)
@@ -119,9 +116,6 @@ bool Synth::HasNote(int midiNumber)
 
 float Synth::GetSample(double absoluteTime)
 {
-	if (_pianoNotes->size() == 0)
-		return 0;
-
 	// BASE OSCILLATORS
 	for (auto iter = _pianoNotes->begin(); iter != _pianoNotes->end(); ++iter)
 	{
@@ -138,16 +132,13 @@ float Synth::GetSample(double absoluteTime)
 		_mixer->SetChannel(note->GetMidiNumber(), output);
 	}
 
-	// Mixer -> AMPLITUDE OSCILLATOR (LFO)
+	// Mixer -> Dry Output -> Mix Effects
 	float dryOutput = _mixer->Get();
 	float wetOutput = dryOutput;
 
 	// OUTPUT EFFECTS	
-	if (_configuration->GetHasDelay())
+	if (_configuration->GetHasDelay() && _delay->HasOutput(absoluteTime))
 		wetOutput = _delay->Apply(wetOutput, absoluteTime);
-
-	if (_configuration->GetHasCompressor())
-		wetOutput = _compressor->Apply(wetOutput, absoluteTime);
 
 	return wetOutput;
 }

@@ -34,3 +34,8 @@ float AllPassFilter::Apply(float sample, float absoluteTime)
 
 	return sample;
 }
+
+bool AllPassFilter::HasOutput(float absoluteTime) const
+{
+	return false;
+}

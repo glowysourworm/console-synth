@@ -116,7 +116,7 @@ void EnvelopeFilter::DisEngage(float absoluteTime)
 	_filterEnvelope->DisEngage(absoluteTime);
 }
 
-bool EnvelopeFilter::HasOutput(float absoluteTime)
+bool EnvelopeFilter::HasOutput(float absoluteTime) const
 {
 	switch (_filterType)
 	{

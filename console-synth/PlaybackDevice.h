@@ -1,5 +1,8 @@
 #pragma once
 
+#include "PlaybackBuffer.h"
+
+template<SignalValue TSignal>
 class PlaybackDevice
 {
 public:
@@ -14,17 +17,20 @@ public:
 	virtual bool Initialize() = 0;
 
 	/// <summary>
-	/// Primary callback for RT Audio! This will be called in real time to get a sample for your
-	/// output device.
+	/// Tells the playback device to write its output to the playback buffer. The write should start at frame index 0, and
+	/// end at the frame index that coincides with the stream end time. The function should return the number of frames written
+	/// to the buffer.
 	/// </summary>
-	/// <param name="outputBuffer">Interleved output frames for the stream</param>
-	/// <param name="numberOfFrames">Number of frames in the stream. Each frame will have N number of channels (usually 2 for L / R)</param>
-	/// <param name="numberOfChannels">Number of channels in the stream, usually 2 for L / R</param>
-	/// <param name="streamTime">Absolute stream time, usually in milliseconds</param>
-	/// <returns>Status code for RT Audio</returns>
-	virtual int StreamCallback(void* outputBuffer,
-		unsigned int numberOfFrames,
-		unsigned int numberOfChannels,		
-		double streamTime) = 0;
+	virtual int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) = 0;
 };
 
+
+template<SignalValue TSignal>
+PlaybackDevice<TSignal>::PlaybackDevice()
+{
+}
+
+template<SignalValue TSignal>
+PlaybackDevice<TSignal>::~PlaybackDevice()
+{
+}

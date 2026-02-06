@@ -46,9 +46,6 @@
     <Filter Include="Header Files\Vendor">
       <UniqueIdentifier>{9843f0f0-0241-434f-b8b6-4a43612afaa6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Vendor\rt-audio">
-      <UniqueIdentifier>{a2fd55c5-4aac-4a16-9710-a9ffe9072b14}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Vendor\smf">
       <UniqueIdentifier>{3b95484a-aeb2-46d1-bd92-365824712d4b}</UniqueIdentifier>
     </Filter>
@@ -57,9 +54,6 @@
     </Filter>
     <Filter Include="Source Files\Vendor\smf">
       <UniqueIdentifier>{76bca306-61c2-4d7d-882d-6b8e696a1f8f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Vendor\rt-audio">
-      <UniqueIdentifier>{d80f535b-518c-4fbb-b91a-5dee623dac33}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +87,6 @@
     <ClCompile Include="AmplitudeOscillator.cpp">
       <Filter>Source Files\Signal</Filter>
     </ClCompile>
-    <ClCompile Include="AudioPlayer.cpp">
-      <Filter>Source Files\Playback</Filter>
-    </ClCompile>
     <ClCompile Include="ButterworthFilter.cpp">
       <Filter>Source Files\Filter</Filter>
     </ClCompile>
@@ -107,21 +98,6 @@
     </ClCompile>
     <ClCompile Include="Envelope.cpp">
       <Filter>Source Files\Signal</Filter>
-    </ClCompile>
-    <ClCompile Include="MidiFilePlayer.cpp">
-      <Filter>Source Files\Playback</Filter>
-    </ClCompile>
-    <ClCompile Include="MidiPlaybackDevice.cpp">
-      <Filter>Source Files\Playback</Filter>
-    </ClCompile>
-    <ClCompile Include="PlaybackDevice.cpp">
-      <Filter>Source Files\Playback</Filter>
-    </ClCompile>
-    <ClCompile Include="SynthPlaybackDevice.cpp">
-      <Filter>Source Files\Playback</Filter>
-    </ClCompile>
-    <ClCompile Include="SynthPlayer.cpp">
-      <Filter>Source Files\Playback</Filter>
     </ClCompile>
     <ClCompile Include="Mixer.cpp">
       <Filter>Source Files\Signal</Filter>
@@ -162,8 +138,11 @@
     <ClCompile Include="SynthNoteMap.cpp">
       <Filter>Source Files\Synth</Filter>
     </ClCompile>
-    <ClCompile Include="..\vendor\rtaudio-master\RtAudio.cpp">
-      <Filter>Source Files\Vendor\rt-audio</Filter>
+    <ClCompile Include="LoopTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaybackClock.cpp">
+      <Filter>Source Files\Playback</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,16 +203,7 @@
     <ClInclude Include="SynthNote.h">
       <Filter>Header Files\Synth</Filter>
     </ClInclude>
-    <ClInclude Include="SynthPlayer.h">
-      <Filter>Header Files\Playback</Filter>
-    </ClInclude>
     <ClInclude Include="SynthPlaybackDevice.h">
-      <Filter>Header Files\Playback</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioPlayer.h">
-      <Filter>Header Files\Playback</Filter>
-    </ClInclude>
-    <ClInclude Include="MidiFilePlayer.h">
       <Filter>Header Files\Playback</Filter>
     </ClInclude>
     <ClInclude Include="MidiPlaybackDevice.h">
@@ -269,8 +239,14 @@
     <ClInclude Include="SynthNoteMap.h">
       <Filter>Header Files\Synth</Filter>
     </ClInclude>
-    <ClInclude Include="..\vendor\rtaudio-master\RtAudio.h">
-      <Filter>Header Files\Vendor\rt-audio</Filter>
+    <ClInclude Include="PlaybackBuffer.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="LoopTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaybackClock.h">
+      <Filter>Header Files\Playback</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

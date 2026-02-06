@@ -179,6 +179,9 @@
       <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\lib;C:\Backup\_Source\Git\portaudio\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;portaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y C:\Backup\_Source\Git\portaudio\build\Debug\portaudio.dll $(OutDir)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'">
     <ClCompile>
@@ -240,14 +243,14 @@
     <ClCompile Include="Envelope.cpp" />
     <ClCompile Include="EnvelopeFilter.cpp" />
     <ClCompile Include="FilterBase.cpp" />
+    <ClCompile Include="LoopTimer.cpp" />
     <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiEventList.cpp" />
     <ClCompile Include="MidiFile.cpp" />
     <ClCompile Include="MidiMessage.cpp" />
-    <ClCompile Include="MidiPlaybackDevice.cpp" />
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Options.cpp" />
-    <ClCompile Include="PlaybackDevice.cpp" />
+    <ClCompile Include="PlaybackClock.cpp" />
     <ClCompile Include="RandomOscillator.cpp" />
     <ClCompile Include="Reverb.cpp" />
     <ClCompile Include="SawtoothOscillator.cpp" />
@@ -259,7 +262,6 @@
     <ClCompile Include="SynthConfiguration.cpp" />
     <ClCompile Include="SynthNote.cpp" />
     <ClCompile Include="SynthNoteMap.cpp" />
-    <ClCompile Include="SynthPlaybackDevice.cpp" />
     <ClCompile Include="TriangleOscillator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -273,6 +275,7 @@
     <ClInclude Include="Envelope.h" />
     <ClInclude Include="EnvelopeFilter.h" />
     <ClInclude Include="FilterBase.h" />
+    <ClInclude Include="LoopTimer.h" />
     <ClInclude Include="MidiEvent.h" />
     <ClInclude Include="MidiEventList.h" />
     <ClInclude Include="MidiFile.h" />
@@ -280,7 +283,9 @@
     <ClInclude Include="MidiPlaybackDevice.h" />
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Options.h" />
+    <ClInclude Include="PlaybackClock.h" />
     <ClInclude Include="PlaybackDevice.h" />
+    <ClInclude Include="PlaybackBuffer.h" />
     <ClInclude Include="RandomOscillator.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="SawtoothOscillator.h" />

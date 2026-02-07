@@ -128,7 +128,7 @@ bool WritePlaybackStream()
 		// Sleep the rest of the period (WHEN GOD SAYS SO!)
 		if ((maxFrameSize - nextFrameSize) > 0)
 		{
-			int sleepPeriod = (maxFrameSize - nextFrameSize) * SAMPLING_RATE * 1000;
+			int sleepPeriod = (int)(((maxFrameSize - nextFrameSize) / (double)SAMPLING_RATE) * 1000.0);
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(sleepPeriod));
 		}

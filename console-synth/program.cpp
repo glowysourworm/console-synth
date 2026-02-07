@@ -1,14 +1,15 @@
 #include "Constant.h"
 #include "Envelope.h"
 #include "LoopTimer.h"
+#include "PlaybackBuffer.h"
 #include "PlaybackClock.h"
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
+#include "WasapiAudioClient.h"
 #include "WindowsKeyCodes.h"
 #include <Windows.h>
-#include <portaudio.h>
-//#include <chrono>
-//#include <exception>
+#include <chrono>
+#include <exception>
 #include <format>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -18,195 +19,58 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
 #include <string>
+#include <thread>
 #include <vector>
-#include "PlaybackBuffer.h"
-#include <exception>
 
 
-// Static Instance (RT Audio) (Couldn't figure out how to cast function callbacks to the framework)
-PaStream* _audioStream;
+WasapiAudioClient* _audioClient;
 PlaybackBuffer<float>* _outputStream;
 SynthPlaybackDevice<float>* _synthDevice;
 SynthConfiguration* _configuration;
 PlaybackClock* _streamClock;
-PaTime _startTime;
-PaTime _writeTime;
+double _lastWriteTime;
+double averageSampleWrite;
+int writeCounter;
 
-void HandleError(PaError error)
+bool InitializeAudioClient()
 {
-	switch (error)
+	try
 	{
-	case paNoError:
-		break;
-	case paNotInitialized:
-		throw new std::exception("Port Audio Error:  Not Initialized");
-	case paUnanticipatedHostError:
-		throw new std::exception("Port Audio Error:  Unanticipated Host (check host configuration)");
-	case paInvalidChannelCount:
-		throw new std::exception("Port Audio Error:  Invalid Channel Count");
-	case paInvalidSampleRate:
-		throw new std::exception("Port Audio Error:  Invalid Sample Rate");
-	case paInvalidDevice:
-		throw new std::exception("Port Audio Error:  Invalid Device");
-	case paInvalidFlag:
-		throw new std::exception("Port Audio Error:  Invalid Flag");
-	case paSampleFormatNotSupported:
-		throw new std::exception("Port Audio Error:  Sample Format Not Supported");
-	case paBadIODeviceCombination:
-		throw new std::exception("Port Audio Error:  Invalid IO Device Combination (check host configuration)");
-	case paInsufficientMemory:
-		throw new std::exception("Port Audio Error:  Insufficient Memory");
-	case paBufferTooBig:
-		throw new std::exception("Port Audio Error:  Buffer too big!");
-	case paBufferTooSmall:
-		throw new std::exception("Port Audio Error:  Buffer too small!");
-	case paNullCallback:
-		throw new std::exception("Port Audio Error:  Null Callback Error (check blocking configuration)");
-	case paBadStreamPtr:
-		throw new std::exception("Port Audio Error:  Bad stream pointer");
-	case paTimedOut:
-		throw new std::exception("Port Audio Error:  Timed out");
-	case paInternalError:
-		throw new std::exception("Port Audio Error:  Internal Error");
-	case paDeviceUnavailable:
-		throw new std::exception("Port Audio Error:  Device Unavailalbe");
-	case paIncompatibleHostApiSpecificStreamInfo:
-		throw new std::exception("Port Audio Error:  Incompatible Host API (check configuration)");
-	case paStreamIsStopped:
-		throw new std::exception("Port Audio Error:  Stream has stopped");
-	case paStreamIsNotStopped:
-		throw new std::exception("Port Audio Error:  Stream has not stopped. Call Pa_StopStream first!");
-	case paInputOverflowed:
-		throw new std::exception("Port Audio Error:  Input overflow");
-	case paOutputUnderflowed:
-		//throw new std::exception("Port Audio Error:  Output underflow");
-		break;
-	case paHostApiNotFound:
-		throw new std::exception("Port Audio Error:  Host API Not found");
-	case paInvalidHostApi:
-		throw new std::exception("Port Audio Error:  Invalid Host API");
-	case paCanNotReadFromACallbackStream:
-		throw new std::exception("Port Audio Error:  Cannot read from callback stream");
-	case paCanNotWriteToACallbackStream:
-		throw new std::exception("Port Audio Error:  Cannot write to callback stream");
-	case paCanNotReadFromAnOutputOnlyStream:
-		throw new std::exception("Port Audio Error:  Cannot read from output only stream");
-	case paCanNotWriteToAnInputOnlyStream:
-		throw new std::exception("Port Audio Error:  Cannot write to input only stream");
-	case paIncompatibleStreamHostApi:
-		throw new std::exception("Port Audio Error:  Incompatible stream host API");
-	case paBadBufferPtr:
-		throw new std::exception("Port Audio Error:  Bad Buffer Pointer");
-	case paCanNotInitializeRecursively:
-		throw new std::exception("Port Audio Error:  Cannot initialize recursively");
-	default:
-		throw new std::exception("Unhandled Port Audio Error:  program.cpp");
-	}
-}
+		_audioClient = new WasapiAudioClient();
 
-bool InitializePortAudio()
-{
-	// Port Audio: RT Audio dis-continued their blocking callback (single threaded functionality)
-	//			   We need to be able to update the synth possibly on each tick. So, using locks
-	//			   may have degraded audio quality and caused glitches.
-	// 
-	// https://files.portaudio.com/docs/v19-doxydocs/tutorial_start.html
-	//
+		_audioClient->Initialize();
+		_audioClient->Open();
 
-	// Initialize Port Audio
-	PaError error = Pa_Initialize();
-
-	if (error != PaErrorCode::paNoError)
-	{
-		HandleError(error);
-		return false;
-	}
-
-	// WASAPI Device
-	PaHostApiIndex wasapiIndex = Pa_HostApiTypeIdToHostApiIndex(PaHostApiTypeId::paMME);
-	PaDeviceIndex outputDeviceIndex;
-
-	for (PaDeviceIndex index = 0; index < Pa_GetDeviceCount(); index++)
-	{
-		const PaDeviceInfo* device = Pa_GetDeviceInfo(index);
-
-		if (device->hostApi == wasapiIndex)
-		{
-			outputDeviceIndex = index;
-		}
-	}
-
-	// Output Parameters
-	PaStreamParameters outputParameters;	
-
-	outputParameters.device = Pa_GetDefaultOutputDevice();
-	outputParameters.channelCount = NUMBER_CHANNELS;
-	outputParameters.sampleFormat = paFloat32;	
-	outputParameters.hostApiSpecificStreamInfo = NULL;
-
-	// Output Device Info
-	const PaDeviceInfo* outputDeviceInfo = Pa_GetDeviceInfo(outputParameters.device);
-	outputParameters.suggestedLatency = outputDeviceInfo->defaultLowOutputLatency;
-	//outputParameters.suggestedLatency = 0;
-
-	// Stream Flags:  Must set these up for variable streaming!
-	PaStreamFlags streamFlags = paClipOff | paDitherOff;
-
-	/* -- setup stream -- */
-	error = Pa_OpenStream(
-			&_audioStream,
-			NULL,
-			&outputParameters,
+		// Initialize Playback Stream
+		_outputStream = new PlaybackBuffer<float>(2,
 			SAMPLING_RATE,
-			paFramesPerBufferUnspecified,	/* the stream will accept a variable number of frames */
-			streamFlags,					/* we won't output out of range samples so don't bother clipping them */
-			NULL,							/* no callback, use blocking API */
-			NULL);							/* no callback, so no callback userData */
+			AUDIO_BUFFER_SIZE * 100000,
+			8,
+			SIGNAL_LOW,
+			SIGNAL_HIGH);
 
-	if (error != PaErrorCode::paNoError)
+		_streamClock = new PlaybackClock();
+		_streamClock->Start();
+		_streamClock->Mark();
+	}
+	catch (std::exception ex)
 	{
-		HandleError(error);
 		return false;
 	}
-
-	error = Pa_StartStream(_audioStream);
-
-	if (error != PaErrorCode::paNoError)
-	{
-		HandleError(error);
-		return false;
-	}
-
-	// Initialize Playback Stream
-	_outputStream = new PlaybackBuffer<float>(outputParameters.channelCount, 
-											  SAMPLING_RATE, 
-											  AUDIO_BUFFER_SIZE * 1000, 
-											  SIGNAL_LOW, 
-											  SIGNAL_HIGH);
-
-	_streamClock = new PlaybackClock();
-	_streamClock->Start();
-
-	_startTime = Pa_GetStreamTime(_audioStream);
 
 	return true;
 }
 
-bool DisposePortAudio()
+bool DisposeAudioClient()
 {
-	PaError error = Pa_StopStream(_audioStream);	
-
-	if (error != PaErrorCode::paNoError)
+	try
 	{
-		HandleError(error);
-		return false;
+		_audioClient->Close();
+
+		delete _audioClient;
 	}
-
-	error = Pa_CloseStream(_audioStream);
-
-	if (error != PaErrorCode::paNoError)
+	catch (std::exception ex)
 	{
-		HandleError(error);
 		return false;
 	}
 
@@ -218,70 +82,66 @@ bool WritePlaybackStream()
 	// Procedure
 	//
 	// 1) Get length of time since last write
-	// 2) Get Port Audio stream time
+	// 2) Calculate frame size of write
 	// 3) Request that amount of frames filled in the playback stream
-	// 4) Write that stream to Port Audio
+	// 4) Write that stream to the audio client
 	//
 
-	// Stream Time:  This is a real time parameter which carries the approximate stream tick. The
-	//				 accuracy of this is left to Port Audio; but we're going to keep counters of 
-	//				 any small latencies that develop.
-	
-	//double currentTime = _streamClock->GetDelta();
-
-	//auto latency = Pa_GetStreamInfo(_audioStream);
-
-	// Calculate end frame index. Write from the beginning to the specified frame.
-	//int nextFrameSize = (_streamClock->GetTime() - _streamClock->GetMarkTime()) * SAMPLING_RATE;
-
-	// Port Audio:  Ready for N frames
-	//long framesAvailable = Pa_GetStreamWriteAvailable(_audioStream);
-
-	//if (framesAvailable < nextFrameSize)
-	//{
-	//	int foo = 3;
-	//	return true;
-	//}
-
-	// First Stream Check
-	if (_writeTime == 0)
+	try
 	{
-		_writeTime = Pa_GetStreamTime(_audioStream) - _startTime;
-		return true;
+		// Audio Client Time (appears to return the time as it relates to the last stream write!)
+		//double streamTime = _audioClient->GetTime();
+		//double latency = _audioClient->GetLatency();
+		//int padding = _audioClient->GetCurrentPadding();
+
+		//double delta = streamTime - _lastWriteTime == 0 ? _streamClock->GetDelta() : streamTime - _lastWriteTime;
+
+		//// Take front end clock minus the current (buffer / backend) time
+		////
+		//int nextFrameSize = (int)((delta) * (double)SAMPLING_RATE);
+
+		//// KLUDGE!
+		//if (nextFrameSize <= 0)
+		//{
+		//	return true;
+		//}
+
+		double streamTime = _audioClient->GetTime();
+		int maxFrameSize = _audioClient->GetRenderBufferFrameSize() - _audioClient->GetCurrentPadding();
+		int nextFrameSize = (int)(_streamClock->GetDelta() * (double)SAMPLING_RATE);
+
+		if (nextFrameSize > maxFrameSize)
+			nextFrameSize = maxFrameSize;
+
+		// Show Sample Frames Output
+		//
+		averageSampleWrite += (nextFrameSize - averageSampleWrite) / (double)(writeCounter++ + 1);
+
+		// Playback Device: Creates output samples for the stream based on the current stream time.
+		//
+		_synthDevice->WritePlaybackBuffer(_outputStream, maxFrameSize, _streamClock->GetTime());
+
+		// Try / Catch for the MSFT backend
+		//
+		_audioClient->RenderBuffer(_outputStream->GetBuffer(), maxFrameSize);
+
+		// Sleep the rest of the period (WHEN GOD SAYS SO!)
+		if ((maxFrameSize - nextFrameSize) > 0)
+		{
+			int sleepPeriod = (maxFrameSize - nextFrameSize) * SAMPLING_RATE * 1000;
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(sleepPeriod));
+		}
+
+		// Updates last marker for measuring delta time
+		//
+		_lastWriteTime = streamTime;
+		_streamClock->Mark();
 	}
-		
-	auto numberOfFrames = Pa_GetStreamWriteAvailable(_audioStream);
-
-	if (numberOfFrames <= 0)
+	catch (std::exception ex)
 	{
-		return true;
-	}
-
-
-	PaTime updateTime = Pa_GetStreamTime(_audioStream) - _startTime;
-
-	// Port Audio:  Next stream frame count using PaTime from their backend
-	//
-	//unsigned int numberOfFrames = (((updateTime - _writeTime)) * SAMPLING_RATE) + 1;
-
-	// Playback Device: Creates output samples for the stream based on the current stream time.
-	//
-	_synthDevice->WritePlaybackBuffer(_outputStream, numberOfFrames, updateTime);
-
-	// Port Audio:  Writes the stream to the output device
-	//
-	PaError error = Pa_WriteStream(_audioStream, _outputStream->GetBuffer(), numberOfFrames);
-
-	if (error != PaErrorCode::paNoError)
-	{
-		HandleError(error);
 		return false;
 	}
-
-	// Updates last marker for measuring delta time
-	//
-	_streamClock->Mark();
-	_writeTime = updateTime;
 
 	return true;
 }
@@ -356,8 +216,9 @@ void LoopUI()
 	bool exit = false;
 
 	// Port Audio Variables
-	std::string version = Pa_GetVersionInfo()->versionText;
-	std::string hostApi = Pa_GetHostApiInfo(Pa_GetDefaultHostApi())->name;
+	//std::string version = "Unknown";
+	std::string hostApi = _audioClient->GetApiInfo();
+	std::string hostApiFormat = _audioClient->GetFormatInfo();
 	double streamLatency = 0;
 
 	// FTX-UI (Terminal Loop / Renderer)
@@ -750,14 +611,14 @@ void LoopUI()
 		// Synth Information
 		auto synthInformation = ftxui::vbox(
 		{
-			ftxui::text(version),
 			ftxui::text("Host API:				   " + hostApi),
+			ftxui::text("Host API Format:          " + hostApiFormat),
 			ftxui::text("Current Time     (s):     " + std::format("{:.3f}", _streamClock->GetTime())),
 			ftxui::text("Avg. UI Time     (ms):    " + std::format("{:.3f}", uiTimer.GetAvgMilli())),
 			ftxui::text("Avg. Sample Time (ms):    " + std::format("{:.3f}", audioTimer.GetAvgMilli())),
+			ftxui::text("Avg. Sample Frames   :    " + std::format("{:.3f}", averageSampleWrite)),
 			ftxui::text("Stream Latency   (ms):    " + std::format("{:.3f}", streamLatency)),
-			ftxui::text("Sample Rate      (Hz):    " + std::to_string(SAMPLING_RATE)),
-			ftxui::text("Frame Period     (ms):    " + std::to_string((_outputStream->GetMaxNumberOfFrames() / (double)SAMPLING_RATE) * 1000)),
+			ftxui::text("Sample Rate      (Hz):    " + std::to_string(SAMPLING_RATE))
 
 		}) | ftxui::border;
 
@@ -796,7 +657,7 @@ void LoopUI()
 		}
 
 		//double currentTime = _streamClock->GetTime();
-		double currentTime = Pa_GetStreamTime(_audioStream) - _startTime;
+		double currentTime = _audioClient->GetTime();
 
 		// Iterate Key Codes (probably the most direct method)
 		//
@@ -894,15 +755,15 @@ void LoopUI()
 
 		audioTimer.Mark();
 
-			bool streamOk = WritePlaybackStream();
-
-			// PA ERROR
-			if (!streamOk)
+			
+		
+			if (!WritePlaybackStream())
 				screen.ExitLoopClosure();
+			
 		//}
 	
 
-		//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		//std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		//_lock->unlock();
 	}
@@ -921,13 +782,16 @@ int main(int argc, char* argv[], char* envp[])
 	// Manual keyboard input
 	else
 	{
-		InitializePortAudio();
+		if (!InitializeAudioClient())
+			return -1;
+
 		InitializePlayback();
 	}
 
 	LoopUI();
 
-	DisposePortAudio();
+	if (!DisposeAudioClient())
+		return -1;
 
 	return 0;
 }

@@ -64,7 +64,7 @@ int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* p
 		for (unsigned int channelIndex = 0; channelIndex < playbackBuffer->GetNumberOfChannels(); channelIndex++)
 		{
 			// Initialize sample to zero
-			double sample = _synth->GetSample(absoluteTime);
+			TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
 
 			// Set output sample
 			playbackBuffer->SetBufferFrame(sample, frameIndex, channelIndex);
@@ -109,4 +109,3 @@ void SynthPlaybackDevice<TSignal>::GetNotes(int array[MIDI_PIANO_SIZE], int& arr
 {
 	_synth->GetNotes(array, arrayLength);
 }
-

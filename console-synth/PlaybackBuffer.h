@@ -1,5 +1,8 @@
-#pragma once
+﻿#pragma once
 
+#include <Windows.h>
+#include <bit>
+#include <cstdint>
 #include <exception>
 #include <type_traits>
 
@@ -18,11 +21,13 @@ public:
 	/// <param name="numberOfChannels">Number of output channels interleved into the buffer</param>
 	/// <param name="maxFrameSize">Max number of output frames (one frame is one sample of all channels)</param>
 	/// <param name="samplingRate">Sampling rate for the stream backend</param>
+	/// <param name="frameByteSize">Size of frame in bytes</param>
 	/// <param name="signalLow">Signal high limit</param>
 	/// <param name="signalHigh">Signal low limit</param>
 	PlaybackBuffer(unsigned int numberOfChannels, 
 				   unsigned int samplingRate,
 				   unsigned int maxFrameSize,
+				   unsigned int frameByteSize,
 				   TSignal signalLow,
 				   TSignal signalHigh);
 	~PlaybackBuffer();
@@ -30,13 +35,8 @@ public:
 	unsigned int GetNumberOfChannels() const;
 	unsigned int GetMaxNumberOfFrames() const;
 
-	/// <summary>
-	/// Returns total size of output buffer in terms of interleved samples. Should be the
-	/// (number of channels) x (number of frames)
-	/// </summary>
-	unsigned int GetTotalBufferSize() const;
 	unsigned int GetSamplingRate() const;
-	TSignal* GetBuffer() const;
+	BYTE* GetBuffer() const;
 
 	/// <summary>
 	/// Function to set the frame at the specified index, for the specified channel.
@@ -48,27 +48,33 @@ public:
 
 private:
 
-	TSignal* _buffer;
+	BYTE* _buffer;
 
 	unsigned int _numberOfChannels;
 	unsigned int _totalBufferSize;
 	unsigned int _samplingRate;
+	unsigned int _frameByteSize;
 
 	TSignal _signalLow;
 	TSignal _signalHigh;
 };
 
 template <SignalValue TSignal>
-PlaybackBuffer<TSignal>::PlaybackBuffer(unsigned int numberOfChannels, unsigned int samplingRate, unsigned int maxNumberOfFrames, TSignal signalLow, TSignal signalHigh)
+PlaybackBuffer<TSignal>::PlaybackBuffer(unsigned int numberOfChannels,
+										unsigned int samplingRate,
+										unsigned int maxNumberOfFrames,
+										unsigned int frameByteSize,
+										TSignal signalLow, TSignal signalHigh)
 {
 	_numberOfChannels = numberOfChannels;
-	_totalBufferSize = maxNumberOfFrames * numberOfChannels;
+	_totalBufferSize = maxNumberOfFrames * frameByteSize;
 	_samplingRate = samplingRate;
+	_frameByteSize = frameByteSize;
 
 	_signalLow = signalLow;
 	_signalHigh = signalHigh;
 
-	_buffer = new TSignal[_totalBufferSize];
+	_buffer = new BYTE[_totalBufferSize];
 }
 
 template <SignalValue TSignal>
@@ -90,19 +96,13 @@ unsigned int PlaybackBuffer<TSignal>::GetMaxNumberOfFrames() const
 }
 
 template <SignalValue TSignal>
-unsigned int PlaybackBuffer<TSignal>::GetTotalBufferSize() const
-{
-	return _totalBufferSize;
-}
-
-template <SignalValue TSignal>
 unsigned int PlaybackBuffer<TSignal>::GetSamplingRate() const
 {
 	return _samplingRate;
 }
 
 template <SignalValue TSignal>
-TSignal* PlaybackBuffer<TSignal>::GetBuffer() const
+BYTE* PlaybackBuffer<TSignal>::GetBuffer() const
 {
 	return _buffer;
 }
@@ -110,10 +110,28 @@ TSignal* PlaybackBuffer<TSignal>::GetBuffer() const
 template<SignalValue TSignal>
 void PlaybackBuffer<TSignal>::SetBufferFrame(TSignal sample, unsigned int frameIndex, unsigned int channelIndex)
 {
-	unsigned int absoluteIndex = (frameIndex * _numberOfChannels) + channelIndex;
+	unsigned int absoluteIndex = (frameIndex * _frameByteSize) + (channelIndex * (_frameByteSize / 2));
 
-	if (absoluteIndex >= _totalBufferSize)
+	if (absoluteIndex + 3 >= _totalBufferSize)
 		throw new std::exception("Out of range of playback stream:  PlaybackStream.cpp");
 
-	_buffer[absoluteIndex] = sample;
+	uint32_t outputSample = std::bit_cast<uint32_t, TSignal>(sample);
+
+	BYTE byte1 = (BYTE)(outputSample & 0x000000FF);
+	BYTE byte2 = (BYTE)((outputSample & 0x0000FF00) >> 8);
+	BYTE byte3 = (BYTE)((outputSample & 0x00FF0000) >> 16);
+	BYTE byte4 = (BYTE)((outputSample & 0xFF000000) >> 24);
+
+	if (byte4 > 0)
+	{
+		int foo = 4;
+	}
+
+	// Output Sample Bytes
+	_buffer[absoluteIndex] = byte1;
+	_buffer[absoluteIndex + 1] = byte2;
+	_buffer[absoluteIndex + 2] = byte3;
+	_buffer[absoluteIndex + 3] = byte4;
+
+	// Input Sample Bytes (would go here for full duplex)
 }

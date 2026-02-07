@@ -248,5 +248,8 @@
     <ClInclude Include="PlaybackClock.h">
       <Filter>Header Files\Playback</Filter>
     </ClInclude>
+    <ClInclude Include="WasapiAudioClient.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

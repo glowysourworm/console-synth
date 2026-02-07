@@ -18,6 +18,7 @@ SynthConfiguration::SynthConfiguration()
 	_hasDelay = false;
 	_hasCompressor = false;
 	_hasEnvelopeFilter = false;
+	_hasReverb = false;
 
 	_noteEnvelope = new Envelope();
 	_envelopeFilter = new Envelope();
@@ -38,6 +39,9 @@ SynthConfiguration::SynthConfiguration()
 	_delaySeconds = 0.5;
 	_delayFeedback = false;
 	_delayGain = 0.6;
+
+	_reverbDelaySeconds = 0.2;
+	_reverbGain = 0.5;
 }
 SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 {

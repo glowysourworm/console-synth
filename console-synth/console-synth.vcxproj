@@ -180,8 +180,7 @@
       <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;rtaudiod.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y C:\Backup\_Source\Git\rtaudio\build\Debug\rtaudiod.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'">
@@ -241,8 +240,11 @@
     <ClCompile Include="ButterworthFilter.cpp" />
     <ClCompile Include="CombFilter.cpp" />
     <ClCompile Include="Compressor.cpp" />
+    <ClCompile Include="CompressorUI.cpp" />
+    <ClCompile Include="DelayUI.cpp" />
     <ClCompile Include="Envelope.cpp" />
     <ClCompile Include="EnvelopeFilter.cpp" />
+    <ClCompile Include="EnvelopeFilterUI.cpp" />
     <ClCompile Include="EnvelopeUI.cpp" />
     <ClCompile Include="FilterBase.cpp" />
     <ClCompile Include="LoopTimer.cpp" />
@@ -256,6 +258,7 @@
     <ClCompile Include="PlaybackClock.cpp" />
     <ClCompile Include="RandomOscillator.cpp" />
     <ClCompile Include="Reverb.cpp" />
+    <ClCompile Include="ReverbUI.cpp" />
     <ClCompile Include="SawtoothOscillator.cpp" />
     <ClCompile Include="SineOscillator.cpp" />
     <ClCompile Include="SliderUI.cpp" />
@@ -276,9 +279,12 @@
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="CombFilter.h" />
     <ClInclude Include="Compressor.h" />
+    <ClInclude Include="CompressorUI.h" />
     <ClInclude Include="Constant.h" />
+    <ClInclude Include="DelayUI.h" />
     <ClInclude Include="Envelope.h" />
     <ClInclude Include="EnvelopeFilter.h" />
+    <ClInclude Include="EnvelopeFilterUI.h" />
     <ClInclude Include="EnvelopeUI.h" />
     <ClInclude Include="FilterBase.h" />
     <ClInclude Include="LoopTimer.h" />
@@ -296,6 +302,7 @@
     <ClInclude Include="PlaybackParameters.h" />
     <ClInclude Include="RandomOscillator.h" />
     <ClInclude Include="Reverb.h" />
+    <ClInclude Include="ReverbUI.h" />
     <ClInclude Include="SawtoothOscillator.h" />
     <ClInclude Include="SineOscillator.h" />
     <ClInclude Include="SliderUI.h" />

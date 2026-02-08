@@ -50,12 +50,12 @@ bool LoopTimer::Mark()
 		_avgMilli += (milli - _avgMilli) / (_counterMilli++ + 1);
 		_avgMicro += (micro - _avgMicro) / (_counterMicro++ + 1);
 		_avgNano += (nano - _avgNano) / (_counterNano++ + 1);
-
-		_lastSeconds += seconds;
-		_lastMilli += milli;
-		_lastMicro += micro;
-		_lastNano += nano;
 	}
+
+	_lastSeconds += seconds;
+	_lastMilli += milli;
+	_lastMicro += micro;
+	_lastNano += nano;
 
 	return this->GoalReached();
 }

@@ -36,9 +36,12 @@ ftxui::Element OscillatorUI::Render()
 
 ftxui::Component OscillatorUI::GetRenderer()
 {
-	auto oscillatorUI = this->GetComponent();
+	auto componentUI = this->GetComponent();
 
-	return ftxui::Renderer(oscillatorUI, [&] { return this->Render(); });
+	return ftxui::Renderer(componentUI, [&]
+	{ 
+		return componentUI->Render();
+	});
 }
 
 ftxui::Component OscillatorUI::GetComponent()

@@ -1,0 +1,47 @@
+#pragma once
+
+#include "SliderUI.h"
+#include "UIBase.h"
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/dom/node.hpp>
+#include <ftxui/screen/color.hpp>
+#include <string>
+#include <vector>
+
+class CompressorUI : UIBase
+{
+public:
+	CompressorUI(bool enabled, 
+				 float threshold, 
+				 float gain, 
+				 float attack, 
+				 float release, 
+				 float compressionRatio, 
+				 const std::string& title, 
+				 const ftxui::Color& titleColor);
+	~CompressorUI();
+
+	ftxui::Element Render() override;
+	ftxui::Component GetRenderer() override;
+	ftxui::Component GetComponent() override;
+
+	bool GetEnabled() const;
+
+	float GetThreshold() const;
+	float GetGain() const;
+	float GetAttack() const;
+	float GetRelease() const;
+	float GetCompressionRatio() const;
+private:
+
+	std::vector<std::string>* _onOffStrs;
+
+	int _enabledIndex;
+
+	SliderUI* _thresholdUI;
+	SliderUI* _gainUI;
+	SliderUI* _attackUI;
+	SliderUI* _releaseUI;
+	SliderUI* _compressionRatioUI;
+};
+

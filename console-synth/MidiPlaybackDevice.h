@@ -2,6 +2,7 @@
 
 #include "PlaybackBuffer.h"
 #include "PlaybackDevice.h"
+#include "PlaybackParameters.h"
 #include "Synth.h"
 
 template<SignalValue TSignal>
@@ -9,11 +10,14 @@ class MidiPlaybackDevice : public PlaybackDevice<TSignal>
 {
 public:
 
-	bool Initialize() override;
+	bool Initialize(const PlaybackParameters& parameters) override;
 
+	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 
 private:
+
+	PlaybackParameters* _streamParameters;
 
 	Synth* _synth;
 	int _frameIndex;
@@ -24,9 +28,10 @@ private:
 };
 
 template<SignalValue TSignal>
-bool MidiPlaybackDevice<TSignal>::Initialize()
+bool MidiPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& parameters)
 {
 	_initialized = true;
+	_streamParameters = parameters;
 
 	//MidiFile midi;
 
@@ -86,6 +91,12 @@ bool MidiPlaybackDevice<TSignal>::Initialize()
 	//}
 
 	return _initialized;
+}
+
+template<SignalValue TSignal>
+inline int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime)
+{
+	return 0;
 }
 
 template<SignalValue TSignal>

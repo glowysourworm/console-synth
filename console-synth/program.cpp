@@ -1,14 +1,15 @@
 #include "Constant.h"
 #include "Envelope.h"
 #include "LoopTimer.h"
+#include "OscillatorUI.h"
 #include "PlaybackBuffer.h"
 #include "PlaybackClock.h"
+#include "PlaybackParameters.h"
+#include "RtAudio.h"
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
-#include "WasapiAudioClient.h"
 #include "WindowsKeyCodes.h"
 #include <Windows.h>
-#include <chrono>
 #include <exception>
 #include <format>
 #include <ftxui/component/component.hpp>
@@ -19,27 +20,134 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
 #include <string>
-#include <thread>
 #include <vector>
 
-
-WasapiAudioClient* _audioClient;
+RtAudio* _rtAudio;
+RtAudio::DeviceInfo _rtOutputDevice;
 PlaybackBuffer<float>* _outputStream;
 SynthPlaybackDevice<float>* _synthDevice;
 SynthConfiguration* _configuration;
 PlaybackClock* _streamClock;
-double _lastWriteTime;
-double averageSampleWrite;
-int writeCounter;
+
+// UI
+OscillatorUI* _sourceOscillatorUI;
+
+void ProcessKeyStrokes(double streamTime)
+{
+	// Iterate Key Codes (probably the most direct method)
+	//
+	for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
+	{
+		// Check that enum is defined
+		if (keyCode < 0x30 ||
+			keyCode == 0x40 ||
+			(keyCode > 0x5A && keyCode < 0x80) ||
+			(keyCode > 0x80 && keyCode < 0xBB) ||
+			(keyCode > 0xBF && keyCode < 0xDB) ||
+			(keyCode > 0xDE))
+			continue;
+
+		if (!_configuration->HasMidiNote((WindowsKeyCodes)keyCode))
+			continue;
+
+		// Pressed
+		bool isPressed = GetAsyncKeyState(keyCode) & 0x8000;
+
+		// Midi Note
+		int midiNote = _configuration->GetMidiNote((WindowsKeyCodes)keyCode);
+
+		// Dis-Engage
+		if (_synthDevice->HasNote(midiNote) && !isPressed)
+			_synthDevice->SetNote(midiNote, false, streamTime);
+
+		// Engage
+		else if (!_synthDevice->HasNote(midiNote) && isPressed)
+			_synthDevice->SetNote(midiNote, true, streamTime);
+	}
+
+	// Clean Up Synth Notes
+	_synthDevice->ClearUnused(streamTime);
+}
+
+/// <summary>
+/// Primary RT Audio Callback:  They have a separate thread managing the device audio. So, this will be on their thread; and we 
+/// will process all of our SynthPlaybackDevice* work here - including key strokes. 
+/// </summary>
+/// <param name="outputBuffer">Output Audio Buffer (see RTAudio initialization)</param>
+/// <param name="inputBuffer">Input Audio (used for recording or duplex mode)</param>
+/// <param name="nFrames">Number of audio frames (Frame = { channel 1, .. channel N }, usually L/R channels)</param>
+/// <param name="streamTime">Stream time in seconds</param>
+/// <param name="status">RT Audio stream status</param>
+/// <param name="userData">This will contain a pointer to the synth configuration. However, it is not thread safe!</param>
+/// <returns>Error indicator to RT Audio</returns>
+int PrimaryAudioCallback(void* outputBuffer, void* inputBuffer, unsigned int nFrames, double streamTime, RtAudioStreamStatus status, void* userData)
+{
+	// Windows API, SynthConfiguration*, SynthPlaybackDevice* (be aware of usage)
+	//
+	ProcessKeyStrokes(streamTime);
+
+	return _synthDevice->WritePlaybackBuffer(outputBuffer, nFrames, streamTime);
+}
+
+
+void PrimaryErrorCallback(RtAudioErrorType type, const std::string& errorText)
+{
+
+}
 
 bool InitializeAudioClient()
 {
 	try
 	{
-		_audioClient = new WasapiAudioClient();
+		// Buffer Frame Calculation:  How many buffer frames will be appropriate?
+		//
+		// After some tedious work with the Windows WASAPI, and using our real time
+		// loop, it was obvious that there is a difficult problem trying to synchronize
+		// the audio backend with the frontend looping. 
+		//
+		// The approximate time for our primary loop is ~7ms. Rendering the actual 
+		// audio is a very small portion of this time, for synchronous setup.
+		//
+		// RT Audio callbacks are on a separate thread. So, we're going to try to
+		// manage our loop so the time to render audio is small. Also, there will
+		// be a shared pointer to the SynthConfiguration*, which will be carefully
+		// set by our thread, and read by the other. This is NOT a thread-safe 
+		// operation; but we won't care as long as we are just setting primitive 
+		// variables.
+		//
+		// The size of the RT Audio buffer should be set from the device. The WASAPI
+		// returned approx ~10.6667ms as the default period. So, we're going to select
+		// an audio buffer time of this much; and see how that works. Later, we'll 
+		// try to take this number from the device itself.
+		//
 
-		_audioClient->Initialize();
-		_audioClient->Open();
+		_rtAudio = new RtAudio(RtAudio::Api::WINDOWS_WASAPI, &PrimaryErrorCallback);
+
+		RtAudio::StreamParameters outputParameters;
+
+		// Output Device
+		//
+		auto outputDeviceIndex = _rtAudio->getDefaultOutputDevice();
+		auto outputDevice = _rtAudio->getDeviceInfo(outputDeviceIndex);
+
+		outputParameters.deviceId = outputDevice.ID;
+		outputParameters.nChannels = outputDevice.outputChannels;
+
+		// Output Buffer Calculation: ~device period (ms) * (s / ms) * (samples / s) = [samples]
+		//
+		// RT Audio:  (see openStream comments) will try to calculate a desired buffer size based on this input
+		//			  value. So, we'll send it something the device likes; and see what it comes back with.
+		//
+		unsigned int outputBufferFrameSize = (unsigned int)(10.6667 * 0.0001 * outputDevice.preferredSampleRate);
+		unsigned int frontendFrameSize = outputBufferFrameSize;
+
+		_rtAudio->openStream(&outputParameters,		// 
+			NULL,									// Duplex Mode (input parameters)
+			RTAUDIO_FLOAT32,						// RT Audio Format
+			outputDevice.preferredSampleRate,		// Device Sampling Rate
+			&outputBufferFrameSize,					// Device (preferred) Frame Size (RT Audio will adjust this)
+			&PrimaryAudioCallback,					// Audio Callback
+			_configuration);						// SynthConfiguration* Shared Pointer***
 
 		// Initialize Playback Stream
 		_outputStream = new PlaybackBuffer<float>(2,
@@ -48,6 +156,8 @@ bool InitializeAudioClient()
 			8,
 			SIGNAL_LOW,
 			SIGNAL_HIGH);
+
+		_rtOutputDevice = outputDevice;
 
 		_streamClock = new PlaybackClock();
 		_streamClock->Start();
@@ -65,9 +175,6 @@ bool DisposeAudioClient()
 {
 	try
 	{
-		_audioClient->Close();
-
-		delete _audioClient;
 	}
 	catch (std::exception ex)
 	{
@@ -89,53 +196,23 @@ bool WritePlaybackStream()
 
 	try
 	{
-		// Audio Client Time (appears to return the time as it relates to the last stream write!)
-		//double streamTime = _audioClient->GetTime();
-		//double latency = _audioClient->GetLatency();
-		//int padding = _audioClient->GetCurrentPadding();
-
-		//double delta = streamTime - _lastWriteTime == 0 ? _streamClock->GetDelta() : streamTime - _lastWriteTime;
-
-		//// Take front end clock minus the current (buffer / backend) time
-		////
-		//int nextFrameSize = (int)((delta) * (double)SAMPLING_RATE);
-
-		//// KLUDGE!
-		//if (nextFrameSize <= 0)
-		//{
-		//	return true;
-		//}
-
-		double streamTime = _audioClient->GetTime();
-		int maxFrameSize = _audioClient->GetRenderBufferFrameSize() - _audioClient->GetCurrentPadding();
 		int nextFrameSize = (int)(_streamClock->GetDelta() * (double)SAMPLING_RATE);
 
-		if (nextFrameSize > maxFrameSize)
-			nextFrameSize = maxFrameSize;
 
 		// Show Sample Frames Output
 		//
-		averageSampleWrite += (nextFrameSize - averageSampleWrite) / (double)(writeCounter++ + 1);
+		//averageSampleWrite += (nextFrameSize - averageSampleWrite) / (double)(writeCounter++ + 1);
 
 		// Playback Device: Creates output samples for the stream based on the current stream time.
 		//
-		_synthDevice->WritePlaybackBuffer(_outputStream, maxFrameSize, _streamClock->GetTime());
+		//_synthDevice->WritePlaybackBuffer(_outputStream, maxFrameSize, _streamClock->GetTime());
 
 		// Try / Catch for the MSFT backend
 		//
-		_audioClient->RenderBuffer(_outputStream->GetBuffer(), maxFrameSize);
-
-		// Sleep the rest of the period (WHEN GOD SAYS SO!)
-		if ((maxFrameSize - nextFrameSize) > 0)
-		{
-			int sleepPeriod = (int)(((maxFrameSize - nextFrameSize) / (double)SAMPLING_RATE) * 1000.0);
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(sleepPeriod));
-		}
+		//_audioClient->RenderBuffer(_outputStream->GetBuffer(), maxFrameSize);
 
 		// Updates last marker for measuring delta time
 		//
-		_lastWriteTime = streamTime;
 		_streamClock->Mark();
 	}
 	catch (std::exception ex)
@@ -151,6 +228,11 @@ bool WritePlaybackStream()
 /// </summary>
 void InitializePlayback()
 {
+	PlaybackParameters parameters;
+
+	parameters.numberOfChannels = _rtOutputDevice.outputChannels;
+	parameters.samplingRate = _rtOutputDevice.preferredSampleRate;
+
 	_configuration = new SynthConfiguration();
 	_synthDevice = new SynthPlaybackDevice<float>();
 
@@ -207,7 +289,7 @@ void InitializePlayback()
 	_configuration->SetMidiNote(WindowsKeyCodes::MINUS, 66);
 	_configuration->SetMidiNote(WindowsKeyCodes::PLUS, 67);
 
-	_synthDevice->Initialize();
+	_synthDevice->Initialize(parameters);
 }
 
 void LoopUI()
@@ -217,8 +299,8 @@ void LoopUI()
 
 	// Port Audio Variables
 	//std::string version = "Unknown";
-	std::string hostApi = _audioClient->GetApiInfo();
-	std::string hostApiFormat = _audioClient->GetFormatInfo();
+	std::string hostApi = "";
+	std::string hostApiFormat = "";
 	double streamLatency = 0;
 
 	// FTX-UI (Terminal Loop / Renderer)
@@ -332,13 +414,6 @@ void LoopUI()
 
 	int compressorEnabled = _configuration->GetHasCompressor() ? 0 : 1;
 
-	auto oscillatorStrs = std::vector<std::string>({
-		"Sine",
-		"Square",
-		"Triangle",
-		"Sawtooth",
-		"Random"
-	});
 	auto onOffStrs = std::vector<std::string>({
 		"On",
 		"Off"
@@ -348,9 +423,6 @@ void LoopUI()
 		"Oscillator",
 		"Sweep"
 	});
-
-	// Oscillator
-	auto oscillatorUI = ftxui::Radiobox(&oscillatorStrs, &oscillatorChoice);
 
 	// Note Envelope
 	auto envelopeUI = ftxui::Container::Vertical(
@@ -378,13 +450,7 @@ void LoopUI()
 	});
 
 	// Envelope Filter (Oscillator)
-	auto envelopeOscillatorUI = ftxui::Container::Vertical({
-		ftxui::Renderer([&] { return ftxui::text("Oscillator Type (VCO)"); }),
-		ftxui::Renderer([&] { return ftxui::separator(); }),
-		ftxui::Radiobox(&oscillatorStrs, &envelopeOscillatorChoice),
-		ftxui::Renderer([&] { return ftxui::separator(); }),
-		ftxui::Slider(&filterOscillatorStr, &filterOscillatorFrequency, filterOscillatorFrequencyLow, filterOscillatorFrequencyHigh, filterOscillatorFrequencyIncr),
-	});
+	auto envelopeOscillatorUI = new OscillatorUI("Envelope Oscillator", false, ftxui::Color::BlueLight);
 
 	// Envelope Filter (Sweep)
 	auto envelopeSweepUI = ftxui::Container::Vertical({
@@ -485,7 +551,7 @@ void LoopUI()
 		ftxui::Renderer([&] { return ftxui::text("Manual Settings"); }) | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 0; }),
 
 		// Oscillator
-		envelopeOscillatorUI | ftxui::Maybe([&]{ return envelopeFilterTypeChoice == 1; }),
+		envelopeOscillatorUI->GetRenderer() | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 1; }),
 
 		// Sweep
 		envelopeSweepUI | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 2; })
@@ -506,17 +572,6 @@ void LoopUI()
 
 		ftxui::Slider(&filterCutoffStr, &filterCutoff, filterCutoffMin, filterCutoffMax, filterCutoffIncr),
 		ftxui::Slider(&filterResonanceStr, &filterResonance, lineMin, lineMax, lineIncr),
-	});
-
-	// Source Oscillator
-	auto oscillatorUIRenderer = ftxui::Renderer(oscillatorUI, [&]
-	{
-		return ftxui::vbox(
-		{
-			ftxui::text("Oscillator") | ftxui::color(ftxui::Color(0, 88, 255, 255)),
-			ftxui::separator(),
-			oscillatorUI->Render()
-		});
 	});
 
 	// Source Envelope
@@ -584,7 +639,7 @@ void LoopUI()
 
 	auto synthInputSettings = ftxui::Container::Horizontal({
 
-		oscillatorUIRenderer | ftxui::flex_grow | ftxui::border,
+		_sourceOscillatorUI->GetRenderer() | ftxui::flex_grow | ftxui::border,
 		envelopeUIRenderer | ftxui::flex_grow | ftxui::border,
 		filterUIRenderer | ftxui::flex_grow | ftxui::border
 
@@ -616,7 +671,7 @@ void LoopUI()
 			ftxui::text("Current Time     (s):     " + std::format("{:.3f}", _streamClock->GetTime())),
 			ftxui::text("Avg. UI Time     (ms):    " + std::format("{:.3f}", uiTimer.GetAvgMilli())),
 			ftxui::text("Avg. Sample Time (ms):    " + std::format("{:.3f}", audioTimer.GetAvgMilli())),
-			ftxui::text("Avg. Sample Frames   :    " + std::format("{:.3f}", averageSampleWrite)),
+			//ftxui::text("Avg. Sample Frames   :    " + std::format("{:.3f}", averageSampleWrite)),
 			ftxui::text("Stream Latency   (ms):    " + std::format("{:.3f}", streamLatency)),
 			ftxui::text("Sample Rate      (Hz):    " + std::to_string(SAMPLING_RATE))
 
@@ -655,43 +710,6 @@ void LoopUI()
 			screen.ExitLoopClosure();
 			break;
 		}
-
-		//double currentTime = _streamClock->GetTime();
-		double currentTime = _audioClient->GetTime();
-
-		// Iterate Key Codes (probably the most direct method)
-		//
-		for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
-		{
-			// Check that enum is defined
-			if (keyCode < 0x30 ||
-				keyCode == 0x40 ||
-				(keyCode > 0x5A && keyCode < 0x80) ||
-				(keyCode > 0x80 && keyCode < 0xBB) ||
-				(keyCode > 0xBF && keyCode < 0xDB) ||
-				(keyCode > 0xDE))
-				continue;
-
-			if (!_configuration->HasMidiNote((WindowsKeyCodes)keyCode))
-				continue;
-
-			// Pressed
-			bool isPressed = GetAsyncKeyState(keyCode) & 0x8000;
-
-			// Midi Note
-			int midiNote = _configuration->GetMidiNote((WindowsKeyCodes)keyCode);
-
-			// Dis-Engage
-			if (_synthDevice->HasNote(midiNote) && !isPressed)
-				_synthDevice->SetNote(midiNote, false, currentTime);
-
-			// Engage
-			else if (!_synthDevice->HasNote(midiNote) && isPressed)
-				_synthDevice->SetNote(midiNote, true, currentTime);
-		}
-
-		// Clean Up Synth Notes
-		_synthDevice->ClearUnused(currentTime);
 
 		// Synth Configuration:  Our copy is updated on the UI Update timer
 		//

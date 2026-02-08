@@ -167,17 +167,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;__WINDOWS_WASAPI__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;__WINDOWS_WASAPI__;RTAUDIO_WINDOWS_WASAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\include;C:\Backup\_Source\Git\rtaudio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\lib;C:\Backup\_Source\Git\rtaudio\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;rtaudiod.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -243,6 +243,7 @@
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Envelope.cpp" />
     <ClCompile Include="EnvelopeFilter.cpp" />
+    <ClCompile Include="EnvelopeUI.cpp" />
     <ClCompile Include="FilterBase.cpp" />
     <ClCompile Include="LoopTimer.cpp" />
     <ClCompile Include="MidiEvent.cpp" />
@@ -251,11 +252,13 @@
     <ClCompile Include="MidiMessage.cpp" />
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Options.cpp" />
+    <ClCompile Include="OscillatorUI.cpp" />
     <ClCompile Include="PlaybackClock.cpp" />
     <ClCompile Include="RandomOscillator.cpp" />
     <ClCompile Include="Reverb.cpp" />
     <ClCompile Include="SawtoothOscillator.cpp" />
     <ClCompile Include="SineOscillator.cpp" />
+    <ClCompile Include="SliderUI.cpp" />
     <ClCompile Include="SquareOscillator.cpp" />
     <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="Synth.cpp" />
@@ -264,6 +267,7 @@
     <ClCompile Include="SynthNote.cpp" />
     <ClCompile Include="SynthNoteMap.cpp" />
     <ClCompile Include="TriangleOscillator.cpp" />
+    <ClCompile Include="UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllPassFilter.h" />
@@ -275,6 +279,7 @@
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Envelope.h" />
     <ClInclude Include="EnvelopeFilter.h" />
+    <ClInclude Include="EnvelopeUI.h" />
     <ClInclude Include="FilterBase.h" />
     <ClInclude Include="LoopTimer.h" />
     <ClInclude Include="MidiEvent.h" />
@@ -284,13 +289,16 @@
     <ClInclude Include="MidiPlaybackDevice.h" />
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Options.h" />
+    <ClInclude Include="OscillatorUI.h" />
     <ClInclude Include="PlaybackClock.h" />
     <ClInclude Include="PlaybackDevice.h" />
     <ClInclude Include="PlaybackBuffer.h" />
+    <ClInclude Include="PlaybackParameters.h" />
     <ClInclude Include="RandomOscillator.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="SawtoothOscillator.h" />
     <ClInclude Include="SineOscillator.h" />
+    <ClInclude Include="SliderUI.h" />
     <ClInclude Include="SquareOscillator.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Synth.h" />
@@ -299,7 +307,7 @@
     <ClInclude Include="SynthNoteMap.h" />
     <ClInclude Include="SynthPlaybackDevice.h" />
     <ClInclude Include="TriangleOscillator.h" />
-    <ClInclude Include="WasapiAudioClient.h" />
+    <ClInclude Include="UIBase.h" />
     <ClInclude Include="WindowsKeyCodes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

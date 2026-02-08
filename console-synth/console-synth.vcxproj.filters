@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Vendor\smf">
       <UniqueIdentifier>{76bca306-61c2-4d7d-882d-6b8e696a1f8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{7e853b8b-6ffb-4467-8385-123e567e863b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{5f3d3bde-aebf-4130-bf3c-c2345932b5f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="program.cpp">
@@ -143,6 +149,18 @@
     </ClCompile>
     <ClCompile Include="PlaybackClock.cpp">
       <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="OscillatorUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBase.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvelopeUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SliderUI.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -248,8 +266,20 @@
     <ClInclude Include="PlaybackClock.h">
       <Filter>Header Files\Playback</Filter>
     </ClInclude>
-    <ClInclude Include="WasapiAudioClient.h">
+    <ClInclude Include="OscillatorUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBase.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaybackParameters.h">
       <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvelopeUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderUI.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

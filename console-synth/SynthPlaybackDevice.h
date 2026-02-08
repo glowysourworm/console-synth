@@ -3,6 +3,7 @@
 #include "Constant.h"
 #include "PlaybackBuffer.h"
 #include "PlaybackDevice.h"
+#include "PlaybackParameters.h"
 #include "Synth.h"
 #include "SynthConfiguration.h"
 
@@ -11,8 +12,12 @@ class SynthPlaybackDevice : public PlaybackDevice<TSignal>
 {
 public:
 
-	bool Initialize() override;
+	SynthPlaybackDevice();
+	~SynthPlaybackDevice();
 
+	bool Initialize(const PlaybackParameters& parameters) override;
+
+	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 
 	void SetNote(int midiNumber, bool pressed, double streamTime);
@@ -30,15 +35,30 @@ public:
 
 private:
 
+	PlaybackParameters* _streamParameters;
 	Synth* _synth;
 	bool _initialized;
 };
 
 
 template<SignalValue TSignal>
-bool SynthPlaybackDevice<TSignal>::Initialize()
+SynthPlaybackDevice<TSignal>::SynthPlaybackDevice()
+{
+	_streamParameters = new PlaybackParameters();
+}
+
+template<SignalValue TSignal>
+SynthPlaybackDevice<TSignal>::~SynthPlaybackDevice()
+{
+	delete _streamParameters;
+}
+
+template<SignalValue TSignal>
+bool SynthPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& parameters)
 {
 	_initialized = true;
+	_streamParameters->numberOfChannels = parameters.numberOfChannels;
+	_streamParameters->samplingRate = parameters.samplingRate;
 
 	// Attack / Decay / Sustain / Release / Attack Peak / Sustain Peak
 	//
@@ -47,6 +67,33 @@ bool SynthPlaybackDevice<TSignal>::Initialize()
 	_synth = new Synth(configuration);
 
 	return _initialized;
+}
+
+template<SignalValue TSignal>
+inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime)
+{
+	if (!_initialized)
+		return 0;
+
+	TSignal* outputBuffer = (TSignal*)playbackBuffer;
+
+	// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
+	for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
+	{
+		double absoluteTime = streamTime + (frameIndex / (double)_streamParameters->samplingRate);
+
+		// Interleved frames
+		for (unsigned int channelIndex = 0; channelIndex < _streamParameters->numberOfChannels; channelIndex++)
+		{
+			// Initialize sample to zero
+			TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
+
+			// Set output sample
+			outputBuffer[frameIndex + channelIndex] = sample;
+		}
+	}
+
+	return 0;
 }
 
 template<SignalValue TSignal>
@@ -71,7 +118,7 @@ int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* p
 		}
 	}
 
-	return numberOfFrames;
+	return 0;
 }
 
 template<SignalValue TSignal>

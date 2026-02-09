@@ -17,14 +17,14 @@ class Synth
 {
 
 public:
-	Synth(const SynthConfiguration& configuration);
+	Synth(const SynthConfiguration& configuration, unsigned int samplingRate);
 	~Synth();
 
 	// Update Configuration
-	void SetConfiguration(const SynthConfiguration& configuration);
+	void SetConfiguration(const SynthConfiguration& configuration, unsigned int samplingRate);
 
 	// Sets midi notes on / off
-	void Set(int midiNumber, bool pressed, double absoluteTime);
+	void Set(int midiNumber, bool pressed, double absoluteTime, unsigned int samplingRate);
 
 	/// <summary>
 	/// Returns true if there is output from the midi numbered synth note
@@ -55,7 +55,7 @@ public:
 
 private:
 
-	void Initialize(const SynthConfiguration& configuration);
+	void Initialize(const SynthConfiguration& configuration, unsigned int samplingRate);
 
 private:
 

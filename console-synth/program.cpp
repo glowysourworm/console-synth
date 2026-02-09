@@ -1,15 +1,9 @@
-#include "CompressorUI.h"
 #include "Constant.h"
-#include "DelayUI.h"
 #include "Envelope.h"
-#include "EnvelopeFilterUI.h"
-#include "EnvelopeUI.h"
 #include "LoopTimer.h"
-#include "OscillatorUI.h"
 #include "PlaybackBuffer.h"
 #include "PlaybackClock.h"
 #include "PlaybackParameters.h"
-#include "ReverbUI.h"
 #include "RtAudio.h"
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
@@ -37,39 +31,40 @@ PlaybackClock* _streamClock;
 LoopTimer* _uiTimer;
 LoopTimer* _audioTimer;
 
-
 void ProcessKeyStrokes(double streamTime)
 {
 	// Iterate Key Codes (probably the most direct method)
 	//
-	for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
-	{
-		// Check that enum is defined
-		if (keyCode < 0x30 ||
-			keyCode == 0x40 ||
-			(keyCode > 0x5A && keyCode < 0x80) ||
-			(keyCode > 0x80 && keyCode < 0xBB) ||
-			(keyCode > 0xBF && keyCode < 0xDB) ||
-			(keyCode > 0xDE))
-			continue;
+	//for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
+	//{
+	//	// Check that enum is defined
+	//	if (keyCode < 0x30 ||
+	//		keyCode == 0x40 ||
+	//		(keyCode > 0x5A && keyCode < 0x80) ||
+	//		(keyCode > 0x80 && keyCode < 0xBB) ||
+	//		(keyCode > 0xBF && keyCode < 0xDB) ||
+	//		(keyCode > 0xDE))
+	//		continue;
 
-		if (!_configuration->HasMidiNote((WindowsKeyCodes)keyCode))
-			continue;
+	//	if (!_configuration->HasMidiNote((WindowsKeyCodes)keyCode))
+	//		continue;
 
-		// Pressed
-		bool isPressed = GetAsyncKeyState(keyCode) & 0x8000;
+	//	// Pressed
+	//	bool isPressed = GetAsyncKeyState(keyCode) & 0x8000;
 
-		// Midi Note
-		int midiNote = _configuration->GetMidiNote((WindowsKeyCodes)keyCode);
+	//	// Midi Note
+	//	int midiNote = _configuration->GetMidiNote((WindowsKeyCodes)keyCode);
 
-		// Dis-Engage
-		if (_synthDevice->HasNote(midiNote) && !isPressed)
-			_synthDevice->SetNote(midiNote, false, streamTime);
+	//	// Dis-Engage
+	//	if (_synthDevice->HasNote(midiNote) && !isPressed)
+	//		_synthDevice->SetNote(midiNote, false, streamTime);
 
-		// Engage
-		else if (!_synthDevice->HasNote(midiNote) && isPressed)
-			_synthDevice->SetNote(midiNote, true, streamTime);
-	}
+	//	// Engage
+	//	else if (!_synthDevice->HasNote(midiNote) && isPressed)
+	//		_synthDevice->SetNote(midiNote, true, streamTime);
+	//}
+
+	_synthDevice->SetNote(50, true, streamTime, _outputParameters->samplingRate);
 
 	// Clean Up Synth Notes
 	_synthDevice->ClearUnused(streamTime);
@@ -138,6 +133,16 @@ bool InitializeAudioClient()
 
 		outputParameters.deviceId = outputDevice.ID;
 		outputParameters.nChannels = outputDevice.outputChannels;
+		outputParameters.firstChannel = 0;
+
+		RtAudio::StreamOptions options;
+
+		//options.flags |= RTAUDIO_SCHEDULE_REALTIME;					
+		options.numberOfBuffers = 4;						// Has to do with audio format!
+		options.flags |= RTAUDIO_HOG_DEVICE;
+		options.flags |= RTAUDIO_MINIMIZE_LATENCY;
+		// options.flags |= RTAUDIO_NONINTERLEAVED;
+
 
 		// Output Buffer Calculation: ~device period (ms) * (s / ms) * (samples / s) = [samples]
 		//
@@ -147,18 +152,19 @@ bool InitializeAudioClient()
 		unsigned int outputBufferFrameSize = (unsigned int)(10.6667 * 0.001 * outputDevice.preferredSampleRate);
 		unsigned int frontendFrameSize = outputBufferFrameSize;
 
-		_rtAudio->openStream(&outputParameters,		// 
+		_rtAudio->openStream(& outputParameters,	// 
 			NULL,									// Duplex Mode (input parameters)
 			RTAUDIO_FLOAT32,						// RT Audio Format
 			outputDevice.preferredSampleRate,		// Device Sampling Rate
 			&outputBufferFrameSize,					// Device (preferred) Frame Size (RT Audio will adjust this)
 			&PrimaryAudioCallback,					// Audio Callback
-			_configuration);						// SynthConfiguration* Shared Pointer***
+			_configuration,							// SynthConfiguration* Shared Pointer***
+			&options);						
 
 		// Initialize Playback Stream
 		_outputStream = new PlaybackBuffer<float>(2,
-			SAMPLING_RATE,
-			AUDIO_BUFFER_SIZE * 100000,
+			outputDevice.preferredSampleRate,
+			outputBufferFrameSize,
 			8,
 			SIGNAL_LOW,
 			SIGNAL_HIGH);
@@ -293,78 +299,399 @@ void LoopUI()
 	_uiTimer->Reset();
 	_audioTimer->Reset();
 
-	// Port Audio Variables
-	//std::string version = "Unknown";
-	std::string hostApi = "RT Audio (WASAPI)";
-	std::string hostApiFormat = "Float (32 bit / channel)";
-	double streamLatency = 0;
-
 	// FTX-UI (Terminal Loop / Renderer)
 	// 
 	// Their backend will handle interaction, resizing, and redrawing. The document should be
-	// updated on this thread (AFAIK) which is captured in the lambda function.
+	// updated on this thread (AFAIK) which is captured in the lambda function(s). 
+	// 
+	// After more working with FTXUI, it is using std::move, and std::make_shared, and std::shared_ptr
+	// to try to keep stack allocations, and move them to the heap. I'm not as familiar with this pattern;
+	// but it is very difficult to reproduce an inheritance pattern. Though, not impossible, it would
+	// be a better use of time to just leave it on our stack, which will accomplish the same task. 
+	// 
+	// There is a slight memory leak which may be in FTXUI; but I'm not sure, yet, if RT Audio has issues,
+	// or just our SynthNote* allocations (probably not).
 	//
 	// https://arthursonzogni.github.io/FTXUI/
 	//
 
 	auto screen = ftxui::ScreenInteractive::TerminalOutput();
 
-	// Source Oscillator
-	OscillatorUI oscillatorUI("Oscillator", true, ftxui::Color::Blue);
+	std::string hostApi = "RT Audio (WASAPI)";
+	std::string hostApiFormat = "Float (32 bit / channel)";
+	double streamLatency = 0;
+
+	// Synth Configuration
+	bool configurationChange = false;
+	Envelope envelope = _configuration->GetNoteEnvelope();
+	Envelope filter = _configuration->GetEnvelopeFilter();
+
+	float lineMin = 0.00f;
+	float lineMax = 1.00f;
+	float lineIncr = 0.01f;
+
+	float envelopeMin = 0.01f;
+	float envelopeMax = 3.0f;
+	float envelopeIncrement = 0.01f;
+
+	float filterCutoffMin = 60;
+	float filterCutoffMax = 7000;
+	float filterCutoffIncr = 10;
+
+	float noteAttack = envelope.GetAttack();
+	float noteSustain = envelope.GetSustain();
+	float noteDecay = envelope.GetDecay();
+	float noteRelease = envelope.GetRelease();
+
+	float filterAttack = filter.GetAttack();
+	float filterSustain = filter.GetSustain();
+	float filterDecay = filter.GetDecay();
+	float filterRelease = filter.GetRelease();
+
+	float filterCutoff = _configuration->GetEnvelopeFilterCutoff();
+	float filterResonance = _configuration->GetEnvelopeFilterResonance();
+
+	float filterOscillatorFrequency = _configuration->GetEnvelopeFilterOscillatorFrequency();
+	float filterOscillatorFrequencyLow = 0.5;
+	float filterOscillatorFrequencyHigh = 5;
+	float filterOscillatorFrequencyIncr = 0.1;
+
+	float delaySeconds = _configuration->GetDelaySeconds();
+	float delayGain = _configuration->GetDelayGain();
+	float delaySecondsMin = 0.1f;
+	float delaySecondsMax = 3.0f;
+	float delaySecondsIncr = 0.1f;
+
+	float reverbDelaySeconds = _configuration->GetReverbDelaySeconds();
+	float reverbGain = _configuration->GetReverbGain();
+
+	float reverbDelayMin = 0.001f;
+	float reverbDelayMax = 0.500f;
+	float reverbDelayIncr = 0.001f;
+
+	float compressorGain = _configuration->GetCompressorGain();
+	float compressorThreshold = _configuration->GetCompressorThreshold();
+	float compressorAttack = _configuration->GetCompressorAttack();
+	float compressorRelease = _configuration->GetCompressorRelease();
+	float compressorRatio = _configuration->GetCompressionRatio();
+
+	float compressorGainLow = 0.0f;
+	float compressorGainHigh = 10.0f;
+	float compressorGainIncr = 0.01f;
+
+	float compressorRatioLow = 1.0f;
+	float compressorRatioHigh = 10.0f;
+	float compressorRatioIncr = 1.0f;
+
+	std::string attackStr;
+	std::string sustainStr;
+	std::string decayStr;
+	std::string releaseStr;
+
+	std::string filterAttackStr;
+	std::string filterSustainStr;
+	std::string filterDecayStr;
+	std::string filterReleaseStr;
+
+	std::string filterCutoffStr;
+	std::string filterResonanceStr;
+
+	std::string filterOscillatorStr;
+
+	std::string reverbDelayStr;
+	std::string reverbGainStr;
+
+	std::string delayStr;
+	std::string delayGainStr;
+
+	std::string compressorGainStr;
+	std::string compressorThresholdStr;
+	std::string compressorRatioStr;
+	std::string compressorAttackStr;
+	std::string compressorReleaseStr;
+
+	int oscillatorChoice = (int)_configuration->GetOscillatorType();
+	int envelopeFilterEnabled = _configuration->GetHasEnvelopeFilter() ? 0 : 1;
+	int envelopeFilterTypeChoice = (int)_configuration->GetEnvelopeFilterType();
+	int envelopeOscillatorChoice = (int)_configuration->GetEnvelopeFilterOscillatorType();
+
+	int reverbEnabled = _configuration->GetHasReverb() ? 0 : 1;
+
+	int delayEnabled = _configuration->GetHasDelay() ? 0 : 1;
+	int delayFeedbackEnabled = _configuration->GetDelayFeedback() ? 0 : 1;
+
+	int compressorEnabled = _configuration->GetHasCompressor() ? 0 : 1;
+
+	auto oscillatorStrs = std::vector<std::string>(
+	{
+		"Sine",
+		"Square",
+		"Triangle",
+		"Sawtooth",
+		"Random"
+	});
+	auto onOffStrs = std::vector<std::string>(
+	{
+		"On",
+		"Off"
+	});
+	auto envelopeFilterTypeStrs = std::vector<std::string>(
+	{
+		"Manual",
+		"Oscillator",
+		"Sweep"
+	});
+
+	// Oscillator
+	auto oscillatorUI = ftxui::Radiobox(&oscillatorStrs, &oscillatorChoice);
 
 	// Note Envelope
-	EnvelopeUI envelopeUI(_configuration->GetNoteEnvelope(), "Input Envelope", true, ftxui::Color::BlueLight);
+	auto envelopeUI = ftxui::Container::Vertical(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Input Envelope") | ftxui::color(ftxui::Color(0,88,255,255)); }),
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+		ftxui::Slider(&attackStr, &noteAttack, envelopeMin, envelopeMax, envelopeIncrement) | ftxui::color(ftxui::Color::White),
+		ftxui::Slider(&sustainStr, &noteSustain, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&decayStr, &noteDecay, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&releaseStr, &noteRelease, envelopeMin, envelopeMax, envelopeIncrement),
+	});
+
+	// Envelope Filter Label (Enable)
+	auto envelopeFilterLabelUI = ftxui::Container::Horizontal(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Envelope Filter") | ftxui::color(ftxui::Color(255,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &envelopeFilterEnabled) | ftxui::align_right,
+	});
+
+	// Envelope Filter Type Label (Toggle)
+	auto envelopeFilterTypeLabelUI = ftxui::Container::Horizontal(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Filter Type") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(envelopeFilterTypeStrs, &envelopeFilterTypeChoice) | ftxui::align_right,
+	});
 
 	// Envelope Filter (Oscillator)
-	EnvelopeFilterUI envelopeFilterUI(_configuration->GetEnvelopeFilterType(),
-									  _configuration->GetEnvelopeFilterOscillatorType(), 
-									  _configuration->GetEnvelopeFilter(), 
-									  _configuration->GetEnvelopeFilterCutoff(), 
-									  _configuration->GetEnvelopeFilterResonance(), 
-									  _configuration->GetEnvelopeFilterOscillatorFrequency(), 
-									  _configuration->GetHasEnvelopeFilter(), 
-									  "Envelope Filter", ftxui::Color::Red);
+	auto envelopeOscillatorUI = ftxui::Container::Vertical(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Oscillator Type (VCO)"); }),
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+		ftxui::Radiobox(&oscillatorStrs, &envelopeOscillatorChoice),
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+		ftxui::Slider(&filterOscillatorStr, &filterOscillatorFrequency, filterOscillatorFrequencyLow, filterOscillatorFrequencyHigh, filterOscillatorFrequencyIncr),
+	});
+
+	// Envelope Filter (Sweep)
+	auto envelopeSweepUI = ftxui::Container::Vertical(
+	{
+		ftxui::Slider(&filterAttackStr, &filterAttack, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&filterSustainStr, &filterSustain, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&filterDecayStr, &filterDecay, envelopeMin, envelopeMax, envelopeIncrement),
+		ftxui::Slider(&filterReleaseStr, &filterRelease, envelopeMin, envelopeMax, envelopeIncrement),
+	});
+
+	// Reverb (Enable)
+	auto reverbEnableUI = ftxui::Container::Horizontal(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Reverb") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &reverbEnabled) | ftxui::align_right,
+	});
+
 	// Reverb
-	ReverbUI reverbUI(_configuration->GetHasReverb(),
-					  _configuration->GetReverbDelaySeconds(), 
-					  _configuration->GetReverbGain(), 
-					  "Reverb", ftxui::Color::Green);
+	auto reverbUI = ftxui::Container::Vertical(
+	{
+		reverbEnableUI,
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+
+		// Delay (s)
+		ftxui::Slider(&reverbDelayStr, &reverbDelaySeconds, reverbDelayMin, reverbDelayMax, reverbDelayIncr),
+
+		// Gain
+		ftxui::Slider(&reverbGainStr, &reverbGain, lineMin, lineMax, lineIncr),
+	});
+
+	// Delay (Enable)
+	auto delayEnableUI = ftxui::Container::Horizontal(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Delay") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &delayEnabled) | ftxui::align_right,
+	});
+
+	// Delay Feedback Enable (Toggle)
+	auto delayFeedbackUI = ftxui::Container::Horizontal(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Feedback") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &delayFeedbackEnabled) | ftxui::align_right,
+	});
 
 	// Delay
-	DelayUI delayUI(_configuration->GetHasDelay(),
-					_configuration->GetDelayFeedback(),
-					_configuration->GetDelaySeconds(),
-					_configuration->GetDelayGain(),
-					"Delay", ftxui::Color::Purple);
+	auto delayUI = ftxui::Container::Vertical(
+	{
+		delayEnableUI,
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+
+		// Feedback (Enable)
+		delayFeedbackUI,
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+
+		// Delay (s)
+		ftxui::Slider(&delayStr, &delaySeconds, delaySecondsMin, delaySecondsMax, delaySecondsIncr),
+
+		// Gain
+		ftxui::Slider(&delayGainStr, &delayGain, lineMin, lineMax, lineIncr),
+	});
+
+	// Compressor (Enable)
+	auto compressorEnableUI = ftxui::Container::Horizontal(
+	{
+		ftxui::Renderer([&] { return ftxui::text("Compressor") | ftxui::color(ftxui::Color(0,0,255,255)); }) | ftxui::flex_grow,
+		ftxui::Toggle(onOffStrs, &compressorEnabled) | ftxui::align_right,
+	});
 
 	// Compressor
-	CompressorUI compressorUI(_configuration->GetHasCompressor(),
-							  _configuration->GetCompressorThreshold(), 
-							  _configuration->GetCompressorGain(), 
-							  _configuration->GetCompressorAttack(), 
-							  _configuration->GetCompressorRelease(), 
-							  _configuration->GetCompressionRatio(), 
-							  "Compressor", ftxui::Color::HotPink);
+	auto compressorUI = ftxui::Container::Vertical(
+	{
+		compressorEnableUI,
+		ftxui::Renderer([&] { return ftxui::separator(); }),
+
+		// Threshold
+		ftxui::Slider(&compressorThresholdStr, &compressorThreshold, lineMin, lineMax, lineIncr),
+
+		// Gain
+		ftxui::Slider(&compressorGainStr, &compressorGain, compressorGainLow, compressorGainHigh, compressorGainIncr),
+
+		// Attack
+		ftxui::Slider(&compressorAttackStr, &compressorAttack, lineMin, lineMax, lineIncr),
+
+		// Release
+		ftxui::Slider(&compressorReleaseStr, &compressorRelease, lineMin, lineMax, lineIncr),
+
+		// Compression Ratio
+		ftxui::Slider(&compressorRatioStr, &compressorRatio, compressorRatioLow, compressorRatioHigh, compressorRatioIncr),
+	});
+
+	// Envelope Type Chooser
+	auto envelopeTypeUI = ftxui::Container::Vertical(
+	{
+		// Manual 
+		ftxui::Renderer([&] { return ftxui::text("Manual Settings"); }) | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 0; }),
+
+		// Oscillator
+		envelopeOscillatorUI | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 1; }),
+
+		// Sweep
+		envelopeSweepUI | ftxui::Maybe([&] { return envelopeFilterTypeChoice == 2; })
+	});
+
+	// Envelope Filter
+	auto envelopeFilterUI = ftxui::Container::Vertical(
+	{
+		envelopeFilterLabelUI,
+		ftxui::Renderer([&] {return ftxui::separator(); }),
+
+		envelopeFilterTypeLabelUI,
+		ftxui::Renderer([&] {return ftxui::separator(); }),
+
+		envelopeTypeUI,
+
+		ftxui::Renderer([&] {return ftxui::separator(); }),
+
+		ftxui::Slider(&filterCutoffStr, &filterCutoff, filterCutoffMin, filterCutoffMax, filterCutoffIncr),
+		ftxui::Slider(&filterResonanceStr, &filterResonance, lineMin, lineMax, lineIncr),
+	});
+
+	// Source Oscillator
+	auto oscillatorUIRenderer = ftxui::Renderer(oscillatorUI, [&]
+	{
+		return ftxui::vbox(
+		{
+			ftxui::text("Oscillator") | ftxui::color(ftxui::Color(0, 88, 255, 255)),
+			ftxui::separator(),
+			oscillatorUI->Render()
+		});
+	});
+
+	// Source Envelope
+	auto envelopeUIRenderer = ftxui::Renderer(envelopeUI, [&]
+	{
+		attackStr = "Attack  (s) " + std::format("{:.2f}", noteAttack);
+		sustainStr = "Sustain (s) " + std::format("{:.2f}", noteSustain);
+		decayStr = "Decay   (s) " + std::format("{:.2f}", noteDecay);
+		releaseStr = "Release (s) " + std::format("{:.2f}", noteRelease);
+
+		return envelopeUI->Render();
+	});
+
+	// Envelope Filter
+	auto filterUIRenderer = ftxui::Renderer(envelopeFilterUI, [&]
+	{
+		filterAttackStr = "Attack  (s) " + std::format("{:.2f}", filterAttack);
+		filterSustainStr = "Sustain (s) " + std::format("{:.2f}", filterSustain);
+		filterDecayStr = "Decay   (s) " + std::format("{:.2f}", filterDecay);
+		filterReleaseStr = "Release (s) " + std::format("{:.2f}", filterRelease);
+
+		filterCutoffStr = "Cutoff (Hz) " + std::to_string((int)filterCutoff);
+		filterResonanceStr = "Resonance   " + std::format("{:.2f}", filterResonance);
+
+		filterOscillatorStr = "Oscillator (Hz) " + std::format("{:.1f}", filterOscillatorFrequency);
+
+		return envelopeFilterUI->Render();
+	});
+
+	// Reverb
+	auto reverbUIRenderer = ftxui::Renderer(reverbUI, [&] 
+	{
+		reverbDelayStr = "Delay (s) " + std::format("{:.4f}", reverbDelaySeconds);
+		reverbGainStr = "Gain      " + std::format("{:.2f}", reverbGain) + "  ";
+
+		return reverbUI->Render();
+	});
+
+	// Delay
+	auto delayUIRenderer = ftxui::Renderer(delayUI, [&] 
+	{
+		delayStr = "Delay (s) " + std::format("{:.2f}", delaySeconds);
+		delayGainStr = "Gain      " + std::format("{:.2f}", delayGain);
+
+		return delayUI->Render();
+	});
+
+	// Compressor
+	auto compressorUIRenderer = ftxui::Renderer(compressorUI, [&] 
+	{
+		compressorThresholdStr = "Threshold    " + std::format("{:.2f}", compressorThreshold) + " ";
+		compressorGainStr = "Gain         " + std::format("{:.2f}", compressorGain) + " ";
+		compressorAttackStr = "Attack  (s)  " + std::format("{:.2f}", compressorAttack) + " ";
+		compressorReleaseStr = "Release (s)  " + std::format("{:.2f}", compressorRelease) + " ";
+
+		// Align Labels
+		if (compressorRatio == 10.0f)
+			compressorRatioStr = "Comp. Ratio  " + std::format("{:.2f}", compressorRatio);
+
+		else
+			compressorRatioStr = "Comp. Ratio  " + std::format("{:.2f}", compressorRatio) + " ";
+
+		return compressorUI->Render();
+	});
 
 	auto synthInputSettings = ftxui::Container::Horizontal({
 
-		oscillatorUI.GetRenderer() | ftxui::flex_grow | ftxui::border,
-		//envelopeUI.GetRenderer() | ftxui::flex_grow | ftxui::border,
-		//envelopeFilterUI.GetRenderer() | ftxui::flex_grow | ftxui::border
+		oscillatorUIRenderer | ftxui::flex_grow | ftxui::border,
+		envelopeUIRenderer | ftxui::flex_grow | ftxui::border,
+		filterUIRenderer | ftxui::flex_grow | ftxui::border
 
 	}) | ftxui::flex_grow;
 
 	auto synthOutputSettings = ftxui::Container::Horizontal({
 
-		compressorUI.GetRenderer() | ftxui::flex_grow | ftxui::border,
-		reverbUI.GetRenderer() | ftxui::flex_grow | ftxui::border,
-		delayUI.GetRenderer() | ftxui::flex_grow | ftxui::border
+		compressorUIRenderer | ftxui::flex_grow | ftxui::border,
+		reverbUIRenderer | ftxui::flex_grow | ftxui::border,
+		delayUIRenderer | ftxui::flex_grow | ftxui::border
 
 	});
 
 	auto synthSettings = ftxui::Container::Vertical({
 		synthInputSettings,
-		//synthOutputSettings
+		synthOutputSettings
 	});
 
 	// UI BACKEND LOOP!! This will be run just for re-drawing purposes during our
@@ -374,17 +701,18 @@ void LoopUI()
 	{
 		// Synth Information
 		auto synthInformation = ftxui::vbox(
-		{
-			ftxui::text("Host API:				   " + hostApi),
-			ftxui::text("Host API Format:          " + hostApiFormat),
-			ftxui::text("Current Time     (s):     " + std::format("{:.3f}", _streamClock->GetTime())),
-			ftxui::text("Avg. UI Time     (ms):    " + std::format("{:.3f}", _uiTimer->GetAvgMilli())),
-			ftxui::text("Avg. Sample Time (ms):    " + std::format("{:.3f}", _audioTimer->GetAvgMilli())),
-			//ftxui::text("Avg. Sample Frames   :    " + std::format("{:.3f}", averageSampleWrite)),
-			ftxui::text("Stream Latency   (ms):    " + std::format("{:.3f}", streamLatency)),
-			ftxui::text("Sample Rate      (Hz):    " + std::to_string(_outputParameters->samplingRate))
+			{
+				ftxui::text("Host API:				   " + hostApi),
+				ftxui::text("Host API Format:          " + hostApiFormat),
+				ftxui::text("RT Audio Buffer Size:     " + std::format("{} (frames)", _outputParameters->outputBufferFrameSize)),
+				ftxui::text("Current Time     (s):     " + std::format("{:.3f}", _streamClock->GetTime())),
+				ftxui::text("Avg. UI Time     (ms):    " + std::format("{:.3f}", _uiTimer->GetAvgMilli())),
+				ftxui::text("Avg. Sample Time (ms):    " + std::format("{:.3f}", _audioTimer->GetAvgMilli())),
+				//ftxui::text("Avg. Sample Frames   :    " + std::format("{:.3f}", averageSampleWrite)),
+				//ftxui::text("Stream Latency   (ms):    " + std::format("{:.3f}", streamLatency)),
+				ftxui::text("Sample Rate      (Hz):    " + std::to_string(_outputParameters->samplingRate))
 
-		}) | ftxui::border;
+			}) | ftxui::border;
 
 
 		// Borderless Layout Grid
@@ -395,10 +723,11 @@ void LoopUI()
 			synthInformation,
 			synthSettings->Render()
 
-		}) | ftxui::flex_grow;
+			}) | ftxui::flex_grow;
 
 		return container;
 	});
+
 
 	// Initialize Screen (sizing)
 	screen.FitComponent();
@@ -407,7 +736,7 @@ void LoopUI()
 	//
 	// https://arthursonzogni.com/FTXUI/doc/examples_2component_2custom_loop_8cpp-example.html#_a8
 	//
-	ftxui::Loop loop(&screen, renderer);
+	ftxui::Loop loop(& screen, renderer);
 
 	// Primary Loop!!! We'll handle this loop - using our system timer to manage the 
 	//				   accuracy of the audio output; and also throttle events for the
@@ -486,7 +815,7 @@ void LoopUI()
 
 int main(int argc, char* argv[], char* envp[])
 {
-	SetConsoleTitleA("Terminal Synth");
+	//SetConsoleTitleA("Terminal Synth");
 
 	// Read midi file
 	if (argc > 1)

@@ -20,7 +20,7 @@ public:
 	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 
-	void SetNote(int midiNumber, bool pressed, double streamTime);
+	void SetNote(int midiNumber, bool pressed, double streamTime, unsigned int samplingRate);
 	bool GetNote(int midiNumber) const;
 	bool HasNote(int midiNumber) const;
 	void ClearUnused(double streamTime);
@@ -59,12 +59,13 @@ bool SynthPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& paramete
 	_initialized = true;
 	_streamParameters->numberOfChannels = parameters.numberOfChannels;
 	_streamParameters->samplingRate = parameters.samplingRate;
+	_streamParameters->outputBufferFrameSize = parameters.outputBufferFrameSize;
 
 	// Attack / Decay / Sustain / Release / Attack Peak / Sustain Peak
 	//
 	SynthConfiguration configuration;
 
-	_synth = new Synth(configuration);
+	_synth = new Synth(configuration, parameters.samplingRate);
 
 	return _initialized;
 }
@@ -89,7 +90,7 @@ inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffe
 			TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
 
 			// Set output sample
-			outputBuffer[frameIndex + channelIndex] = sample;
+			outputBuffer[(2 * frameIndex) + channelIndex] = sample;
 		}
 	}
 
@@ -122,9 +123,9 @@ int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* p
 }
 
 template<SignalValue TSignal>
-void SynthPlaybackDevice<TSignal>::SetNote(int midiNumber, bool pressed, double streamTime)
+void SynthPlaybackDevice<TSignal>::SetNote(int midiNumber, bool pressed, double streamTime, unsigned int samplingRate)
 {
-	_synth->Set(midiNumber, pressed, streamTime);
+	_synth->Set(midiNumber, pressed, streamTime, samplingRate);
 }
 
 template<SignalValue TSignal>
@@ -148,7 +149,7 @@ void SynthPlaybackDevice<TSignal>::ClearUnused(double streamTime)
 template<SignalValue TSignal>
 void SynthPlaybackDevice<TSignal>::UpdateSynth(const SynthConfiguration& configuration)
 {
-	_synth->SetConfiguration(configuration);
+	_synth->SetConfiguration(configuration, _streamParameters->samplingRate);
 }
 
 template<SignalValue TSignal>

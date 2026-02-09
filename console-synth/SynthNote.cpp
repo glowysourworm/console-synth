@@ -12,12 +12,12 @@
 #include <cmath>
 #include <exception>
 
-SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration)
+SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration, unsigned int samplingRate)
 {
 	_midiNumber = midiNumber;
 	_envelope = new Envelope(configuration.GetNoteEnvelope());
 	_envelopeFilter = new EnvelopeFilter(1.0, 
-		SAMPLING_RATE,
+		samplingRate,
 		configuration.GetEnvelopeFilterCutoff(),
 		configuration.GetEnvelopeFilterResonance(),
 		configuration.GetEnvelopeFilterType(),
@@ -26,7 +26,7 @@ SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration)
 		configuration.GetEnvelopeFilter());
 
 	_compressor = new Compressor(configuration.GetCompressorGain(), 
-		SAMPLING_RATE, 
+		samplingRate,
 		configuration.GetCompressorThreshold(), 
 		configuration.GetCompressionRatio(), 
 		configuration.GetCompressorRelaxationPeriod(), 

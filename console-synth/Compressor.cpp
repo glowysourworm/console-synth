@@ -17,7 +17,7 @@ Compressor::Compressor(float gain,
 	_compressionRatio = compressionRatio;
 	_relaxationValue = 0;
 	_relaxationBuffer = new std::queue<float>();
-	_relaxationBufferLength = SAMPLING_RATE * relaxationPeriod;
+	_relaxationBufferLength = samplingRate * relaxationPeriod;
 	_attack = attack;
 	_release = release;
 }

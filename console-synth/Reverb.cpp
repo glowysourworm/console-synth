@@ -10,7 +10,7 @@ Reverb::Reverb(float delaySeconds, float gain, int samplingRate) : FilterBase(ga
 {
 	_combFilters = new CombFilter * [REVERB_COMB_SIZE];
 	_allPassFilters = new AllPassFilter * [REVERB_ALLPASS_SIZE];
-	_lowPassFilter = new ButterworthFilter(SAMPLING_RATE, 1);
+	_lowPassFilter = new ButterworthFilter(samplingRate, 1);
 
 	// https://ccrma.stanford.edu/~jos/pasp/Schroeder_Reverberators.html
 	//

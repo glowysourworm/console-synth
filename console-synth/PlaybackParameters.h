@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+
 struct PlaybackParameters
 {
 	std::string* hostAPI;

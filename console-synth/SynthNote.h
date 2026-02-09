@@ -11,7 +11,7 @@ class SynthNote
 {
 public:
 
-	SynthNote(int midiNumber, const SynthConfiguration& configuration);
+	SynthNote(int midiNumber, const SynthConfiguration& configuration, unsigned int samplingRate);
 	~SynthNote();
 
 	int GetMidiNumber() const;

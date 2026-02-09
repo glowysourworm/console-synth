@@ -8,9 +8,9 @@
 #include <map>
 #include <utility>
 
-Synth::Synth(const SynthConfiguration& configuration)
+Synth::Synth(const SynthConfiguration& configuration, unsigned int samplingRate)
 {
-	this->Initialize(configuration);
+	this->Initialize(configuration, samplingRate);
 }
 
 void Synth::GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const
@@ -26,7 +26,7 @@ void Synth::GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const
 	}
 }
 
-void Synth::Initialize(const SynthConfiguration& configuration)
+void Synth::Initialize(const SynthConfiguration& configuration, unsigned int samplingRate)
 {
 	// DESTRUCTOR!
 	if (_configuration != nullptr)
@@ -36,8 +36,8 @@ void Synth::Initialize(const SynthConfiguration& configuration)
 	_pianoNotes = new std::map<int, SynthNote*>();
 
 	_mixer = new Mixer();
-	_delay = new CombFilter(configuration.GetDelaySeconds(), 0.8, SAMPLING_RATE, configuration.GetDelayFeedback());
-	_reverb = new Reverb(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), SAMPLING_RATE);
+	_delay = new CombFilter(configuration.GetDelaySeconds(), 0.8, samplingRate, configuration.GetDelayFeedback());
+	_reverb = new Reverb(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), samplingRate);
 }
 
 Synth::~Synth()
@@ -55,19 +55,19 @@ Synth::~Synth()
 	delete _reverb;
 }
 
-void Synth::SetConfiguration(const SynthConfiguration& configuration)
+void Synth::SetConfiguration(const SynthConfiguration& configuration, unsigned int samplingRate)
 {
-	this->Initialize(configuration);
+	this->Initialize(configuration, samplingRate);
 }
 
-void Synth::Set(int midiNumber, bool pressed, double absoluteTime)
+void Synth::Set(int midiNumber, bool pressed, double absoluteTime, unsigned int samplingRate)
 {
 	SynthNote* note = nullptr;
 
 	// New Note
 	if (!_pianoNotes->contains(midiNumber))
 	{
-		note = new SynthNote(midiNumber, *_configuration);
+		note = new SynthNote(midiNumber, *_configuration, samplingRate);
 
 		_pianoNotes->insert(std::make_pair(midiNumber, note));
 	}

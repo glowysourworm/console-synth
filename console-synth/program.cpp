@@ -9,6 +9,7 @@
 #include "SynthPlaybackDevice.h"
 #include "WindowsKeyCodes.h"
 #include <Windows.h>
+#include <chrono>
 #include <exception>
 #include <format>
 #include <ftxui/component/component.hpp>
@@ -19,6 +20,7 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
 #include <string>
+#include <thread>
 #include <vector>
 
 RtAudio* _rtAudio;
@@ -35,36 +37,34 @@ void ProcessKeyStrokes(double streamTime)
 {
 	// Iterate Key Codes (probably the most direct method)
 	//
-	//for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
-	//{
-	//	// Check that enum is defined
-	//	if (keyCode < 0x30 ||
-	//		keyCode == 0x40 ||
-	//		(keyCode > 0x5A && keyCode < 0x80) ||
-	//		(keyCode > 0x80 && keyCode < 0xBB) ||
-	//		(keyCode > 0xBF && keyCode < 0xDB) ||
-	//		(keyCode > 0xDE))
-	//		continue;
+	for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
+	{
+		// Check that enum is defined
+		if (keyCode < 0x30 ||
+			keyCode == 0x40 ||
+			(keyCode > 0x5A && keyCode < 0x80) ||
+			(keyCode > 0x80 && keyCode < 0xBB) ||
+			(keyCode > 0xBF && keyCode < 0xDB) ||
+			(keyCode > 0xDE))
+			continue;
 
-	//	if (!_configuration->HasMidiNote((WindowsKeyCodes)keyCode))
-	//		continue;
+		if (!_configuration->HasMidiNote((WindowsKeyCodes)keyCode))
+			continue;
 
-	//	// Pressed
-	//	bool isPressed = GetAsyncKeyState(keyCode) & 0x8000;
+		// Pressed
+		bool isPressed = GetAsyncKeyState(keyCode) & 0x8000;
 
-	//	// Midi Note
-	//	int midiNote = _configuration->GetMidiNote((WindowsKeyCodes)keyCode);
+		// Midi Note
+		int midiNote = _configuration->GetMidiNote((WindowsKeyCodes)keyCode);
 
-	//	// Dis-Engage
-	//	if (_synthDevice->HasNote(midiNote) && !isPressed)
-	//		_synthDevice->SetNote(midiNote, false, streamTime);
+		// Dis-Engage
+		if (_synthDevice->HasNote(midiNote) && !isPressed)
+			_synthDevice->SetNote(midiNote, false, streamTime, _outputParameters->samplingRate);
 
-	//	// Engage
-	//	else if (!_synthDevice->HasNote(midiNote) && isPressed)
-	//		_synthDevice->SetNote(midiNote, true, streamTime);
-	//}
-
-	_synthDevice->SetNote(50, true, streamTime, _outputParameters->samplingRate);
+		// Engage
+		else if (!_synthDevice->HasNote(midiNote) && isPressed)
+			_synthDevice->SetNote(midiNote, true, streamTime, _outputParameters->samplingRate);
+	}
 
 	// Clean Up Synth Notes
 	_synthDevice->ClearUnused(streamTime);
@@ -86,6 +86,8 @@ int PrimaryAudioCallback(void* outputBuffer, void* inputBuffer, unsigned int nFr
 	// Windows API, SynthConfiguration*, SynthPlaybackDevice* (be aware of usage)
 	//
 	ProcessKeyStrokes(streamTime);
+
+	_audioTimer->Mark();
 
 	return _synthDevice->WritePlaybackBuffer(outputBuffer, nFrames, streamTime);
 }
@@ -701,18 +703,18 @@ void LoopUI()
 	{
 		// Synth Information
 		auto synthInformation = ftxui::vbox(
-			{
-				ftxui::text("Host API:				   " + hostApi),
-				ftxui::text("Host API Format:          " + hostApiFormat),
-				ftxui::text("RT Audio Buffer Size:     " + std::format("{} (frames)", _outputParameters->outputBufferFrameSize)),
-				ftxui::text("Current Time     (s):     " + std::format("{:.3f}", _streamClock->GetTime())),
-				ftxui::text("Avg. UI Time     (ms):    " + std::format("{:.3f}", _uiTimer->GetAvgMilli())),
-				ftxui::text("Avg. Sample Time (ms):    " + std::format("{:.3f}", _audioTimer->GetAvgMilli())),
-				//ftxui::text("Avg. Sample Frames   :    " + std::format("{:.3f}", averageSampleWrite)),
-				//ftxui::text("Stream Latency   (ms):    " + std::format("{:.3f}", streamLatency)),
-				ftxui::text("Sample Rate      (Hz):    " + std::to_string(_outputParameters->samplingRate))
+		{
+			ftxui::text("Host API:				   " + hostApi),
+			ftxui::text("Host API Format:          " + hostApiFormat),
+			ftxui::text("RT Audio Buffer Size:     " + std::format("{} (frames)", _outputParameters->outputBufferFrameSize)),
+			ftxui::text("Current Time     (s):     " + std::format("{:.3f}", _streamClock->GetTime())),
+			ftxui::text("Avg. UI Time     (ms):    " + std::format("{:.3f}", _uiTimer->GetAvgMilli())),
+			ftxui::text("Avg. Sample Time (ms):    " + std::format("{:.3f}", _audioTimer->GetAvgMilli())),
+			//ftxui::text("Avg. Sample Frames   :    " + std::format("{:.3f}", averageSampleWrite)),
+			//ftxui::text("Stream Latency   (ms):    " + std::format("{:.3f}", streamLatency)),
+			ftxui::text("Sample Rate      (Hz):    " + std::to_string(_outputParameters->samplingRate))
 
-			}) | ftxui::border;
+		}) | ftxui::border;
 
 
 		// Borderless Layout Grid
@@ -761,28 +763,28 @@ void LoopUI()
 			screen.PostEvent(ftxui::Event::Custom);
 
 			// Update Configuration
-			//_configuration->SetNoteEnvelope(Envelope(noteAttack, noteDecay, noteSustain, noteRelease, envelope.GetAttackPeak(), envelope.GetSustainPeak()));
-			//_configuration->SetEnvelopeFilter(Envelope(filterAttack, filterDecay, filterSustain, filterRelease, filter.GetAttackPeak(), filter.GetSustainPeak()));
-			//_configuration->SetOscillatorType((AmplitudeOscillatorType)oscillatorChoice);
-			//_configuration->SetEnvelopeFilterType((EnvelopeFilterType)envelopeFilterTypeChoice);
-			//_configuration->SetEnvelopeFilterCutoff(filterCutoff);
-			//_configuration->SetEnvelopeFilterResonance(filterResonance);
-			//_configuration->SetEnvelopeFilterOscillatorFrequency(filterOscillatorFrequency);
-			//_configuration->SetEnvelopeFilterOscillatorType((AmplitudeOscillatorType)envelopeOscillatorChoice);
-			//_configuration->SetHasEnvelopeFilter(envelopeFilterEnabled == 0);
-			//_configuration->SetHasDelay(delayEnabled == 0);
-			//_configuration->SetHasCompressor(compressorEnabled == 0);
-			//_configuration->SetHasReverb(reverbEnabled == 0);
-			//_configuration->SetReverbSeconds(reverbDelaySeconds);
-			//_configuration->SetReverbGain(reverbGain);
-			//_configuration->SetDelayFeedback(delayFeedbackEnabled == 0);
-			//_configuration->SetDelaySeconds(delaySeconds);
-			//_configuration->SetDelayGain(delayGain);
-			//_configuration->SetCompressionRatio(compressorRatio);
-			//_configuration->SetCompressorAttack(compressorAttack);
-			//_configuration->SetCompressorGain(compressorGain);
-			//_configuration->SetCompressorRelease(compressorRelease);
-			//_configuration->SetCompressorThreshold(compressorThreshold);
+			_configuration->SetNoteEnvelope(Envelope(noteAttack, noteDecay, noteSustain, noteRelease, envelope.GetAttackPeak(), envelope.GetSustainPeak()));
+			_configuration->SetEnvelopeFilter(Envelope(filterAttack, filterDecay, filterSustain, filterRelease, filter.GetAttackPeak(), filter.GetSustainPeak()));
+			_configuration->SetOscillatorType((AmplitudeOscillatorType)oscillatorChoice);
+			_configuration->SetEnvelopeFilterType((EnvelopeFilterType)envelopeFilterTypeChoice);
+			_configuration->SetEnvelopeFilterCutoff(filterCutoff);
+			_configuration->SetEnvelopeFilterResonance(filterResonance);
+			_configuration->SetEnvelopeFilterOscillatorFrequency(filterOscillatorFrequency);
+			_configuration->SetEnvelopeFilterOscillatorType((AmplitudeOscillatorType)envelopeOscillatorChoice);
+			_configuration->SetHasEnvelopeFilter(envelopeFilterEnabled == 0);
+			_configuration->SetHasDelay(delayEnabled == 0);
+			_configuration->SetHasCompressor(compressorEnabled == 0);
+			_configuration->SetHasReverb(reverbEnabled == 0);
+			_configuration->SetReverbSeconds(reverbDelaySeconds);
+			_configuration->SetReverbGain(reverbGain);
+			_configuration->SetDelayFeedback(delayFeedbackEnabled == 0);
+			_configuration->SetDelaySeconds(delaySeconds);
+			_configuration->SetDelayGain(delayGain);
+			_configuration->SetCompressionRatio(compressorRatio);
+			_configuration->SetCompressorAttack(compressorAttack);
+			_configuration->SetCompressorGain(compressorGain);
+			_configuration->SetCompressorRelease(compressorRelease);
+			_configuration->SetCompressorThreshold(compressorThreshold);
 
 			// UI Run
 			loop.RunOnce();
@@ -795,20 +797,17 @@ void LoopUI()
 			//					  it is only allowed every ~100ms at the most.
 			//
 
-			//_player->StopStream();
+			_rtAudio->stopStream();
 
 			_synthDevice->UpdateSynth(*_configuration);
 
-			//_player->StartStream();
+			_rtAudio->startStream();
 
 			// Reset Configuration Flag
 			_configuration->ClearDirty();
 		}
 		
-		// THIS MOVES TO THE OTHER THREAD
-		_audioTimer->Mark();
-
-		//screen.ExitLoopClosure();
+		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 }
 

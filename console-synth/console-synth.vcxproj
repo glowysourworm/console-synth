@@ -118,7 +118,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CopyLocalProjectReference>true</CopyLocalProjectReference>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>C:\Backup\_Source\Git\console-synth\vendor\airwin2rack-DAWPlugin;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -167,7 +167,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;__WINDOWS_WASAPI__;RTAUDIO_WINDOWS_WASAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;__WINDOWS_WASAPI__;RTAUDIO_WINDOWS_WASAPI;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
@@ -234,6 +234,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.cpp" />
+    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.cpp" />
+    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedralProc.cpp" />
+    <ClCompile Include="AirwindowsEffect.cpp" />
     <ClCompile Include="AllPassFilter.cpp" />
     <ClCompile Include="AmplitudeOscillator.cpp" />
     <ClCompile Include="Binasc.cpp" />
@@ -265,6 +269,9 @@
     <ClCompile Include="TriangleOscillator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.h" />
+    <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.h" />
+    <ClInclude Include="AirwindowsEffect.h" />
     <ClInclude Include="AllPassFilter.h" />
     <ClInclude Include="AmplitudeOscillator.h" />
     <ClInclude Include="Binasc.h" />

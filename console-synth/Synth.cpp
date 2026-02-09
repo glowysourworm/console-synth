@@ -1,3 +1,4 @@
+#include "AirwindowsEffect.h"
 #include "CombFilter.h"
 #include "Constant.h"
 #include "Mixer.h"
@@ -37,7 +38,8 @@ void Synth::Initialize(const SynthConfiguration& configuration, unsigned int sam
 
 	_mixer = new Mixer();
 	_delay = new CombFilter(configuration.GetDelaySeconds(), 0.8, samplingRate, configuration.GetDelayFeedback());
-	_reverb = new Reverb(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), samplingRate);
+	//_reverb = new Reverb(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), samplingRate);
+	_reverb = new AirwindowsEffect(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), samplingRate);
 }
 
 Synth::~Synth()

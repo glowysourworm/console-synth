@@ -7,6 +7,7 @@
 #include "Constant.h"
 #include "Mixer.h"
 #include "Reverb.h"
+#include "AirwindowsEffect.h"
 #include "SynthConfiguration.h"
 #include "SynthNote.h"
 
@@ -65,7 +66,8 @@ private:
 	Mixer* _mixer;
 
 	// Post-processing effects	
-	Reverb* _reverb;
+	//Reverb* _reverb;
+	AirwindowsEffect* _reverb;
 	CombFilter* _delay;
 
 	SynthConfiguration* _configuration;

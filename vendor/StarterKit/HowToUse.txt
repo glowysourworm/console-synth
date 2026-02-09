@@ -1,0 +1,69 @@
+	This is the Airwindows Plugin Starter Kit. It contains 11 plugins (if you count Console as its own kind of plugin) and you should be able to make 'em do just about anything musical you could want. This includes many forms of 'analog emulation' and a great deal of creative mix exploration. There's a video explaining many things you can do, but this is the cheatsheet.
+	
+	Your mix will look like this when you're set up:
+	
+	-all the tracks going into the buss have
+	(whatever you use for EQ etc)
+	(maybe sends to an aux with Galactic or Verbity on it, set to all wet)
+	Console7Channel OR Console7 Cascade if you want more overdrive on the channel.
+	
+	The faders will be set to unity gain (probably marked as 0 dB, fader up to default position)
+	
+	-the mix buss will have
+	Console7Buss (you won't be altering the gain setting on this one, it stays at 1.0)
+	Pressure5 OR ClipOnly2 if you don't want buss compression
+	Monitoring
+	
+	That's a start! :)
+
+	Here's what is inside, from start of mix to the end.
+
+		Tracks
+
+	Baxandall is an EQ. It's got treble and bass controls, and is very forgiving, a great 'broad stroke' tonal balance fixer.
+
+	Capacitor2 is an EQ. It's got highpass and lowpass controls: rather than generally boost or cut highs and lows, it's more about making the treble or bass just stop at a certain point. It also reacts well to automation.
+	
+	Focus is sort of an EQ. It specializes in the sensitive midrange and helps stuff cut through a mix. It distorts only mids, so you can get aggressive sounds out of it without aliasing. (It can also be used inside Console for an old-school tube-console raucousness and energy, as shown in the video)
+
+	Pressure5 is a compressor. It can go from subtle to really outrageous. The speed control makes its reaction times go slower or faster: slower will clean up its tone. The mewiness control lets you go from a 'New York' parallel compression sound at far left (with punchy attacks) to fairly normal compressedness in the middle, to vari-mu extreme dynamic inversion on the far right. Small adjustments can make a big difference! There's also an output level control that has boosting and ClipOnly2 built in, so if you use Pressure5 on your mix buss you won't need to put ClipOnly2 as a safety clipper.
+
+	DeBess is a de-esser. If you have bright vocal tracks and the esses are super annoying, this could be a way of softening them. It can also be used to soften other kinds of bright trebly stuff, but it's mostly meant for vocals, and should be used on individual tracks (or appropriate busses), not so much on the main output buss.
+
+	PurestGain is the cleanest gain trim you will ever need, most likely. The top and bottom controls both work: the top one reads in dB (decibels) from -40 to +40, and the bottom one goes from 0 (silence) to 1 (unity gain). The bottom control, for fades or gain riding, has extra smoothing built into it so that motions of the volume control will be fluid and free of 'zipper noise'. You don't have to use this now that Console7 has its own special gain trims built in, but you can use it to adjust gain around other plugins if you like.
+
+	You will probably be sending tracks to different busses and auxes, including the use of aux send controls for special busses like reverb.
+
+		Console7 (the mix buss)
+
+	Console works by pre-distorting tracks in a calibrated way, summing them, and then un-distorting them according to the calibration. If there's only one track active, it's meant to come through unaltered, but if many tracks are playing they 'fight' each other like channels trying to drive a varying buss impedance. The way to set it up is to put Console7Channel last on every channel, and Console7Buss first on the final mix buss, and then whatever you have in between it has to keep close to unity gain.
+	
+	Console7Cascade is there for when you'd like a track to be bigger, fatter and distorted. It's got more gain on tap and is designed to sound right in the Console7 mix when you turn it up more.
+
+	You're still supposed to keep unity gain between either it or Console7Channel, and the Console7Buss, which means if there's a fader below the plugins it should stay at 0 dB, and you should use the controls on the channel plugins to mix with. Changing this won't break the plugins, it'll just cause things to sound maybe not as well-adjusted as you'd like.
+
+	Hypersonic is another EQ you can use with Console if you like. If you are using a high sample rate, putting Hypersonic in front of ConsoleChannel (or in front of any distortion plugin like Channel9) can make the sound cleaner and more organic, by reducing aliasing of supersonic frequencies that don't play well with digital mixes. Console7 now does this too, but if you need to really suppress high frequency aliasing on a particular track you can use Hypersonic for a more extreme effect.
+
+	Things that can go in a 'between tracks and output 2-buss' place are plugins like:
+
+	DeBess, if used inside Console, will kick in harder.
+
+	Channel9 is a subtle 'analogifier' that applies saturation boosts, subtle highpass filtering, and slew clipping. What that means is, there's a 'drive' knob you can turn up to boost things, and you can pick three 'flavors' you might recognize. They're not really the consoles associated with those things, but they are calibrated to take effect about the same way, and when you use Channel9 (on tracks, on the mix buss, wherever) you add a little 'analog flavor' by restricting what the audio can do, in ways that are characteristic of real analog gear's limitations. This restricting can help make things sound bigger and more solid.
+
+	Interstage is a subtle 'analogifier' that fits well in locations where analog gear has transformers: it can imitate input transformer, output transformer, or both. You can use it many times over if you need lots of analog softening: I'd suggest putting it in lots of different places to help things gel.
+
+	Verbity and Galactic are reverbs: I thought Starter Kit should have the best reverbs. If you run aux sends to them, you'll set them to 'all wet'. If you put them in the path of the regular mix, for instance running Verbity on a submix like a drum buss, it's designed so that if you start at Dry and add reverb, it won't start cutting Dry volume until halfway, when the Wet volume is up all the way. Galactic's dry/wet is more normal.
+	
+	Srsly2 is something I find useful with Galactic: it's a stereo widener, made to act a bit like the old Hughes SRS. You turn up the wide to make Galactic a lot wider, otherwise it'll mostly be deep and not have extra wideness to it. You can also use it on stereo stems of anything you'd like to make super-wide.
+
+	ClipOnly2 is one of the best 'harshness reducing' output clippers you could find, but Console7 already clips at mostly the same level. The difference is, ClipOnly2 cuts back initial 'clipped samples' to reduce brightness and glare. If you're slamming your Console buss, you might want to put ClipOnly2 first. It does nothing to the sound unless clipping, so you can put it all over the place if you like.
+
+	Focus, put inside Console, does a special thing if you're into really old retro sounds: since it boosts and distorts midrange while leaving everything else at unity gain, if it's inside Console it boosts mids and puts them out of balance with ConsoleBuss, making them too loud and causing ConsoleBuss to expand them more. Doing this gives you that 'vintage tube console' sound in a big way, since that sound is all about energy and not about 'softness' or fuzziness.
+
+	Lastly, Monitoring goes last on the output buss. It dithers everything to 24 bit (or 16, if you tell it to) and applies a wide range of mix-check tones: you can hear just the brightness at roughly the volume it should be, or just the deepest bass at roughly the volume it should be. There's a 'Peaks' setting that exaggerates whatever is 'poking out' of your mix: if you are not trying for 'super loud', you can use this to check whether any element is dominating too much. The video demonstrates all the Monitoring settings, which can help you make sense of a mix even when your own monitoring isn't perfect.
+
+	If you have other questions you can post to the thread about the Starter Kit, or show up to a Monday Q&A session, or get in touch with me some other way and I'll try to help. The Starter Kit is meant to be very approachable, so it should help you start to get pleasing results provided you know what kinds of sounds you want to make! :)
+
+	Thank you, and I hope you enjoy the Airwindows Plugins Starter Kit! If you want more plugins, there are hundreds, but this is a good start.
+
+	-chris

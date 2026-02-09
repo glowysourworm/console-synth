@@ -1,14 +1,15 @@
 #pragma once
-#include "AmplitudeOscillator.h"
+#include "OscillatorBase.h"
+#include "PlaybackFrame.h"
 
-class RandomOscillator : public AmplitudeOscillator
+class RandomOscillator : public OscillatorBase
 {
 public:
 
-	RandomOscillator(float frequency, float low, float high, int numberOfDivisions);
+	RandomOscillator(float frequency, int numberOfDivisions);
 	~RandomOscillator() override;
 
-	float GetSample(float absoluteTime) override;
+	float GetMonoSample(float absoluteTime) override;
 
 private:
 	int _numberOfDivisions;

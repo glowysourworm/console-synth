@@ -1,15 +1,20 @@
 #include "FilterBase.h"
 
-FilterBase::FilterBase(float gain, int samplingRate)
+FilterBase::FilterBase(float gain, unsigned int numberOfChannels, unsigned int samplingRate)
 {
 	_gain = gain;
+	_numberOfChannels = numberOfChannels;
 	_samplingRate = samplingRate;
 }
 
 FilterBase::~FilterBase()
 {
 }
-float FilterBase::GetSamplingRate() const
+unsigned int FilterBase::GetNumberOfChannels() const
+{
+	return _numberOfChannels;
+}
+unsigned int FilterBase::GetSamplingRate() const
 {
 	return _samplingRate;
 }

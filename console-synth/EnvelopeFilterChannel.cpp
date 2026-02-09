@@ -1,8 +1,8 @@
-#include "ButterworthFilter.h"
+#include "ButterworthFilterChannel.h"
 #include "Constant.h"
 #include "Envelope.h"
-#include "EnvelopeFilter.h"
-#include "FilterBase.h"
+#include "EnvelopeFilterChannel.h"
+#include "FilterChannelBase.h"
 #include "RandomOscillator.h"
 #include "SawtoothOscillator.h"
 #include "SineOscillator.h"
@@ -11,16 +11,16 @@
 #include <cmath>
 #include <exception>
 
-EnvelopeFilter::EnvelopeFilter(float gain, 
-	int samplingRate, 
-	int cutoffFrequency, 
-	float resonance, 
+EnvelopeFilterChannel::EnvelopeFilterChannel(float gain,
+	int cutoffFrequency,
+	float resonance,
 	EnvelopeFilterType filterType,
-	AmplitudeOscillatorType oscillatorType,
+	OscillatorType oscillatorType,
 	float oscillatorFrequency,
-	const Envelope& envelope) : FilterBase(gain, samplingRate)
+	const Envelope& envelope,
+	unsigned int samplingRate) : FilterChannelBase(gain, samplingRate)
 {
-	_filter = new ButterworthFilter(samplingRate, gain);
+	_filter = new ButterworthFilterChannel(samplingRate, gain);
 	_filterEnvelope = new Envelope(envelope);
 
 	_oscillatorFrequency = oscillatorFrequency;
@@ -35,37 +35,37 @@ EnvelopeFilter::EnvelopeFilter(float gain,
 
 	switch (oscillatorType)
 	{
-	case AmplitudeOscillatorType::Sine:
+	case OscillatorType::Sine:
 		_filterOscillator = new SineOscillator(oscillatorFrequency);
 		break;
-	case AmplitudeOscillatorType::Square:
+	case OscillatorType::Square:
 		_filterOscillator = new SquareOscillator(oscillatorFrequency);
 		break;
-	case AmplitudeOscillatorType::Triangle:
+	case OscillatorType::Triangle:
 		_filterOscillator = new TriangleOscillator(oscillatorFrequency);
 		break;
-	case AmplitudeOscillatorType::Sawtooth:
+	case OscillatorType::Sawtooth:
 		_filterOscillator = new SawtoothOscillator(oscillatorFrequency);
 		break;
-	case AmplitudeOscillatorType::Random:
-		_filterOscillator = new RandomOscillator(oscillatorFrequency, 0, 1, 4);
+	case OscillatorType::Random:
+		_filterOscillator = new RandomOscillator(oscillatorFrequency, 4);
 		break;
 	default:
 		throw new std::exception("Unhandled Amplitude Oscillator Type:  EnvelopeFilter.cpp");
 	}
 }
-EnvelopeFilter::~EnvelopeFilter()
+EnvelopeFilterChannel::~EnvelopeFilterChannel()
 {
 	delete _filter;
 	delete _filterEnvelope;
 	delete _filterOscillator;
 }
-float EnvelopeFilter::ApplyConstant(float sample, float absoluteTime)
+float EnvelopeFilterChannel::ApplyConstant(float sample, float absoluteTime)
 {
 	return _filter->Apply(sample, absoluteTime);
 }
 
-float EnvelopeFilter::ApplyEnvelope(float sample, float absoluteTime)
+float EnvelopeFilterChannel::ApplyEnvelope(float sample, float absoluteTime)
 {
 	// Output should go from [0,1]
 	float filterLevel = _filterEnvelope->GetEnvelopeLevel(absoluteTime);
@@ -77,10 +77,10 @@ float EnvelopeFilter::ApplyEnvelope(float sample, float absoluteTime)
 	return _filter->Apply(sample, absoluteTime);
 }
 
-float EnvelopeFilter::ApplyOscillator(float sample, float absoluteTime)
+float EnvelopeFilterChannel::ApplyOscillator(float sample, float absoluteTime)
 {
 	// Oscillator Level (similar to VCO in a synth) (absolute value)
-	float filterLevel = fabsf(_filterOscillator->GetSample(absoluteTime));
+	float filterLevel = fabsf(_filterOscillator->GetMonoSample(absoluteTime));
 
 	// Set Butterworth based on the oscillator
 	_filter->Set(filterLevel * _cutoffFrequency, _resonance);
@@ -89,7 +89,7 @@ float EnvelopeFilter::ApplyOscillator(float sample, float absoluteTime)
 	return _filter->Apply(sample, absoluteTime);
 }
 
-float EnvelopeFilter::Apply(float sample, float absoluteTime)
+float EnvelopeFilterChannel::Apply(float sample, float absoluteTime)
 {
 	switch (_filterType)
 	{
@@ -106,17 +106,17 @@ float EnvelopeFilter::Apply(float sample, float absoluteTime)
 	}
 }
 
-void EnvelopeFilter::Engage(float absoluteTime)
+void EnvelopeFilterChannel::Engage(float absoluteTime)
 {
 	_filterEnvelope->Engage(absoluteTime);
 }
 
-void EnvelopeFilter::DisEngage(float absoluteTime)
+void EnvelopeFilterChannel::DisEngage(float absoluteTime)
 {
 	_filterEnvelope->DisEngage(absoluteTime);
 }
 
-bool EnvelopeFilter::HasOutput(float absoluteTime) const
+bool EnvelopeFilterChannel::HasOutput(float absoluteTime) const
 {
 	switch (_filterType)
 	{

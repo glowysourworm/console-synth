@@ -1,17 +1,22 @@
 #include "AirwindowsEffect.h"
-#include "CombFilter.h"
+#include "CombFilterChannel.h"
 #include "Constant.h"
+#include "Filter.h"
+#include "FilterChannelBase.h"
 #include "Mixer.h"
-#include "Reverb.h"
+#include "PlaybackFrame.h"
 #include "Synth.h"
 #include "SynthConfiguration.h"
 #include "SynthNote.h"
 #include <map>
 #include <utility>
 
-Synth::Synth(const SynthConfiguration& configuration, unsigned int samplingRate)
+Synth::Synth(const SynthConfiguration& configuration, unsigned int numberOfChannels, unsigned int samplingRate)
 {
-	this->Initialize(configuration, samplingRate);
+	_numberOfChannels = numberOfChannels;
+	_samplingRate = samplingRate;
+
+	this->Initialize(configuration);
 }
 
 void Synth::GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const
@@ -27,7 +32,7 @@ void Synth::GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const
 	}
 }
 
-void Synth::Initialize(const SynthConfiguration& configuration, unsigned int samplingRate)
+void Synth::Initialize(const SynthConfiguration& configuration)
 {
 	// DESTRUCTOR!
 	if (_configuration != nullptr)
@@ -37,9 +42,15 @@ void Synth::Initialize(const SynthConfiguration& configuration, unsigned int sam
 	_pianoNotes = new std::map<int, SynthNote*>();
 
 	_mixer = new Mixer();
-	_delay = new CombFilter(configuration.GetDelaySeconds(), 0.8, samplingRate, configuration.GetDelayFeedback());
+	_delay = new Filter(configuration.GetDelaySeconds(), _numberOfChannels, _samplingRate);
 	//_reverb = new Reverb(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), samplingRate);
-	_reverb = new AirwindowsEffect(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), samplingRate);
+	_reverb = new AirwindowsEffect(configuration.GetReverbDelaySeconds(), configuration.GetReverbGain(), _numberOfChannels, _samplingRate);
+
+	// MEMORY!!! These are being deleted in the Filter::~Filter destructor! Please watch memory carefully!!!
+	for (int index = 0; index < _numberOfChannels; index++)
+	{
+		_delay->AddChannel((FilterChannelBase*)(new CombFilterChannel(configuration.GetDelaySeconds(), configuration.GetDelayGain(), configuration.GetDelayFeedback(), _samplingRate)));
+	}
 }
 
 Synth::~Synth()
@@ -57,19 +68,19 @@ Synth::~Synth()
 	delete _reverb;
 }
 
-void Synth::SetConfiguration(const SynthConfiguration& configuration, unsigned int samplingRate)
+void Synth::SetConfiguration(const SynthConfiguration& configuration)
 {
-	this->Initialize(configuration, samplingRate);
+	this->Initialize(configuration);
 }
 
-void Synth::Set(int midiNumber, bool pressed, double absoluteTime, unsigned int samplingRate)
+void Synth::Set(int midiNumber, bool pressed, double absoluteTime)
 {
 	SynthNote* note = nullptr;
 
 	// New Note
 	if (!_pianoNotes->contains(midiNumber))
 	{
-		note = new SynthNote(midiNumber, *_configuration, samplingRate);
+		note = new SynthNote(midiNumber, *_configuration, _samplingRate);
 
 		_pianoNotes->insert(std::make_pair(midiNumber, note));
 	}
@@ -116,7 +127,7 @@ bool Synth::HasNote(int midiNumber)
 	return _pianoNotes->contains(midiNumber);
 }
 
-float Synth::GetSample(double absoluteTime)
+void Synth::GetSample(PlaybackFrame* frame, double absoluteTime)
 {
 	float output = 0;
 
@@ -128,7 +139,7 @@ float Synth::GetSample(double absoluteTime)
 		// Primary notes
 		if (note->HasOutput(absoluteTime))
 		{
-			output += note->GetSample(absoluteTime);
+			note->AddSample(frame, absoluteTime);
 		}
 	}
 
@@ -138,10 +149,8 @@ float Synth::GetSample(double absoluteTime)
 
 	// OUTPUT EFFECTS	
 	if (_configuration->GetHasReverb() && _reverb->HasOutput(absoluteTime))
-		wetOutput = _reverb->Apply(wetOutput, absoluteTime);
+		_reverb->GetSample(frame, absoluteTime);
 
 	if (_configuration->GetHasDelay() && _delay->HasOutput(absoluteTime))
-		wetOutput = _delay->Apply(wetOutput, absoluteTime);
-
-	return wetOutput;
+		_delay->GetSample(frame, absoluteTime);
 }

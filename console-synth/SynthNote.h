@@ -1,10 +1,11 @@
 #ifndef SYNTHNOTE_H
 #define SYNTHNOTE_H
 
-#include "AmplitudeOscillator.h"
-#include "Compressor.h"
+#include "CompressorChannel.h"
 #include "Envelope.h"
-#include "EnvelopeFilter.h"
+#include "EnvelopeFilterChannel.h"
+#include "OscillatorBase.h"
+#include "PlaybackFrame.h"
 #include "SynthConfiguration.h"
 
 class SynthNote
@@ -16,7 +17,8 @@ public:
 
 	int GetMidiNumber() const;
 	float GetFrequency() const;
-	float GetSample(float absoluteTime) const;
+	void GetSample(PlaybackFrame* frame, float absoluteTime) const;
+	void AddSample(PlaybackFrame* frame, float absoluteTime) const;
 
 
 	bool IsEngaged();
@@ -26,11 +28,18 @@ public:
 
 private:
 
+	/// <summary>
+	/// Applys note to the playback frame either by overwriting or adding
+	/// </summary>
+	void ApplyImpl(PlaybackFrame* frame, float absoluteTime, bool overwriteOrAdd) const;
+
+private:
+
 	int  _midiNumber;
+	OscillatorBase* _oscillator;
 	Envelope* _envelope;
-	EnvelopeFilter* _envelopeFilter;
-	AmplitudeOscillator* _oscillator; 
-	Compressor* _compressor;
+	EnvelopeFilterChannel* _envelopeFilter;
+	CompressorChannel* _compressor;
 
 	bool _envelopeFilterEnabled;
 	bool _compressorEnabled;

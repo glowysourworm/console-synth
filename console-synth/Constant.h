@@ -1,7 +1,7 @@
 #ifndef SYNTH_CONSTANT_H
 #define SYNTH_CONSTANT_H
 
-enum class AmplitudeOscillatorType : int {
+enum class OscillatorType : int {
 	Sine = 0,
 	Square,
 	Triangle,

@@ -1,13 +1,14 @@
 #pragma once
-#include "AmplitudeOscillator.h"
+#include "OscillatorBase.h"
+#include "PlaybackFrame.h"
 
-class TriangleOscillator : public AmplitudeOscillator
+class TriangleOscillator : public OscillatorBase
 {
 public:
 
 	TriangleOscillator(float frequency);
 	~TriangleOscillator() override;
 
-	float GetSample(float absoluteTime) override;
+	float GetMonoSample(float absoluteTime) override;
 };
 

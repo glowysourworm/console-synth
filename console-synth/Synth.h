@@ -3,11 +3,11 @@
 
 #include <map>
 
-#include "CombFilter.h"
-#include "Constant.h"
-#include "Mixer.h"
-#include "Reverb.h"
 #include "AirwindowsEffect.h"
+#include "Constant.h"
+#include "Filter.h"
+#include "Mixer.h"
+#include "PlaybackFrame.h"
 #include "SynthConfiguration.h"
 #include "SynthNote.h"
 
@@ -18,14 +18,14 @@ class Synth
 {
 
 public:
-	Synth(const SynthConfiguration& configuration, unsigned int samplingRate);
+	Synth(const SynthConfiguration& configuration, unsigned int numberOfChannels, unsigned int samplingRate);
 	~Synth();
 
 	// Update Configuration
-	void SetConfiguration(const SynthConfiguration& configuration, unsigned int samplingRate);
+	void SetConfiguration(const SynthConfiguration& configuration);
 
 	// Sets midi notes on / off
-	void Set(int midiNumber, bool pressed, double absoluteTime, unsigned int samplingRate);
+	void Set(int midiNumber, bool pressed, double absoluteTime);
 
 	/// <summary>
 	/// Returns true if there is output from the midi numbered synth note
@@ -40,7 +40,7 @@ public:
 	/// <summary>
 	/// Synthesizes a full output at the specified stream time
 	/// </summary>
-	float GetSample(double absoluteTime);
+	void GetSample(PlaybackFrame* frame, double absoluteTime);
 
 	/// <summary>
 	/// Clears out notes that have no ouptut
@@ -56,7 +56,7 @@ public:
 
 private:
 
-	void Initialize(const SynthConfiguration& configuration, unsigned int samplingRate);
+	void Initialize(const SynthConfiguration& configuration);
 
 private:
 
@@ -68,9 +68,11 @@ private:
 	// Post-processing effects	
 	//Reverb* _reverb;
 	AirwindowsEffect* _reverb;
-	CombFilter* _delay;
+	Filter* _delay;
 
 	SynthConfiguration* _configuration;
+	unsigned int _numberOfChannels;
+	unsigned int _samplingRate;
 };
 
 #endif

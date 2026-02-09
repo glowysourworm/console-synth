@@ -1,18 +1,18 @@
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
 
-#include "FilterBase.h"
+#include "FilterChannelBase.h"
 #include <queue>
 
-class Compressor : public FilterBase
+class CompressorChannel : public FilterChannelBase
 {
 public:
 
 	// Compression ratio is a value between [1, Infinity]
-	Compressor(float gain, int samplingRate, float threshold, float compressionRatio, float relaxationPeriod, float attack, float release);
-	~Compressor();
+	CompressorChannel(float gain, unsigned int samplingRate, float threshold, float compressionRatio, float relaxationPeriod, float attack, float release);
+	~CompressorChannel();
 
-	float Apply(float sample, float absoluteTime) override;
+	float Apply(float inputSample, float absoluteTime) override;
 	bool HasOutput(float absoluteTime) const override;
 
 private:

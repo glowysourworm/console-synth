@@ -1,20 +1,21 @@
-﻿#include "AllPassFilter.h"
-#include "FilterBase.h"
+﻿#include "AllPassFilterChannel.h"
+#include "FilterChannelBase.h"
 #include <queue>
 
-AllPassFilter::AllPassFilter(float delaySeconds, float gain, int samplingRate) : FilterBase(gain, samplingRate)
+AllPassFilterChannel::AllPassFilterChannel(float delaySeconds, float gain, unsigned int samplingRate) : FilterChannelBase(gain, samplingRate)
 {
 	_bufferSize = (int)(delaySeconds * samplingRate);
 
 	_delayedInput = new std::queue<float>();
 	_delayedOutput = new std::queue<float>();
 }
-AllPassFilter::~AllPassFilter()
+AllPassFilterChannel::~AllPassFilterChannel()
 {
 	delete _delayedInput;
 	delete _delayedOutput;
 }
-float AllPassFilter::Apply(float sample, float absoluteTime)
+
+float AllPassFilterChannel::Apply(float sample, float absoluteTime)
 {
 	// https://medium.com/the-seekers-project/coding-a-basic-reverb-algorithm-part-2-an-introduction-to-audio-programming-4db79dd4e325
 	//
@@ -26,7 +27,7 @@ float AllPassFilter::Apply(float sample, float absoluteTime)
 	{
 		_delayedInput->push(sample);
 	}
-		
+
 	// Applying:  Start circulating the queue back into the output stream; and filling the output buffer
 	else
 	{
@@ -46,13 +47,11 @@ float AllPassFilter::Apply(float sample, float absoluteTime)
 
 		return result;
 	}
-
-	return sample;
 }
 
-bool AllPassFilter::HasOutput(float absoluteTime) const
+bool AllPassFilterChannel::HasOutput(float absoluteTime) const
 {
-	return _delayedOutput->size() > 0 && 
-		   _delayedOutput->front() > 0 && 
-		   this->GetGain() > 0;
+	return _delayedOutput->size() > 0 &&
+		_delayedOutput->front() > 0 &&
+		this->GetGain() > 0;
 }

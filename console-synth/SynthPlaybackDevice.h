@@ -3,6 +3,7 @@
 #include "Constant.h"
 #include "PlaybackBuffer.h"
 #include "PlaybackDevice.h"
+#include "PlaybackFrame.h"
 #include "PlaybackParameters.h"
 #include "Synth.h"
 #include "SynthConfiguration.h"
@@ -20,7 +21,7 @@ public:
 	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 
-	void SetNote(int midiNumber, bool pressed, double streamTime, unsigned int samplingRate);
+	void SetNote(int midiNumber, bool pressed, double streamTime);
 	bool GetNote(int midiNumber) const;
 	bool HasNote(int midiNumber) const;
 	void ClearUnused(double streamTime);
@@ -35,6 +36,7 @@ public:
 
 private:
 
+	PlaybackFrame* _frame;
 	PlaybackParameters* _streamParameters;
 	Synth* _synth;
 	bool _initialized;
@@ -51,6 +53,8 @@ template<SignalValue TSignal>
 SynthPlaybackDevice<TSignal>::~SynthPlaybackDevice()
 {
 	delete _streamParameters;
+	delete _synth;
+	delete _frame;
 }
 
 template<SignalValue TSignal>
@@ -65,7 +69,8 @@ bool SynthPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& paramete
 	//
 	SynthConfiguration configuration;
 
-	_synth = new Synth(configuration, parameters.samplingRate);
+	_synth = new Synth(configuration, parameters.numberOfChannels, parameters.samplingRate);
+	_frame = new PlaybackFrame(parameters.numberOfChannels);
 
 	return _initialized;
 }
@@ -74,7 +79,7 @@ template<SignalValue TSignal>
 inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime)
 {
 	if (!_initialized)
-		return 0;
+		return -1;
 
 	TSignal* outputBuffer = (TSignal*)playbackBuffer;
 
@@ -83,14 +88,17 @@ inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffe
 	{
 		double absoluteTime = streamTime + (frameIndex / (double)_streamParameters->samplingRate);
 
+		// Clear Frame
+		_frame->Clear();
+
+		// Get Samples for N channels
+		_synth->GetSample(_frame, absoluteTime);
+
 		// Interleved frames
 		for (unsigned int channelIndex = 0; channelIndex < _streamParameters->numberOfChannels; channelIndex++)
 		{
-			// Initialize sample to zero
-			TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
-
 			// Set output sample
-			outputBuffer[(2 * frameIndex) + channelIndex] = sample;
+			outputBuffer[(2 * frameIndex) + channelIndex] = _frame->GetSample(channelIndex);
 		}
 	}
 
@@ -101,31 +109,31 @@ template<SignalValue TSignal>
 int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime)
 {
 	if (!_initialized)
-		return 0;
+		return -1;
 
-	// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
-	for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
-	{
-		double absoluteTime = streamTime + (frameIndex / (double)playbackBuffer->GetSamplingRate());
+	//// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
+	//for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
+	//{
+	//	double absoluteTime = streamTime + (frameIndex / (double)playbackBuffer->GetSamplingRate());
 
-		// Interleved frames
-		for (unsigned int channelIndex = 0; channelIndex < playbackBuffer->GetNumberOfChannels(); channelIndex++)
-		{
-			// Initialize sample to zero
-			TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
+	//	// Interleved frames
+	//	for (unsigned int channelIndex = 0; channelIndex < playbackBuffer->GetNumberOfChannels(); channelIndex++)
+	//	{
+	//		// Initialize sample to zero
+	//		TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
 
-			// Set output sample
-			playbackBuffer->SetBufferFrame(sample, frameIndex, channelIndex);
-		}
-	}
+	//		// Set output sample
+	//		playbackBuffer->SetBufferFrame(sample, frameIndex, channelIndex);
+	//	}
+	//}
 
 	return 0;
 }
 
 template<SignalValue TSignal>
-void SynthPlaybackDevice<TSignal>::SetNote(int midiNumber, bool pressed, double streamTime, unsigned int samplingRate)
+void SynthPlaybackDevice<TSignal>::SetNote(int midiNumber, bool pressed, double streamTime)
 {
-	_synth->Set(midiNumber, pressed, streamTime, samplingRate);
+	_synth->Set(midiNumber, pressed, streamTime);
 }
 
 template<SignalValue TSignal>
@@ -149,7 +157,7 @@ void SynthPlaybackDevice<TSignal>::ClearUnused(double streamTime)
 template<SignalValue TSignal>
 void SynthPlaybackDevice<TSignal>::UpdateSynth(const SynthConfiguration& configuration)
 {
-	_synth->SetConfiguration(configuration, _streamParameters->samplingRate);
+	_synth->SetConfiguration(configuration);
 }
 
 template<SignalValue TSignal>

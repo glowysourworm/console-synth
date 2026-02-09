@@ -10,7 +10,7 @@ SynthConfiguration::SynthConfiguration()
 
 	_isDirty = false;
 
-	_oscillatorType = AmplitudeOscillatorType::Sine;
+	_oscillatorType = OscillatorType::Sine;
 
 	_midiLow = MIDI_PIANO_LOW_NUMBER;
 	_midiHigh = MIDI_PIANO_HIGH_NUMBER;
@@ -26,7 +26,7 @@ SynthConfiguration::SynthConfiguration()
 	_envelopeFilterCutoff = 5000;
 	_envelopeFilterResonance = 1;
 	_envelopeFilterType = EnvelopeFilterType::Constant;
-	_envelopeFilterOscillatorType = AmplitudeOscillatorType::Sine;
+	_envelopeFilterOscillatorType = OscillatorType::Sine;
 	_envelopeFilterOscillatorFrequency = 1.0;
 
 	_compressorThreshold = 0.5;
@@ -108,7 +108,7 @@ void SynthConfiguration::ClearDirty()
 	_isDirty = false;
 }
 
-AmplitudeOscillatorType SynthConfiguration::GetOscillatorType() const
+OscillatorType SynthConfiguration::GetOscillatorType() const
 {
 	return _oscillatorType;
 }
@@ -150,7 +150,7 @@ EnvelopeFilterType SynthConfiguration::GetEnvelopeFilterType() const
 {
 	return _envelopeFilterType;
 }
-AmplitudeOscillatorType SynthConfiguration::GetEnvelopeFilterOscillatorType() const
+OscillatorType SynthConfiguration::GetEnvelopeFilterOscillatorType() const
 {
 	return _envelopeFilterOscillatorType;
 }
@@ -230,7 +230,7 @@ WindowsKeyCodes SynthConfiguration::GetKeyCode(int midiNote) const
 	return _keyMap->GetKeyCode(midiNote);
 }
 
-void SynthConfiguration::SetOscillatorType(AmplitudeOscillatorType value)
+void SynthConfiguration::SetOscillatorType(OscillatorType value)
 {
 	if (_oscillatorType != value)
 		_isDirty = true;
@@ -244,7 +244,7 @@ void SynthConfiguration::SetEnvelopeFilterType(EnvelopeFilterType value)
 
 	_envelopeFilterType = value;
 }
-void SynthConfiguration::SetEnvelopeFilterOscillatorType(AmplitudeOscillatorType value)
+void SynthConfiguration::SetEnvelopeFilterOscillatorType(OscillatorType value)
 {
 	if (_envelopeFilterOscillatorType != value)
 		_isDirty = true;

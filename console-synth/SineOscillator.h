@@ -1,13 +1,14 @@
 #pragma once
-#include "AmplitudeOscillator.h"
+#include "OscillatorBase.h"
+#include "PlaybackFrame.h"
 
-class SineOscillator : public AmplitudeOscillator
+class SineOscillator : public OscillatorBase
 {
 public:
 
 	SineOscillator(float frequency);
 	~SineOscillator() override;
 
-	float GetSample(float absoluteTime) override;
+	float GetMonoSample(float absoluteTime) override;
 };
 

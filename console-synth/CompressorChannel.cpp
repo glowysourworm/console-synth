@@ -1,16 +1,15 @@
-#include "Compressor.h"
-#include "Constant.h"
-#include "FilterBase.h"
+#include "CompressorChannel.h"
+#include "FilterChannelBase.h"
 #include <cmath>
 #include <queue>
 
-Compressor::Compressor(float gain,
-	int samplingRate,
+CompressorChannel::CompressorChannel(float gain,
+	unsigned int samplingRate,
 	float threshold,
 	float compressionRatio,
 	float relaxationPeriod,
 	float attack,
-	float release) : FilterBase(gain, samplingRate)
+	float release) : FilterChannelBase(gain, samplingRate)
 {
 	// Compression parameters
 	_threshold = threshold;
@@ -22,12 +21,12 @@ Compressor::Compressor(float gain,
 	_release = release;
 }
 
-Compressor::~Compressor()
+CompressorChannel::~CompressorChannel()
 {
 	delete _relaxationBuffer;
 }
 
-float Compressor::Apply(float sample, float absoluteTime)
+float CompressorChannel::Apply(float sample, float absoluteTime)
 {
 	float slope = 1 / _compressionRatio;
 	float result = 0;
@@ -47,7 +46,7 @@ float Compressor::Apply(float sample, float absoluteTime)
 	return result;
 }
 
-bool Compressor::HasOutput(float absoluteTime) const
+bool CompressorChannel::HasOutput(float absoluteTime) const
 {
 	return true;
 }

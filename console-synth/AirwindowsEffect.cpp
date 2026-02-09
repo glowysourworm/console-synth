@@ -1,8 +1,9 @@
 #include "AirwindowsEffect.h"
 #include "FilterBase.h"
+#include "PlaybackFrame.h"
 #include <kCathedral.h>
 
-AirwindowsEffect::AirwindowsEffect(float delaySeconds, float gain, int samplingRate) : FilterBase(gain, samplingRate)
+AirwindowsEffect::AirwindowsEffect(float delaySeconds, float gain, unsigned int numberOfChannels, unsigned int samplingRate) : FilterBase(gain, numberOfChannels, samplingRate)
 {
 	_effect = new kCathedral(0);
 	_input = new float* [2];
@@ -26,7 +27,7 @@ AirwindowsEffect::~AirwindowsEffect()
 	delete _effect;
 }
 
-float AirwindowsEffect::Apply(float sample, float absoluteTime)
+void AirwindowsEffect::GetSample(PlaybackFrame* frame, float absoluteTime)
 {
 	// airwindows format:  The effect treats the inputs as dry input, and the outputs as the result. I think 
 	//					   they may have been confused about other audio APIs, which have input as the microphone.
@@ -42,11 +43,13 @@ float AirwindowsEffect::Apply(float sample, float absoluteTime)
 	//					   Let's see how it sounds!
 	//
 
-	_input[0][0] = sample;
-	_input[1][0] = sample;
+	_input[0][0] = frame->GetSample(0);
+	_input[1][0] = frame->GetSample(1);
+
 	_effect->processReplacing(_input, _output, 1);
 
-	return _output[0][0];
+	frame->SetSample(0, _output[0][0]);
+	frame->SetSample(0, _output[1][0]);
 }
 
 bool AirwindowsEffect::HasOutput(float absoluteTime) const

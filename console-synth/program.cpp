@@ -59,11 +59,11 @@ void ProcessKeyStrokes(double streamTime)
 
 		// Dis-Engage
 		if (_synthDevice->HasNote(midiNote) && !isPressed)
-			_synthDevice->SetNote(midiNote, false, streamTime, _outputParameters->samplingRate);
+			_synthDevice->SetNote(midiNote, false, streamTime);
 
 		// Engage
 		else if (!_synthDevice->HasNote(midiNote) && isPressed)
-			_synthDevice->SetNote(midiNote, true, streamTime, _outputParameters->samplingRate);
+			_synthDevice->SetNote(midiNote, true, streamTime);
 	}
 
 	// Clean Up Synth Notes
@@ -765,12 +765,12 @@ void LoopUI()
 			// Update Configuration
 			_configuration->SetNoteEnvelope(Envelope(noteAttack, noteDecay, noteSustain, noteRelease, envelope.GetAttackPeak(), envelope.GetSustainPeak()));
 			_configuration->SetEnvelopeFilter(Envelope(filterAttack, filterDecay, filterSustain, filterRelease, filter.GetAttackPeak(), filter.GetSustainPeak()));
-			_configuration->SetOscillatorType((AmplitudeOscillatorType)oscillatorChoice);
+			_configuration->SetOscillatorType((OscillatorType)oscillatorChoice);
 			_configuration->SetEnvelopeFilterType((EnvelopeFilterType)envelopeFilterTypeChoice);
 			_configuration->SetEnvelopeFilterCutoff(filterCutoff);
 			_configuration->SetEnvelopeFilterResonance(filterResonance);
 			_configuration->SetEnvelopeFilterOscillatorFrequency(filterOscillatorFrequency);
-			_configuration->SetEnvelopeFilterOscillatorType((AmplitudeOscillatorType)envelopeOscillatorChoice);
+			_configuration->SetEnvelopeFilterOscillatorType((OscillatorType)envelopeOscillatorChoice);
 			_configuration->SetHasEnvelopeFilter(envelopeFilterEnabled == 0);
 			_configuration->SetHasDelay(delayEnabled == 0);
 			_configuration->SetHasCompressor(compressorEnabled == 0);
@@ -814,7 +814,7 @@ void LoopUI()
 
 int main(int argc, char* argv[], char* envp[])
 {
-	//SetConsoleTitleA("Terminal Synth");
+	SetConsoleTitleA("Terminal Synth");
 
 	// Read midi file
 	if (argc > 1)

@@ -16,9 +16,9 @@ public:
 
 	void ClearDirty();
 
-	void SetOscillatorType(AmplitudeOscillatorType value);
+	void SetOscillatorType(OscillatorType value);
 	void SetEnvelopeFilterType(EnvelopeFilterType value);	
-	void SetEnvelopeFilterOscillatorType(AmplitudeOscillatorType value);
+	void SetEnvelopeFilterOscillatorType(OscillatorType value);
 
 	void SetMidiLow(int value);
 	void SetMidiHigh(int value);
@@ -57,7 +57,7 @@ public:
 	int GetMidiNote(WindowsKeyCodes keyCode) const;
 	WindowsKeyCodes GetKeyCode(int midiNote) const;
 
-	AmplitudeOscillatorType GetOscillatorType() const;
+	OscillatorType GetOscillatorType() const;
 
 	bool GetHasReverb() const;
 	bool GetHasDelay() const;
@@ -70,7 +70,7 @@ public:
 	int GetEnvelopeFilterCutoff() const;
 	float GetEnvelopeFilterResonance() const;
 	EnvelopeFilterType GetEnvelopeFilterType() const;
-	AmplitudeOscillatorType GetEnvelopeFilterOscillatorType() const;
+	OscillatorType GetEnvelopeFilterOscillatorType() const;
 	float GetEnvelopeFilterOscillatorFrequency() const;
 
 	float GetCompressorThreshold() const;
@@ -101,7 +101,7 @@ private:
 	int _midiLow;
 	int _midiHigh;
 
-	AmplitudeOscillatorType _oscillatorType;
+	OscillatorType _oscillatorType;
 	EnvelopeFilterType _envelopeFilterType;
 
 	bool _hasReverb;
@@ -112,7 +112,7 @@ private:
 	Envelope* _noteEnvelope;
 
 	Envelope* _envelopeFilter;
-	AmplitudeOscillatorType _envelopeFilterOscillatorType;
+	OscillatorType _envelopeFilterOscillatorType;
 	int _envelopeFilterCutoff;
 	float _envelopeFilterResonance;	
 	float _envelopeFilterOscillatorFrequency;

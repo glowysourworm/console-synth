@@ -1,16 +1,16 @@
-﻿#include "AllPassFilter.h"
-#include "ButterworthFilter.h"
-#include "CombFilter.h"
+﻿#include "AllPassFilterChannel.h"
+#include "ButterworthFilterChannel.h"
+#include "CombFilterChannel.h"
 #include "Constant.h"
-#include "FilterBase.h"
-#include "Reverb.h"
+#include "FilterChannelBase.h"
+#include "ReverbChannel.h"
 #include <cmath>
 
-Reverb::Reverb(float delaySeconds, float gain, int samplingRate) : FilterBase(gain, samplingRate)
+ReverbChannel::ReverbChannel(float delaySeconds, float gain, int samplingRate) : FilterChannelBase(gain, samplingRate)
 {
-	_combFilters = new CombFilter * [REVERB_COMB_SIZE];
-	_allPassFilters = new AllPassFilter * [REVERB_ALLPASS_SIZE];
-	_lowPassFilter = new ButterworthFilter(samplingRate, 1);
+	_combFilters = new CombFilterChannel * [REVERB_COMB_SIZE];
+	_allPassFilters = new AllPassFilterChannel * [REVERB_ALLPASS_SIZE];
+	_lowPassFilter = new ButterworthFilterChannel(samplingRate, 1);
 
 	// https://ccrma.stanford.edu/~jos/pasp/Schroeder_Reverberators.html
 	//
@@ -20,15 +20,15 @@ Reverb::Reverb(float delaySeconds, float gain, int samplingRate) : FilterBase(ga
 
 	// FIGURE OUT EFFECTS OF STAGGERING THE COMBS
 	for (int i = 0; i < REVERB_COMB_SIZE; i++)
-		_combFilters[i] = new CombFilter(delaySeconds * schroederCoefficients[i], gain, samplingRate, false);
+		_combFilters[i] = new CombFilterChannel(delaySeconds * schroederCoefficients[i], gain, samplingRate, false);
 
 	for (int i = 0; i < REVERB_ALLPASS_SIZE; i++)
-		_allPassFilters[i] = new AllPassFilter(allPassDelayBase / powf(3, i), gain, samplingRate);
+		_allPassFilters[i] = new AllPassFilterChannel(allPassDelayBase / powf(3, i), gain, samplingRate);
 
 	_lowPassFilter->Set(8000, 0.1);
 
 }
-Reverb::~Reverb()
+ReverbChannel::~ReverbChannel()
 {
 	for (int i = 0; i < REVERB_COMB_SIZE; i++)
 		delete _combFilters[i];
@@ -39,7 +39,7 @@ Reverb::~Reverb()
 	delete[] _combFilters;
 	delete[] _allPassFilters;
 }
-float Reverb::Apply(float sample, float absoluteTime)
+float ReverbChannel::Apply(float sample, float absoluteTime)
 {
 	// https://ccrma.stanford.edu/~jos/pasp/Schroeder_Reverberators.html
 	//
@@ -73,7 +73,7 @@ float Reverb::Apply(float sample, float absoluteTime)
 	return _lowPassFilter->Apply(mixedOutput, absoluteTime);
 }
 
-bool Reverb::HasOutput(float absoluteTime) const
+bool ReverbChannel::HasOutput(float absoluteTime) const
 {
 	// Ringing based on all pass filters
 	for (int index = 0; index < REVERB_ALLPASS_SIZE; index++)

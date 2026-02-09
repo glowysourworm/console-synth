@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FilterBase.h"
+#include "PlaybackFrame.h"
 #include "kCathedral.h"
 
 class AirwindowsEffect : public FilterBase
@@ -8,11 +9,11 @@ class AirwindowsEffect : public FilterBase
 public:
 
 	// Compression ratio is a value between [1, Infinity]
-	AirwindowsEffect(float delaySeconds, float gain, int samplingRate );
+	AirwindowsEffect(float delaySeconds, float gain, unsigned int numberOfChannels, unsigned int samplingRate);
 	~AirwindowsEffect();
 
-	float Apply(float sample, float absoluteTime) override;
-	bool HasOutput(float absoluteTime) const override;
+	virtual void GetSample(PlaybackFrame* frame, float absoluteTime) override;
+	virtual bool HasOutput(float absoluteTime) const override;
 
 private:
 

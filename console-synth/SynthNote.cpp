@@ -1,7 +1,8 @@
-﻿#include "Compressor.h"
+﻿#include "CompressorChannel.h"
 #include "Constant.h"
 #include "Envelope.h"
-#include "EnvelopeFilter.h"
+#include "EnvelopeFilterChannel.h"
+#include "PlaybackFrame.h"
 #include "RandomOscillator.h"
 #include "SawtoothOscillator.h"
 #include "SineOscillator.h"
@@ -16,16 +17,16 @@ SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration, un
 {
 	_midiNumber = midiNumber;
 	_envelope = new Envelope(configuration.GetNoteEnvelope());
-	_envelopeFilter = new EnvelopeFilter(1.0, 
-		samplingRate,
+
+	_envelopeFilter = new EnvelopeFilterChannel(1.0, 		
 		configuration.GetEnvelopeFilterCutoff(),
 		configuration.GetEnvelopeFilterResonance(),
 		configuration.GetEnvelopeFilterType(),
 		configuration.GetEnvelopeFilterOscillatorType(),
 		configuration.GetEnvelopeFilterOscillatorFrequency(),
-		configuration.GetEnvelopeFilter());
+		configuration.GetEnvelopeFilter(), samplingRate);
 
-	_compressor = new Compressor(configuration.GetCompressorGain(), 
+	_compressor = new CompressorChannel(configuration.GetCompressorGain(), 
 		samplingRate,
 		configuration.GetCompressorThreshold(), 
 		configuration.GetCompressionRatio(), 
@@ -39,19 +40,19 @@ SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration, un
 	// Initialize Oscillator
 	switch (configuration.GetOscillatorType())
 	{
-	case AmplitudeOscillatorType::Sine:
+	case OscillatorType::Sine:
 		_oscillator = new SineOscillator(this->GetFrequency());
 		break;
-	case AmplitudeOscillatorType::Random:
-		_oscillator = new RandomOscillator(this->GetFrequency(), SIGNAL_LOW, SIGNAL_HIGH, 4);
+	case OscillatorType::Random:
+		_oscillator = new RandomOscillator(this->GetFrequency(), 4);
 		break;
-	case AmplitudeOscillatorType::Square:
+	case OscillatorType::Square:
 		_oscillator = new SquareOscillator(this->GetFrequency());
 		break;
-	case AmplitudeOscillatorType::Triangle:
+	case OscillatorType::Triangle:
 		_oscillator = new TriangleOscillator(this->GetFrequency());
 		break;
-	case AmplitudeOscillatorType::Sawtooth:
+	case OscillatorType::Sawtooth:
 		_oscillator = new SawtoothOscillator(this->GetFrequency());
 		break;
 	default:
@@ -69,24 +70,43 @@ int SynthNote::GetMidiNumber() const
 	return _midiNumber;
 }
 
-float SynthNote::GetSample(float absoluteTime) const
+void SynthNote::ApplyImpl(PlaybackFrame* frame, float absoluteTime, bool overwriteOrAdd) const
 {
-	// BASE TONE:  Includes note envelope
-	float output = _envelope->GetEnvelopeLevel(absoluteTime) * _oscillator->GetSample(absoluteTime);
+	// Generate Oscillator
+	if (overwriteOrAdd)
+		_oscillator->GetSample(frame, absoluteTime);
+	else
+		_oscillator->MixSample(frame, absoluteTime);
 
-	// FILTER SWEEP: Check envelope filter for output
-	if (_envelopeFilterEnabled && _envelopeFilter->HasOutput(absoluteTime))
+	for (int index = 0; index < frame->GetChannelCount(); index++)
 	{
-		output = _envelopeFilter->Apply(output, absoluteTime);
-	}
+		// Envelope
+		float output = _envelope->GetEnvelopeLevel(absoluteTime) * frame->GetSample(index);
 
-	// COMPRESSOR: Apply Compression
-	if (_compressorEnabled && _compressor->HasOutput(absoluteTime))
-	{
-		output = _envelopeFilter->Apply(output, absoluteTime);
-	}
+		// FILTER SWEEP: Check envelope filter for output
+		if (_envelopeFilterEnabled && _envelopeFilter->HasOutput(absoluteTime))
+		{
+			output = _envelopeFilter->Apply(output, absoluteTime);
+		}
 
-	return output;
+		// COMPRESSOR: Apply Compression
+		if (_compressorEnabled && _compressor->HasOutput(absoluteTime))
+		{
+			output = _compressor->Apply(output, absoluteTime);
+		}
+
+		frame->SetSample(index, output);
+	}
+}
+
+void SynthNote::GetSample(PlaybackFrame* frame, float absoluteTime) const
+{
+	this->ApplyImpl(frame, absoluteTime, true);
+}
+
+void SynthNote::AddSample(PlaybackFrame* frame, float absoluteTime) const
+{
+	this->ApplyImpl(frame, absoluteTime, false);
 }
 
 float SynthNote::GetFrequency() const

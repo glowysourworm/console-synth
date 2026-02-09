@@ -1,23 +1,24 @@
-#include "CombFilter.h"
-#include "FilterBase.h"
+#include "CombFilterChannel.h"
+#include "FilterChannelBase.h"
 #include <queue>
 
-CombFilter::CombFilter(float delaySeconds, float gain, int samplingRate, bool feedbackForm) : FilterBase(gain, samplingRate)
+CombFilterChannel::CombFilterChannel(float delaySeconds, float gain, bool feedback, unsigned int samplingRate)
+	: FilterChannelBase(gain, samplingRate)
 {
 	int bufferSize = (int)(delaySeconds * samplingRate);
 
 	_buffer = new std::queue<float>();
-	_feedbackForm = feedbackForm;
+	_feedback = feedback;
 
 	// Initialize the queue
 	for (int i = 0; i < bufferSize; i++)
 		_buffer->push(0);
 }
-CombFilter::~CombFilter()
+CombFilterChannel::~CombFilterChannel()
 {
 	delete _buffer;
 }
-float CombFilter::Apply(float sample, float absoluteTime)
+float CombFilterChannel::Apply(float sample, float absoluteTime)
 {
 	// Calculate sample from front of the queue (SAME FOR BOTH FORMS)
 	float result = sample + (this->GetGain() * _buffer->front());
@@ -26,7 +27,7 @@ float CombFilter::Apply(float sample, float absoluteTime)
 	_buffer->pop();
 
 	// Feed-forward -> store input sample
-	if (!_feedbackForm)
+	if (!_feedback)
 		_buffer->push(sample);
 
 	// Feed-back -> store result
@@ -36,7 +37,7 @@ float CombFilter::Apply(float sample, float absoluteTime)
 	return result;
 }
 
-bool CombFilter::HasOutput(float absoluteTime) const
+bool CombFilterChannel::HasOutput(float absoluteTime) const
 {
 	//return _buffer->size() > 0 &&
 	//	   _buffer->front() > 0 &&

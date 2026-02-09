@@ -1,9 +1,9 @@
-#include "AmplitudeOscillator.h"
-#include "Constant.h"
+#include "OscillatorBase.h"
+#include "PlaybackFrame.h"
 #include "SawtoothOscillator.h"
 #include <cmath>
 
-SawtoothOscillator::SawtoothOscillator(float frequency) : AmplitudeOscillator(frequency, SIGNAL_LOW, SIGNAL_HIGH)
+SawtoothOscillator::SawtoothOscillator(float frequency) : OscillatorBase(frequency)
 {
 }
 
@@ -11,7 +11,7 @@ SawtoothOscillator::~SawtoothOscillator()
 {
 }
 
-float SawtoothOscillator::GetSample(float absoluteTime)
+float SawtoothOscillator::GetMonoSample(float absoluteTime)
 {
 	// Using modulo arithmetic to get the relative period time
 	float periodTime = fmodf(absoluteTime, this->GetPeriod());

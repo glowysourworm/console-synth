@@ -1,10 +1,10 @@
-#include "AmplitudeOscillator.h"
-#include "Constant.h"
+#include "OscillatorBase.h"
+#include "PlaybackFrame.h"
 #include "SineOscillator.h"
 #include <cmath>
 #include <numbers>
 
-SineOscillator::SineOscillator(float frequency) : AmplitudeOscillator(frequency, SIGNAL_LOW, SIGNAL_HIGH)
+SineOscillator::SineOscillator(float frequency) : OscillatorBase(frequency)
 {
 }
 
@@ -12,7 +12,7 @@ SineOscillator::~SineOscillator()
 {
 }
 
-float SineOscillator::GetSample(float absoluteTime)
+float SineOscillator::GetMonoSample(float absoluteTime)
 {
 	return sinf(2.0 * std::numbers::pi * this->GetFrequency() * absoluteTime);
 }

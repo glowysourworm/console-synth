@@ -239,6 +239,10 @@
     <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedralProc.cpp" />
     <ClCompile Include="AirwindowsEffect.cpp" />
     <ClCompile Include="AllPassFilterChannel.cpp" />
+    <ClCompile Include="CompressorUI.cpp" />
+    <ClCompile Include="DelayUI.cpp" />
+    <ClCompile Include="EnvelopeFilterUI.cpp" />
+    <ClCompile Include="EnvelopeUI.cpp" />
     <ClCompile Include="IntervalTimer.cpp" />
     <ClCompile Include="ButterworthFilterChannel.cpp" />
     <ClCompile Include="Filter.cpp" />
@@ -257,11 +261,14 @@
     <ClCompile Include="MidiMessage.cpp" />
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Options.cpp" />
+    <ClCompile Include="OscillatorUI.cpp" />
     <ClCompile Include="PlaybackClock.cpp" />
     <ClCompile Include="RandomOscillator.cpp" />
     <ClCompile Include="ReverbChannel.cpp" />
+    <ClCompile Include="ReverbUI.cpp" />
     <ClCompile Include="SawtoothOscillator.cpp" />
     <ClCompile Include="SineOscillator.cpp" />
+    <ClCompile Include="SliderUI.cpp" />
     <ClCompile Include="SquareOscillator.cpp" />
     <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="Synth.cpp" />
@@ -270,12 +277,17 @@
     <ClCompile Include="SynthNote.cpp" />
     <ClCompile Include="SynthNoteMap.cpp" />
     <ClCompile Include="TriangleOscillator.cpp" />
+    <ClCompile Include="UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.h" />
     <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.h" />
     <ClInclude Include="AirwindowsEffect.h" />
     <ClInclude Include="AllPassFilterChannel.h" />
+    <ClInclude Include="CompressorUI.h" />
+    <ClInclude Include="DelayUI.h" />
+    <ClInclude Include="EnvelopeFilterUI.h" />
+    <ClInclude Include="EnvelopeUI.h" />
     <ClInclude Include="IntervalTimer.h" />
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="Filter.h" />
@@ -297,6 +309,7 @@
     <ClInclude Include="MidiPlaybackDevice.h" />
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Options.h" />
+    <ClInclude Include="OscillatorUI.h" />
     <ClInclude Include="PlaybackClock.h" />
     <ClInclude Include="PlaybackDevice.h" />
     <ClInclude Include="PlaybackBuffer.h" />
@@ -304,10 +317,12 @@
     <ClInclude Include="PlaybackFrame.h" />
     <ClInclude Include="RandomOscillator.h" />
     <ClInclude Include="ReverbChannel.h" />
+    <ClInclude Include="ReverbUI.h" />
     <ClInclude Include="SawtoothOscillator.h" />
     <ClInclude Include="SignalBase.h" />
     <ClInclude Include="SignalChannelBase.h" />
     <ClInclude Include="SineOscillator.h" />
+    <ClInclude Include="SliderUI.h" />
     <ClInclude Include="SquareOscillator.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Synth.h" />
@@ -316,6 +331,7 @@
     <ClInclude Include="SynthNoteMap.h" />
     <ClInclude Include="SynthPlaybackDevice.h" />
     <ClInclude Include="TriangleOscillator.h" />
+    <ClInclude Include="UIBase.h" />
     <ClInclude Include="WindowsKeyCodes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

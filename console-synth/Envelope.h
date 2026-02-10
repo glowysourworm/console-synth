@@ -9,6 +9,8 @@ public:
 	Envelope(const Envelope& copy);
 	~Envelope();
 
+	void Set(float attack, float decay, float sustain, float release, float attackPeak, float sustainPeak);
+
 	void Engage(float absoluteTime);
 	void DisEngage(float absoluteTime);
 	bool HasOutput(float absoluteTime);

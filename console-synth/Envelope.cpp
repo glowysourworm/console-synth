@@ -58,6 +58,17 @@ Envelope::~Envelope()
 
 }
 
+void Envelope::Set(float attack, float decay, float sustain, float release, float attackPeak, float sustainPeak)
+{
+	_attack = attack;
+	_decay = decay;
+	_sustain = sustain;
+	_release = release;
+
+	_attackPeak = attackPeak;
+	_sustainPeak = sustainPeak;
+}
+
 void Envelope::Engage(float absoluteTime)
 {
 	float currentLevel = GetEnvelopeLevel(absoluteTime);

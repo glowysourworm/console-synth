@@ -239,6 +239,7 @@
     <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedralProc.cpp" />
     <ClCompile Include="AirwindowsEffect.cpp" />
     <ClCompile Include="AllPassFilterChannel.cpp" />
+    <ClCompile Include="IntervalTimer.cpp" />
     <ClCompile Include="ButterworthFilterChannel.cpp" />
     <ClCompile Include="Filter.cpp" />
     <ClCompile Include="OscillatorBase.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.h" />
     <ClInclude Include="AirwindowsEffect.h" />
     <ClInclude Include="AllPassFilterChannel.h" />
+    <ClInclude Include="IntervalTimer.h" />
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterChannelBase.h" />

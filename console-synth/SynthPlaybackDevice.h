@@ -46,7 +46,10 @@ private:
 template<SignalValue TSignal>
 SynthPlaybackDevice<TSignal>::SynthPlaybackDevice()
 {
-	_streamParameters = new PlaybackParameters();
+	_frame = nullptr;
+	_streamParameters = nullptr;
+	_synth = nullptr;
+	_initialized = false;
 }
 
 template<SignalValue TSignal>
@@ -60,17 +63,15 @@ SynthPlaybackDevice<TSignal>::~SynthPlaybackDevice()
 template<SignalValue TSignal>
 bool SynthPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& parameters)
 {
-	_initialized = true;
-	_streamParameters->numberOfChannels = parameters.numberOfChannels;
-	_streamParameters->samplingRate = parameters.samplingRate;
-	_streamParameters->outputBufferFrameSize = parameters.outputBufferFrameSize;
-
 	// Attack / Decay / Sustain / Release / Attack Peak / Sustain Peak
 	//
 	SynthConfiguration configuration;
 
-	_synth = new Synth(configuration, parameters.numberOfChannels, parameters.samplingRate);
-	_frame = new PlaybackFrame(parameters.numberOfChannels);
+	_synth = new Synth(configuration, parameters.GetNumberOfChannels(), parameters.GetSamplingRate());
+	_frame = new PlaybackFrame(parameters.GetNumberOfChannels());
+	_streamParameters = new PlaybackParameters(parameters);
+
+	_initialized = true;
 
 	return _initialized;
 }
@@ -86,7 +87,7 @@ inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffe
 	// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
 	for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
 	{
-		double absoluteTime = streamTime + (frameIndex / (double)_streamParameters->samplingRate);
+		double absoluteTime = streamTime + (frameIndex / (double)_streamParameters->GetSamplingRate());
 
 		// Clear Frame
 		_frame->Clear();
@@ -95,7 +96,7 @@ inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffe
 		_synth->GetSample(_frame, absoluteTime);
 
 		// Interleved frames
-		for (unsigned int channelIndex = 0; channelIndex < _streamParameters->numberOfChannels; channelIndex++)
+		for (unsigned int channelIndex = 0; channelIndex < _streamParameters->GetNumberOfChannels(); channelIndex++)
 		{
 			// Set output sample
 			outputBuffer[(2 * frameIndex) + channelIndex] = _frame->GetSample(channelIndex);

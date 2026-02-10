@@ -20,6 +20,11 @@ public:
 	void Mark();
 
 	/// <summary>
+	/// Clears and re-starts the timer
+	/// </summary>
+	void Reset();
+
+	/// <summary>
 	/// Returns current time in seconds
 	/// </summary>
 	double GetTime();

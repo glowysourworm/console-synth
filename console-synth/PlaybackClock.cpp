@@ -23,6 +23,14 @@ void PlaybackClock::Mark()
 	_currentTime += _stopWatch->markSeconds();
 }
 
+void PlaybackClock::Reset()
+{
+	_startTime = 0;
+	_currentTime = 0;
+
+	this->Start();
+}
+
 double PlaybackClock::GetTime()
 {
 	return _currentTime + _stopWatch->peek();

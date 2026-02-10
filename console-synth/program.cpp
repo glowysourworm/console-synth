@@ -1,5 +1,6 @@
 #include "Constant.h"
 #include "Envelope.h"
+#include "IntervalTimer.h"
 #include "LoopTimer.h"
 #include "PlaybackBuffer.h"
 #include "PlaybackClock.h"
@@ -32,6 +33,9 @@ SynthConfiguration* _configuration;
 PlaybackClock* _streamClock;
 LoopTimer* _uiTimer;
 LoopTimer* _audioTimer;
+IntervalTimer* _synthIntervalTimer;
+
+float _frontendAvgMilli;
 
 void ProcessKeyStrokes(double streamTime)
 {
@@ -83,13 +87,24 @@ void ProcessKeyStrokes(double streamTime)
 /// <returns>Error indicator to RT Audio</returns>
 int PrimaryAudioCallback(void* outputBuffer, void* inputBuffer, unsigned int nFrames, double streamTime, RtAudioStreamStatus status, void* userData)
 {
+	// Full Audio Loop Timer
+	_audioTimer->Mark();
+
+	// Frontend Processing Time (Start!)
+	_synthIntervalTimer->Reset();
+
 	// Windows API, SynthConfiguration*, SynthPlaybackDevice* (be aware of usage)
 	//
 	ProcessKeyStrokes(streamTime);
 
-	_audioTimer->Mark();
+	int returnValue = _synthDevice->WritePlaybackBuffer(outputBuffer, nFrames, streamTime);
 
-	return _synthDevice->WritePlaybackBuffer(outputBuffer, nFrames, streamTime);
+	// Frontend Processing Time (Mark.)
+	_synthIntervalTimer->Mark();
+
+	_frontendAvgMilli = _synthIntervalTimer->AvgMilli();
+
+	return returnValue;
 }
 
 
@@ -151,7 +166,8 @@ bool InitializeAudioClient()
 		// RT Audio:  (see openStream comments) will try to calculate a desired buffer size based on this input
 		//			  value. So, we'll send it something the device likes; and see what it comes back with.
 		//
-		unsigned int outputBufferFrameSize = (unsigned int)(10.6667 * 0.001 * outputDevice.preferredSampleRate);
+		//unsigned int outputBufferFrameSize = (unsigned int)(10.6667 * 0.001 * outputDevice.preferredSampleRate);
+		unsigned int outputBufferFrameSize = 16;
 		unsigned int frontendFrameSize = outputBufferFrameSize;
 
 		_rtAudio->openStream(& outputParameters,	// 
@@ -173,12 +189,18 @@ bool InitializeAudioClient()
 
 		_rtOutputDevice = outputDevice;
 
+		//std::string deviceFormat("Float32 - Channels");
+
+		const char* deviceFormat = "Bizzare Unknown";
+
 		// Store output parameters
-		_outputParameters = new PlaybackParameters();
-		//_outputParameters->hostAPI = new std::string("RT Audio (WASAPI)");
-		_outputParameters->numberOfChannels = _rtOutputDevice.outputChannels;
-		_outputParameters->samplingRate = _rtOutputDevice.preferredSampleRate;
-		_outputParameters->outputBufferFrameSize = outputBufferFrameSize;
+		_outputParameters = new PlaybackParameters(
+			_rtAudio->getApiDisplayName(_rtAudio->getCurrentApi()).c_str(),
+			deviceFormat,
+			_rtOutputDevice.name.c_str(),
+			_rtOutputDevice.preferredSampleRate, 
+			_rtOutputDevice.outputChannels, 
+			outputBufferFrameSize);
 	}
 	catch (std::exception ex)
 	{
@@ -216,6 +238,7 @@ bool DisposeAudioClient()
 		_streamClock = NULL;
 		_uiTimer = NULL;
 		_audioTimer = NULL;
+		_synthIntervalTimer = NULL;
 	}
 	catch (std::exception ex)
 	{
@@ -234,7 +257,8 @@ void InitializePlayback()
 	_synthDevice = new SynthPlaybackDevice<float>();
 	_streamClock = new PlaybackClock();
 	_uiTimer = new LoopTimer(0.025);
-	_audioTimer = new LoopTimer(_outputParameters->outputBufferFrameSize / (double)_outputParameters->samplingRate);
+	_audioTimer = new LoopTimer(_outputParameters->GetOutputBufferFrameSize() / (double)_outputParameters->GetSamplingRate());
+	_synthIntervalTimer = new IntervalTimer();
 
 	// Octave 1
 	_configuration->SetMidiNote(WindowsKeyCodes::Z, 21);
@@ -319,8 +343,6 @@ void LoopUI()
 
 	auto screen = ftxui::ScreenInteractive::TerminalOutput();
 
-	std::string hostApi = "RT Audio (WASAPI)";
-	std::string hostApiFormat = "Float (32 bit / channel)";
 	double streamLatency = 0;
 
 	// Synth Configuration
@@ -701,31 +723,46 @@ void LoopUI()
 	//
 	auto renderer = ftxui::Renderer(synthSettings, [&]
 	{
-		// Synth Information
-		auto synthInformation = ftxui::vbox(
+		// Terminal Synth Information
+		auto synthInformation = ftxui::hbox(
 		{
-			ftxui::text("Host API:				   " + hostApi),
-			ftxui::text("Host API Format:          " + hostApiFormat),
-			ftxui::text("RT Audio Buffer Size:     " + std::format("{} (frames)", _outputParameters->outputBufferFrameSize)),
-			ftxui::text("Current Time     (s):     " + std::format("{:.3f}", _streamClock->GetTime())),
-			ftxui::text("Avg. UI Time     (ms):    " + std::format("{:.3f}", _uiTimer->GetAvgMilli())),
-			ftxui::text("Avg. Sample Time (ms):    " + std::format("{:.3f}", _audioTimer->GetAvgMilli())),
-			//ftxui::text("Avg. Sample Frames   :    " + std::format("{:.3f}", averageSampleWrite)),
-			//ftxui::text("Stream Latency   (ms):    " + std::format("{:.3f}", streamLatency)),
-			ftxui::text("Sample Rate      (Hz):    " + std::to_string(_outputParameters->samplingRate))
+			ftxui::vbox(
+			{
+				ftxui::text("Host API:                 " + _outputParameters->GetHostApi()),
+				ftxui::text("Device Name:              " + _outputParameters->GetDeviceName()),
+				ftxui::text("Stream Format:            " + _outputParameters->GetDeviceFormat()),
+				ftxui::text("Stream Buffer Size:       " + std::format("{} (frames)", _outputParameters->GetOutputBufferFrameSize())),
+				ftxui::text("Sample Rate (Hz):         " + std::to_string(_outputParameters->GetSamplingRate()))
 
-		}) | ftxui::border;
+			}) | ftxui::flex_grow,
+
+			ftxui::separator(),
+
+			ftxui::vbox(
+			{
+				ftxui::text(" Stream Time            (s):    " + std::format("{:.3f}", _streamClock->GetTime())),
+				ftxui::text(" Avg. UI Time          (ms):    " + std::format("{:.3f}", _uiTimer->GetAvgMilli())),
+				ftxui::text(" Avg. Callback Time    (ms):    " + std::format("{:.3f}", _audioTimer->GetAvgMilli())),
+				ftxui::text(" Avg. Frontend Time    (ms):    " + std::format("{:.3f}", _synthIntervalTimer->AvgMilli())),
+				ftxui::text(" Stream Latency   (samples):    " + std::to_string(_rtAudio->getStreamLatency()))
+
+			}) | ftxui::flex_grow
+		});
 
 
 		// Borderless Layout Grid
 		auto container = ftxui::vbox({
 
-			ftxui::text("Terminal Synth") | ftxui::color(ftxui::Color(0,255,0,255)),
+			ftxui::vbox({
+				ftxui::text("Terminal Synth") | ftxui::color(ftxui::Color(0,255,0,255)),
+				ftxui::separator(),
+				synthInformation,
 
-			synthInformation,
-			synthSettings->Render()
+			}) | ftxui::border | ftxui::flex_grow,
 
-			}) | ftxui::flex_grow;
+			synthSettings->Render() | ftxui::border | ftxui::flex_grow
+
+		});
 
 		return container;
 	});
@@ -800,6 +837,13 @@ void LoopUI()
 			_rtAudio->stopStream();
 
 			_synthDevice->UpdateSynth(*_configuration);
+
+			// This timer is not thread-safe; but the usage seems to be ok on both threads
+			// without stopping the audio stream. We need to re-measure the metrics up-to-date.
+			_synthIntervalTimer->ClearAll();
+			_streamClock->Reset();
+			_uiTimer->Reset();
+			_audioTimer->Reset();
 
 			_rtAudio->startStream();
 

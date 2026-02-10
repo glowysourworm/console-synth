@@ -9,6 +9,11 @@ OscillatorBase::OscillatorBase(float frequency) : SignalBase()
 OscillatorBase::~OscillatorBase()
 {
 }
+void OscillatorBase::Set(float frequency)
+{
+	_frequency = frequency;
+	_period = 1 / frequency;
+}
 float OscillatorBase::GetFrequency() const
 {
 	return _frequency;

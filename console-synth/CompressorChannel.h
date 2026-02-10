@@ -2,6 +2,7 @@
 #define COMPRESSOR_H
 
 #include "FilterChannelBase.h"
+#include "SynthConfiguration.h"
 #include <queue>
 
 class CompressorChannel : public FilterChannelBase
@@ -14,6 +15,7 @@ public:
 
 	float Apply(float inputSample, float absoluteTime) override;
 	bool HasOutput(float absoluteTime) const override;
+	void SetConfiguration(const SynthConfiguration* configuration) override;
 
 private:
 

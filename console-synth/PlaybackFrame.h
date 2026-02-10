@@ -1,4 +1,6 @@
 #pragma once
+#include <cmath>
+#include <exception>
 
 class PlaybackFrame
 {	
@@ -8,6 +10,11 @@ public:
 	{
 		_numberOfChannels = numberChannels;
 		_frameSamples = new float[numberChannels];
+
+		for (int index = 0; index < numberChannels; index++)
+		{
+			_frameSamples[index] = 0.0f;
+		}
 	}
 	~PlaybackFrame()
 	{
@@ -42,14 +49,20 @@ public:
 		}
 	}
 
+	void SetFrame(const PlaybackFrame* copy)
+	{
+		if (_numberOfChannels != copy->GetChannelCount())
+			throw new std::exception("Mismatching channel count:  PlaybackFrame.h");
+
+		for (int index = 0; index < _numberOfChannels; index++)
+		{
+			_frameSamples[index] = copy->GetSample(index);
+		}
+	}
+
 	void SetSample(int channel, float sample)
 	{
 		_frameSamples[channel] = sample;
-	}
-
-	void AddSample(int channel, float sample)
-	{
-		_frameSamples[channel] += sample;
 	}
 
 	void Clear()
@@ -68,6 +81,18 @@ public:
 	unsigned int GetChannelCount() const
 	{
 		return _numberOfChannels;
+	}
+
+	bool HasOutput() const
+	{
+		bool hasOutput = false;
+
+		for (int index = 0; index < _numberOfChannels && !hasOutput; index++)
+		{
+			hasOutput |= fabsf(_frameSamples[index]) > 0;
+		}
+
+		return hasOutput;
 	}
 
 private:

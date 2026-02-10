@@ -3,17 +3,17 @@
 #include "UIBase.h"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
-#include <ftxui/component/event.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
 #include <string>
 #include <vector>
 
-ReverbUI::ReverbUI(bool enabled, float delay, float gain, const std::string& title, const ftxui::Color& titleColor) : UIBase(title, true, titleColor)
+ReverbUI::ReverbUI(bool enabled, float delay, float gain, float wetDry, const std::string& title, const ftxui::Color& titleColor) : UIBase(title, true, titleColor)
 {
     _enabledIndex = enabled ? 0 : 1;
     _delayUI = new SliderUI(delay, 0.005f, 0.5f, 0.005f, "Delay (s):  {:.3f}", titleColor);
     _gainUI = new SliderUI(gain, 0.01f, 1.0f, 0.01f,     "Gain:       {:.2f}", titleColor);
+    _wetDryUI = new SliderUI(wetDry, 0.0f, 1.0f, 0.01f,   "Wet/Dry:    {:.2f}", titleColor);
     _onOffStrs = new std::vector<std::string>({ "On", "Off" });
 }
 
@@ -21,6 +21,7 @@ ReverbUI::~ReverbUI()
 {
     delete _delayUI;
     delete _gainUI;
+    delete _wetDryUI;
     delete _onOffStrs;
 }
 
@@ -40,7 +41,8 @@ ftxui::Component ReverbUI::GetComponent()
         ftxui::Renderer([&] {return ftxui::separator(); }),
 
         _delayUI->GetRenderer(),
-        _gainUI->GetRenderer()
+        _gainUI->GetRenderer(),
+        _wetDryUI->GetRenderer()
     });
 
     return componentUI;
@@ -50,6 +52,7 @@ void ReverbUI::UpdateComponent(bool clearDirty)
 {
     _delayUI->UpdateComponent(clearDirty);
     _gainUI->UpdateComponent(clearDirty);
+    _wetDryUI->UpdateComponent(clearDirty);
 
     if (clearDirty)
         this->ClearDirty();
@@ -67,5 +70,10 @@ float ReverbUI::GetDelay() const
 
 float ReverbUI::GetGain() const
 {
-    return _delayUI->GetValue();
+    return _gainUI->GetValue();
+}
+
+float ReverbUI::GetWetDry() const
+{
+    return  _wetDryUI->GetValue();
 }

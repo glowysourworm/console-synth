@@ -4,16 +4,17 @@
 #include "PlaybackDevice.h"
 #include "PlaybackParameters.h"
 #include "Synth.h"
+#include "SynthConfiguration.h"
 
 template<SignalValue TSignal>
 class MidiPlaybackDevice : public PlaybackDevice<TSignal>
 {
 public:
 
-	bool Initialize(const PlaybackParameters& parameters) override;
+	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters) override;
 
-	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
-	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
+	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput) override;
+	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput) override;
 
 private:
 
@@ -28,7 +29,7 @@ private:
 };
 
 template<SignalValue TSignal>
-bool MidiPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& parameters)
+bool MidiPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters)
 {
 	_initialized = true;
 	_streamParameters = parameters;
@@ -94,13 +95,13 @@ bool MidiPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& parameter
 }
 
 template<SignalValue TSignal>
-inline int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime)
+inline int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput)
 {
 	return 0;
 }
 
 template<SignalValue TSignal>
-int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackStream, unsigned int numberOfFrames, double streamTime)
+int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackStream, unsigned int numberOfFrames, double streamTime, bool& hasOutput)
 {
 	//if (!_initialized)
 	//	return 0;

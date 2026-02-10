@@ -1,49 +1,35 @@
 #ifndef MIXER_H
 #define MIXER_H
 
+#include "MixerChannel.h"
+#include "PlaybackFrame.h"
 #include <map>
-
 class Mixer
 {
 public:
 
-	struct MixerChannel
-	{
-		float sample;
-		float mixLevel;
-
-		MixerChannel()
-		{
-			this->sample = 0;
-			this->mixLevel = 0;
-		}
-
-		MixerChannel(float sample, float mixLevel)
-		{
-			this->sample = sample;
-			this->mixLevel = mixLevel;
-		}
-
-		void Set(float sample, float mixLevel)
-		{
-			this->sample = sample;
-			this->mixLevel = mixLevel;
-		}
-	};
-
 	// Creates a mixer with the specified number of channels
-	Mixer();
+	Mixer(float gain, float leftRight, unsigned int numberOfChannels);
 	~Mixer();
 
-	void SetChannel(int channelKey, float sample, float relativeMix = 1.0);
+	void Set(float gain, float leftRight);
+
+	bool HasChannel(int channelKey) const;
+	void SetChannel(int channelKey, float gain, float leftRight);
+	void SetSample(int channelKey, PlaybackFrame* source);
 	void ClearChannel(int channelKey);
 
-	// Returns mix vor current sample frame
-	float Get();
+	PlaybackFrame* GetFrame(int channelKey);
+
+	void MixOutput(PlaybackFrame* destination);
 
 private:
 
-	std::map<int, Mixer::MixerChannel>* _channels;
+	std::map<int, MixerChannel*>* _channels;
+
+	float _gain;
+	float _leftRight;
+	unsigned int _numberOfChannels;
 };
 
 #endif

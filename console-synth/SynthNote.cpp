@@ -13,32 +13,45 @@
 #include <cmath>
 #include <exception>
 
-SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration, unsigned int samplingRate)
+SynthNote::SynthNote(const SynthConfiguration* configuration, int midiNumber, unsigned int samplingRate)
 {
 	_midiNumber = midiNumber;
-	_envelope = new Envelope(configuration.GetNoteEnvelope());
+	_envelope = new Envelope(configuration->GetNoteEnvelope());
 
 	_envelopeFilter = new EnvelopeFilterChannel(1.0, 		
-		configuration.GetEnvelopeFilterCutoff(),
-		configuration.GetEnvelopeFilterResonance(),
-		configuration.GetEnvelopeFilterType(),
-		configuration.GetEnvelopeFilterOscillatorType(),
-		configuration.GetEnvelopeFilterOscillatorFrequency(),
-		configuration.GetEnvelopeFilter(), samplingRate);
+		configuration->GetEnvelopeFilterCutoff(),
+		configuration->GetEnvelopeFilterResonance(),
+		configuration->GetEnvelopeFilterType(),
+		configuration->GetEnvelopeFilterOscillatorType(),
+		configuration->GetEnvelopeFilterOscillatorFrequency(),
+		configuration->GetEnvelopeFilter(), samplingRate);
 
-	_compressor = new CompressorChannel(configuration.GetCompressorGain(), 
+	_compressor = new CompressorChannel(configuration->GetCompressorGain(), 
 		samplingRate,
-		configuration.GetCompressorThreshold(), 
-		configuration.GetCompressionRatio(), 
-		configuration.GetCompressorRelaxationPeriod(), 
-		configuration.GetCompressorAttack(), 
-		configuration.GetCompressorRelease());
+		configuration->GetCompressorThreshold(), 
+		configuration->GetCompressionRatio(), 
+		configuration->GetCompressorRelaxationPeriod(), 
+		configuration->GetCompressorAttack(), 
+		configuration->GetCompressorRelease());
 
-	_envelopeFilterEnabled = configuration.GetHasEnvelopeFilter();
-	_compressorEnabled = configuration.GetHasCompressor();
+	_envelopeFilterEnabled = configuration->GetHasEnvelopeFilter();
+	_compressorEnabled = configuration->GetHasCompressor();
+	_oscillator = nullptr;
 
-	// Initialize Oscillator
-	switch (configuration.GetOscillatorType())
+	this->CreateOscillator(configuration->GetOscillatorType());
+}
+
+SynthNote::~SynthNote()
+{
+	delete _envelope;
+}
+
+void SynthNote::CreateOscillator(OscillatorType type)
+{
+	if (_oscillator != nullptr)
+		delete _oscillator;
+
+	switch (type)
 	{
 	case OscillatorType::Sine:
 		_oscillator = new SineOscillator(this->GetFrequency());
@@ -60,9 +73,15 @@ SynthNote::SynthNote(int midiNumber, const SynthConfiguration& configuration, un
 	}
 }
 
-SynthNote::~SynthNote()
+void SynthNote::SetConfiguration(const SynthConfiguration* configuration)
 {
-	delete _envelope;
+	this->CreateOscillator(configuration->GetOscillatorType());
+
+	_envelope->Set(configuration->GetNoteEnvelope());
+	_envelopeFilter->SetConfiguration(configuration);
+	_compressor->SetConfiguration(configuration);
+	_envelopeFilterEnabled = configuration->GetHasEnvelopeFilter();
+	_compressorEnabled = configuration->GetHasCompressor();
 }
 
 int SynthNote::GetMidiNumber() const
@@ -70,13 +89,10 @@ int SynthNote::GetMidiNumber() const
 	return _midiNumber;
 }
 
-void SynthNote::ApplyImpl(PlaybackFrame* frame, float absoluteTime, bool overwriteOrAdd) const
+void SynthNote::GetSample(PlaybackFrame* frame, float absoluteTime) const
 {
 	// Generate Oscillator
-	if (overwriteOrAdd)
-		_oscillator->GetSample(frame, absoluteTime);
-	else
-		_oscillator->MixSample(frame, absoluteTime);
+	_oscillator->GetSample(frame, absoluteTime);
 
 	for (int index = 0; index < frame->GetChannelCount(); index++)
 	{
@@ -97,16 +113,6 @@ void SynthNote::ApplyImpl(PlaybackFrame* frame, float absoluteTime, bool overwri
 
 		frame->SetSample(index, output);
 	}
-}
-
-void SynthNote::GetSample(PlaybackFrame* frame, float absoluteTime) const
-{
-	this->ApplyImpl(frame, absoluteTime, true);
-}
-
-void SynthNote::AddSample(PlaybackFrame* frame, float absoluteTime) const
-{
-	this->ApplyImpl(frame, absoluteTime, false);
 }
 
 float SynthNote::GetFrequency() const

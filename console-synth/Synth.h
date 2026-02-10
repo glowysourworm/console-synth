@@ -18,11 +18,11 @@ class Synth
 {
 
 public:
-	Synth(const SynthConfiguration& configuration, unsigned int numberOfChannels, unsigned int samplingRate);
+	Synth(const SynthConfiguration* configuration, unsigned int numberOfChannels, unsigned int samplingRate);
 	~Synth();
 
 	// Update Configuration
-	void SetConfiguration(const SynthConfiguration& configuration);
+	void SetConfiguration(const SynthConfiguration* configuration);
 
 	// Sets midi notes on / off
 	void Set(int midiNumber, bool pressed, double absoluteTime);
@@ -38,14 +38,9 @@ public:
 	bool HasNote(int midiNumber);
 
 	/// <summary>
-	/// Synthesizes a full output at the specified stream time
+	/// Synthesizes a full output at the specified stream time. Returns true if there was output this call.
 	/// </summary>
-	void GetSample(PlaybackFrame* frame, double absoluteTime);
-
-	/// <summary>
-	/// Clears out notes that have no ouptut
-	/// </summary>
-	void Clear(double absoluteTime);
+	bool GetSample(PlaybackFrame* frame, double absoluteTime);
 
 public:
 
@@ -53,10 +48,6 @@ public:
 	/// Iterates currently active notes in the synth
 	/// </summary>
 	void GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const;
-
-private:
-
-	void Initialize(const SynthConfiguration& configuration);
 
 private:
 
@@ -70,7 +61,7 @@ private:
 	AirwindowsEffect* _reverb;
 	Filter* _delay;
 
-	SynthConfiguration* _configuration;
+	const SynthConfiguration* _configuration;
 	unsigned int _numberOfChannels;
 	unsigned int _samplingRate;
 };

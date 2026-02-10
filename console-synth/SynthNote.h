@@ -2,6 +2,7 @@
 #define SYNTHNOTE_H
 
 #include "CompressorChannel.h"
+#include "Constant.h"
 #include "Envelope.h"
 #include "EnvelopeFilterChannel.h"
 #include "OscillatorBase.h"
@@ -12,13 +13,14 @@ class SynthNote
 {
 public:
 
-	SynthNote(int midiNumber, const SynthConfiguration& configuration, unsigned int samplingRate);
+	SynthNote(const SynthConfiguration* configuration, int midiNumber, unsigned int samplingRate);
 	~SynthNote();
+
+	void SetConfiguration(const SynthConfiguration* configuration);
 
 	int GetMidiNumber() const;
 	float GetFrequency() const;
 	void GetSample(PlaybackFrame* frame, float absoluteTime) const;
-	void AddSample(PlaybackFrame* frame, float absoluteTime) const;
 
 
 	bool IsEngaged();
@@ -28,10 +30,7 @@ public:
 
 private:
 
-	/// <summary>
-	/// Applys note to the playback frame either by overwriting or adding
-	/// </summary>
-	void ApplyImpl(PlaybackFrame* frame, float absoluteTime, bool overwriteOrAdd) const;
+	void CreateOscillator(OscillatorType type);
 
 private:
 

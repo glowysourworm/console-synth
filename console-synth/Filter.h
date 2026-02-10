@@ -3,6 +3,7 @@
 #include "FilterBase.h"
 #include "FilterChannelBase.h"
 #include "PlaybackFrame.h"
+#include "SynthConfiguration.h"
 #include <vector>
 
 class Filter : public FilterBase
@@ -16,6 +17,7 @@ public:
 
 	virtual void GetSample(PlaybackFrame* frame, float absoluteTime) override;
 	virtual bool HasOutput(float absoluteTime) const override;
+	virtual void SetConfiguration(const SynthConfiguration* configuration) override;
 
 private:
 

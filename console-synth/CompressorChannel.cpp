@@ -1,5 +1,6 @@
 #include "CompressorChannel.h"
 #include "FilterChannelBase.h"
+#include "SynthConfiguration.h"
 #include <cmath>
 #include <queue>
 
@@ -49,4 +50,15 @@ float CompressorChannel::Apply(float sample, float absoluteTime)
 bool CompressorChannel::HasOutput(float absoluteTime) const
 {
 	return true;
+}
+
+void CompressorChannel::SetConfiguration(const SynthConfiguration* configuration)
+{
+	_threshold = configuration->GetCompressorThreshold();
+	_compressionRatio = configuration->GetCompressionRatio();
+	//_relaxationValue = 0;
+	//_relaxationBuffer = new std::queue<float>();
+	//_relaxationBufferLength = samplingRate * relaxationPeriod;
+	_attack = configuration->GetCompressorAttack();
+	_release = configuration->GetCompressorRelease();
 }

@@ -2,6 +2,7 @@
 
 #include "PlaybackFrame.h"
 #include "SignalBase.h"
+#include "SynthConfiguration.h"
 
 class FilterBase : public SignalBase
 {
@@ -11,6 +12,7 @@ public:
 
 	virtual void GetSample(PlaybackFrame* frame, float absoluteTime) = 0;
 	virtual bool HasOutput(float absoluteTime) const = 0;
+	virtual void SetConfiguration(const SynthConfiguration* configuration) = 0;
 
 public:
 

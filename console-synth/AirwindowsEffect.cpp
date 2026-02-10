@@ -1,6 +1,7 @@
 #include "AirwindowsEffect.h"
 #include "FilterBase.h"
 #include "PlaybackFrame.h"
+#include "SynthConfiguration.h"
 #include <kCathedral.h>
 
 AirwindowsEffect::AirwindowsEffect(float delaySeconds, float gain, unsigned int numberOfChannels, unsigned int samplingRate) : FilterBase(gain, numberOfChannels, samplingRate)
@@ -55,4 +56,9 @@ void AirwindowsEffect::GetSample(PlaybackFrame* frame, float absoluteTime)
 bool AirwindowsEffect::HasOutput(float absoluteTime) const
 {
 	return true;
+}
+
+void AirwindowsEffect::SetConfiguration(const SynthConfiguration* configuration)
+{
+
 }

@@ -10,7 +10,7 @@
 class ReverbUI : UIBase
 {
 public:
-	ReverbUI(bool enabled, float delay, float gain, const std::string& title, const ftxui::Color& titleColor);
+	ReverbUI(bool enabled, float delay, float gain, float wetDry, const std::string& title, const ftxui::Color& titleColor);
 	~ReverbUI();
 
 	ftxui::Component GetComponent() override;
@@ -20,6 +20,7 @@ public:
 
 	float GetDelay() const;
 	float GetGain() const;
+	float GetWetDry() const;
 	
 private:
 
@@ -27,6 +28,7 @@ private:
 
 	SliderUI* _delayUI;
 	SliderUI* _gainUI;
+	SliderUI* _wetDryUI;
 
 	// Set to zero to choose "On"
 	int _enabledIndex;

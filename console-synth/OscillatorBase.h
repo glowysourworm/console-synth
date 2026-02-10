@@ -1,6 +1,7 @@
 #ifndef AMPLITUDEOSCILLATOR_H
 #define AMPLITUDEOSCILLATOR_H
 
+#include "Constant.h"
 #include "PlaybackFrame.h"
 #include "SignalBase.h"
 #include <cmath>
@@ -11,17 +12,8 @@ public:
 	OscillatorBase(float frequency);
 	virtual ~OscillatorBase();
 
-	void MixSample(PlaybackFrame* frame, float absoluteTime)
-	{
-		float sample = this->GetMonoSample(absoluteTime);
+	void Set(float frequency);
 
-		// Mono
-		for (int index = 0; index < frame->GetChannelCount(); index++)
-		{
-			frame->SetSample(index, sample + frame->GetSample(index));
-		}
-		
-	}
 	void GetSample(PlaybackFrame* frame, float absoluteTime)
 	{
 		float sample = this->GetMonoSample(absoluteTime);
@@ -33,6 +25,7 @@ public:
 
 	float GetFrequency() const;
 	float GetPeriod() const;
+	virtual OscillatorType GetType() const = 0;
 
 private:
 

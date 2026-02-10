@@ -2,7 +2,7 @@
 #include "ButterworthFilterChannel.h"
 #include "FilterBase.h"
 #include "PlaybackFrame.h"
-#include <cmath>
+#include "SynthConfiguration.h"
 
 ButterworthFilter::ButterworthFilter(float gain, unsigned int numberOfChannels, unsigned int samplingRate) : FilterBase(gain, numberOfChannels, samplingRate)
 {
@@ -32,6 +32,10 @@ void ButterworthFilter::Set(float cutoffFrequency, float resonance)
 	{
 		_filterChannels[index]->Set(cutoffFrequency, resonance);
 	}
+}
+
+void ButterworthFilter::SetConfiguration(const SynthConfiguration* configuration)
+{
 }
 
 void ButterworthFilter::GetSample(PlaybackFrame* frame, float absoluteTime)

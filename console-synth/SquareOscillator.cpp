@@ -1,3 +1,4 @@
+#include "Constant.h"
 #include "OscillatorBase.h"
 #include "PlaybackFrame.h"
 #include "SquareOscillator.h"
@@ -24,4 +25,9 @@ float SquareOscillator::GetMonoSample(float absoluteTime)
 		sample = this->GetLow();
 
 	return sample;
+}
+
+OscillatorType SquareOscillator::GetType() const
+{
+	return OscillatorType::Square;
 }

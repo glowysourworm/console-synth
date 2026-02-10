@@ -1,5 +1,5 @@
+#include "Constant.h"
 #include "OscillatorBase.h"
-#include "PlaybackFrame.h"
 #include "TriangleOscillator.h"
 #include <cmath>
 
@@ -47,4 +47,9 @@ float TriangleOscillator::GetMonoSample(float absoluteTime)
 	}
 
 	return sample;
+}
+
+OscillatorType TriangleOscillator::GetType() const
+{
+	return OscillatorType::Triangle;
 }

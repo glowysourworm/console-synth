@@ -1,3 +1,4 @@
+#include "Accumulator.h"
 #include "CompressorUI.h"
 #include "Constant.h"
 #include "DelayUI.h"
@@ -7,6 +8,7 @@
 #include "IntervalTimer.h"
 #include "LoopTimer.h"
 #include "OscillatorUI.h"
+#include "OutputUI.h"
 #include "PlaybackBuffer.h"
 #include "PlaybackClock.h"
 #include "PlaybackParameters.h"
@@ -42,7 +44,11 @@ LoopTimer* _uiTimer;
 LoopTimer* _audioTimer;
 IntervalTimer* _synthIntervalTimer;
 
-float _frontendAvgMilli;
+// Related to last callback
+float _outputL;
+float _outputR;
+bool _hasOutput;
+
 
 void ProcessKeyStrokes(double streamTime)
 {
@@ -68,17 +74,10 @@ void ProcessKeyStrokes(double streamTime)
 		// Midi Note
 		int midiNote = _configuration->GetMidiNote((WindowsKeyCodes)keyCode);
 
-		// Dis-Engage
-		if (_synthDevice->HasNote(midiNote) && !isPressed)
-			_synthDevice->SetNote(midiNote, false, streamTime);
-
-		// Engage
-		else if (!_synthDevice->HasNote(midiNote) && isPressed)
-			_synthDevice->SetNote(midiNote, true, streamTime);
+		// Engage / Dis-Engage
+		if (_synthDevice->HasNote(midiNote))
+			_synthDevice->SetNote(midiNote, isPressed, streamTime);
 	}
-
-	// Clean Up Synth Notes
-	_synthDevice->ClearUnused(streamTime);
 }
 
 /// <summary>
@@ -104,12 +103,22 @@ int PrimaryAudioCallback(void* outputBuffer, void* inputBuffer, unsigned int nFr
 	//
 	ProcessKeyStrokes(streamTime);
 
-	int returnValue = _synthDevice->WritePlaybackBuffer(outputBuffer, nFrames, streamTime);
+	int returnValue = _synthDevice->WritePlaybackBuffer(outputBuffer, nFrames, streamTime, _hasOutput);
+
+	// Get output for the UI
+	if (_hasOutput)
+	{
+		_outputL = _synthDevice->GetOutput(0);
+		_outputR = _synthDevice->GetOutput(1);
+	}
+	else
+	{
+		_outputL = 0;
+		_outputR = 0;
+	}
 
 	// Frontend Processing Time (Mark.)
 	_synthIntervalTimer->Mark();
-
-	_frontendAvgMilli = _synthIntervalTimer->AvgMilli();
 
 	return returnValue;
 }
@@ -165,7 +174,7 @@ bool InitializeAudioClient()
 		options.numberOfBuffers = 4;						// Has to do with audio format!
 		options.flags |= RTAUDIO_HOG_DEVICE;
 		options.flags |= RTAUDIO_MINIMIZE_LATENCY;
-		// options.flags |= RTAUDIO_NONINTERLEAVED;
+		// options.flags |= RTAUDIO_NONINTERLEAVED; 
 
 
 		// Output Buffer Calculation: ~device period (ms) * (s / ms) * (samples / s) = [samples]
@@ -263,7 +272,7 @@ void InitializePlayback()
 	_configuration = new SynthConfiguration();
 	_synthDevice = new SynthPlaybackDevice<float>();
 	_streamClock = new PlaybackClock();
-	_uiTimer = new LoopTimer(0.03);
+	_uiTimer = new LoopTimer(0.075);
 	_audioTimer = new LoopTimer(_outputParameters->GetOutputBufferFrameSize() / (double)_outputParameters->GetSamplingRate());
 	_synthIntervalTimer = new IntervalTimer();
 
@@ -320,7 +329,7 @@ void InitializePlayback()
 	_configuration->SetMidiNote(WindowsKeyCodes::MINUS, 66);
 	_configuration->SetMidiNote(WindowsKeyCodes::PLUS, 67);
 
-	_synthDevice->Initialize(*_outputParameters);
+	_synthDevice->Initialize(_configuration, *_outputParameters);
 	_rtAudio->startStream();
 }
 
@@ -371,6 +380,7 @@ void LoopUI()
 	ReverbUI reverbUI(_configuration->GetHasReverb(),
 		_configuration->GetReverbDelaySeconds(),
 		_configuration->GetReverbGain(),
+		_configuration->GetReverbWetDry(),
 		"Reverb", ftxui::Color::Green);
 
 	// Delay
@@ -378,6 +388,7 @@ void LoopUI()
 		_configuration->GetDelayFeedback(),
 		_configuration->GetDelaySeconds(),
 		_configuration->GetDelayGain(),
+		_configuration->GetDelayWetDry(),
 		"Delay", ftxui::Color::Purple);
 
 	// Compressor
@@ -389,6 +400,9 @@ void LoopUI()
 		_configuration->GetCompressionRatio(),
 		"Compressor", ftxui::Color::HotPink);
 
+	// Output
+	OutputUI outputUI(_configuration->GetOutputGain(), _configuration->GetOutputLeftRight(), "Output", ftxui::Color::Green);
+
 	auto synthInputSettings = ftxui::Container::Horizontal({
 
 		oscillatorUI.GetComponent() | ftxui::flex | ftxui::border,
@@ -397,7 +411,7 @@ void LoopUI()
 
 	}) | ftxui::flex_grow;
 
-	auto synthOutputSettings = ftxui::Container::Horizontal({
+	auto synthEffectsSettings = ftxui::Container::Horizontal({
 
 		compressorUI.GetComponent() | ftxui::flex_grow | ftxui::border,
 		reverbUI.GetComponent() | ftxui::flex_grow | ftxui::border,
@@ -405,9 +419,16 @@ void LoopUI()
 
 	});
 
+	auto synthOutputSettings = ftxui::Container::Horizontal({
+
+		outputUI.GetComponent() | ftxui::flex_grow | ftxui::border,
+
+	});
+
 	auto synthSettings = ftxui::Container::Vertical({
 		synthInputSettings | ftxui::flex_grow,
-		synthOutputSettings | ftxui::flex_grow
+		synthEffectsSettings | ftxui::flex_grow,
+		synthOutputSettings | ftxui::flex_grow,
 	});
 
 	// UI BACKEND LOOP!! This will be run just for re-drawing purposes during our
@@ -460,13 +481,14 @@ void LoopUI()
 
 	}) | ftxui::CatchEvent([&](ftxui::Event event) {
 
+		// Only allow mouse events through
 		if (event.mouse().button == ftxui::Mouse::Left)
 		{
 			isUIDirty |= event.is_mouse();
 			return false;
 		}
-			
 
+		// Cancel keyboard events
 		return true;
 	});
 
@@ -511,6 +533,9 @@ void LoopUI()
 			reverbUI.UpdateComponent(true);
 			compressorUI.UpdateComponent(true);
 
+			outputUI.SetOutput(_outputL, _outputR);
+			outputUI.UpdateComponent(true);
+
 			// Use custom event to force one UI update
 			screen.PostEvent(ftxui::Event::Custom);
 
@@ -542,11 +567,13 @@ void LoopUI()
 				// Reverb
 				_configuration->SetReverbSeconds(reverbUI.GetDelay());
 				_configuration->SetReverbGain(reverbUI.GetGain());
+				_configuration->SetReverbWetDry(reverbUI.GetWetDry());
 
 				// Delay
 				_configuration->SetDelayFeedback(delayUI.GetFeedbackEnabled());
 				_configuration->SetDelaySeconds(delayUI.GetDelay());
 				_configuration->SetDelayGain(delayUI.GetGain());
+				_configuration->SetDelayWetDry(delayUI.GetWetDry());
 
 				// Compressor
 				_configuration->SetCompressionRatio(compressorUI.GetCompressionRatio());
@@ -554,6 +581,10 @@ void LoopUI()
 				_configuration->SetCompressorGain(compressorUI.GetGain());
 				_configuration->SetCompressorRelease(compressorUI.GetRelease());
 				_configuration->SetCompressorThreshold(compressorUI.GetThreshold());
+
+				// Output
+				_configuration->SetOutputGain(outputUI.GetGain());
+				_configuration->SetOutputLeftRight(outputUI.GetLeftRight());
 			}
 
 			// UI Run
@@ -569,7 +600,7 @@ void LoopUI()
 
 			_rtAudio->stopStream();
 
-			_synthDevice->UpdateSynth(*_configuration);
+			_synthDevice->UpdateSynth(_configuration);
 
 			// This timer is not thread-safe; but the usage seems to be ok on both threads
 			// without stopping the audio stream. We need to re-measure the metrics up-to-date.

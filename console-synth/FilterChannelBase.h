@@ -2,6 +2,7 @@
 
 #include "Constant.h"
 #include "SignalChannelBase.h"
+#include "SynthConfiguration.h"
 #include <exception>
 
 class FilterChannelBase : public SignalChannelBase
@@ -21,10 +22,13 @@ public:
 	virtual float Apply(float inputSample, float absoluteTime) = 0;
 	virtual bool HasOutput(float absoluteTime) const = 0;
 
+	virtual void SetConfiguration(const SynthConfiguration* configuration) = 0;
+
 public:
 
 	unsigned int GetSamplingRate() const { return _samplingRate; }
 	float GetGain() const { return _gain; }
+	void SetGain(float newValue) { _gain = newValue; }
 
 private:
 

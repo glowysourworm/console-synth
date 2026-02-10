@@ -58,6 +58,17 @@ Envelope::~Envelope()
 
 }
 
+void Envelope::Set(const Envelope& envelope)
+{
+	_attack = envelope.GetAttack();
+	_decay = envelope.GetDecay();
+	_sustain = envelope.GetSustain();
+	_release = envelope.GetRelease();
+
+	_attackPeak = envelope.GetAttackPeak();
+	_sustainPeak = envelope.GetSustainPeak();
+}
+
 void Envelope::Set(float attack, float decay, float sustain, float release, float attackPeak, float sustainPeak)
 {
 	_attack = attack;

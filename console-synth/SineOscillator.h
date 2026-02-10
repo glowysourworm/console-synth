@@ -1,4 +1,5 @@
 #pragma once
+#include "Constant.h"
 #include "OscillatorBase.h"
 #include "PlaybackFrame.h"
 
@@ -10,5 +11,7 @@ public:
 	~SineOscillator() override;
 
 	float GetMonoSample(float absoluteTime) override;
+
+	OscillatorType GetType() const override;
 };
 

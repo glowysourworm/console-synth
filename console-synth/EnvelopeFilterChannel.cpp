@@ -7,6 +7,7 @@
 #include "SawtoothOscillator.h"
 #include "SineOscillator.h"
 #include "SquareOscillator.h"
+#include "SynthConfiguration.h"
 #include "TriangleOscillator.h"
 #include <cmath>
 #include <exception>
@@ -33,32 +34,41 @@ EnvelopeFilterChannel::EnvelopeFilterChannel(float gain,
 	// Initialize Butterworth Filter (this may not be reset in real time. depends on usage.)
 	_filter->Set(_cutoffFrequency, _resonance);
 
-	switch (oscillatorType)
-	{
-	case OscillatorType::Sine:
-		_filterOscillator = new SineOscillator(oscillatorFrequency);
-		break;
-	case OscillatorType::Square:
-		_filterOscillator = new SquareOscillator(oscillatorFrequency);
-		break;
-	case OscillatorType::Triangle:
-		_filterOscillator = new TriangleOscillator(oscillatorFrequency);
-		break;
-	case OscillatorType::Sawtooth:
-		_filterOscillator = new SawtoothOscillator(oscillatorFrequency);
-		break;
-	case OscillatorType::Random:
-		_filterOscillator = new RandomOscillator(oscillatorFrequency, 4);
-		break;
-	default:
-		throw new std::exception("Unhandled Amplitude Oscillator Type:  EnvelopeFilter.cpp");
-	}
+	_filterOscillator = nullptr;
+
+	this->ConstructOscillator();
 }
 EnvelopeFilterChannel::~EnvelopeFilterChannel()
 {
 	delete _filter;
 	delete _filterEnvelope;
 	delete _filterOscillator;
+}
+void EnvelopeFilterChannel::ConstructOscillator()
+{
+	if (_filterOscillator != nullptr)
+		delete _filterOscillator;
+
+	switch (_oscillatorType)
+	{
+	case OscillatorType::Sine:
+		_filterOscillator = new SineOscillator(_oscillatorFrequency);
+		break;
+	case OscillatorType::Square:
+		_filterOscillator = new SquareOscillator(_oscillatorFrequency);
+		break;
+	case OscillatorType::Triangle:
+		_filterOscillator = new TriangleOscillator(_oscillatorFrequency);
+		break;
+	case OscillatorType::Sawtooth:
+		_filterOscillator = new SawtoothOscillator(_oscillatorFrequency);
+		break;
+	case OscillatorType::Random:
+		_filterOscillator = new RandomOscillator(_oscillatorFrequency, 4);
+		break;
+	default:
+		throw new std::exception("Unhandled Amplitude Oscillator Type:  EnvelopeFilter.cpp");
+	}
 }
 float EnvelopeFilterChannel::ApplyConstant(float sample, float absoluteTime)
 {
@@ -129,4 +139,26 @@ bool EnvelopeFilterChannel::HasOutput(float absoluteTime) const
 	default:
 		throw new std::exception("Unhandled Envelope Fitler Type:  EnvelopeFilter.cpp");
 	}	
+}
+
+void EnvelopeFilterChannel::SetConfiguration(const SynthConfiguration* configuration)
+{
+	_cutoffFrequency = configuration->GetEnvelopeFilterCutoff();
+	_resonance = configuration->GetEnvelopeFilterResonance();
+
+	_filterType = configuration->GetEnvelopeFilterType();
+	_oscillatorFrequency = configuration->GetEnvelopeFilterOscillatorFrequency();
+	_oscillatorType = configuration->GetEnvelopeFilterOscillatorType();
+
+	_filter->SetConfiguration(configuration);
+	_filterEnvelope->Set(configuration->GetEnvelopeFilter());
+
+	// Reset Oscillator
+	if (_filterOscillator->GetType() != configuration->GetEnvelopeFilterOscillatorType())
+		this->ConstructOscillator();
+
+	// Set Frequency
+	else
+		_filterOscillator->Set(configuration->GetEnvelopeFilterOscillatorFrequency());
+	
 }

@@ -1,5 +1,6 @@
 #include "CombFilterChannel.h"
 #include "FilterChannelBase.h"
+#include "SynthConfiguration.h"
 #include <queue>
 
 CombFilterChannel::CombFilterChannel(float delaySeconds, float gain, bool feedback, unsigned int samplingRate)
@@ -17,6 +18,10 @@ CombFilterChannel::CombFilterChannel(float delaySeconds, float gain, bool feedba
 CombFilterChannel::~CombFilterChannel()
 {
 	delete _buffer;
+}
+void CombFilterChannel::Set(bool feedback)
+{
+	_feedback = feedback;
 }
 float CombFilterChannel::Apply(float sample, float absoluteTime)
 {
@@ -44,4 +49,8 @@ bool CombFilterChannel::HasOutput(float absoluteTime) const
 	//	   this->GetGain() > 0;
 
 	return this->GetGain() > 0;
+}
+
+void CombFilterChannel::SetConfiguration(const SynthConfiguration* configuration)
+{
 }

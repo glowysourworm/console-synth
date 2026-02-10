@@ -262,6 +262,7 @@
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OscillatorUI.cpp" />
+    <ClCompile Include="OutputUI.cpp" />
     <ClCompile Include="PlaybackClock.cpp" />
     <ClCompile Include="RandomOscillator.cpp" />
     <ClCompile Include="ReverbChannel.cpp" />
@@ -282,6 +283,7 @@
   <ItemGroup>
     <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.h" />
     <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.h" />
+    <ClInclude Include="Accumulator.h" />
     <ClInclude Include="AirwindowsEffect.h" />
     <ClInclude Include="AllPassFilterChannel.h" />
     <ClInclude Include="CompressorUI.h" />
@@ -292,6 +294,7 @@
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterChannelBase.h" />
+    <ClInclude Include="MixerChannel.h" />
     <ClInclude Include="OscillatorBase.h" />
     <ClInclude Include="Binasc.h" />
     <ClInclude Include="ButterworthFilterChannel.h" />
@@ -310,6 +313,7 @@
     <ClInclude Include="Mixer.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="OscillatorUI.h" />
+    <ClInclude Include="OutputUI.h" />
     <ClInclude Include="PlaybackClock.h" />
     <ClInclude Include="PlaybackDevice.h" />
     <ClInclude Include="PlaybackBuffer.h" />

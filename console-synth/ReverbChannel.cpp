@@ -4,6 +4,7 @@
 #include "Constant.h"
 #include "FilterChannelBase.h"
 #include "ReverbChannel.h"
+#include "SynthConfiguration.h"
 #include <cmath>
 
 ReverbChannel::ReverbChannel(float delaySeconds, float gain, int samplingRate) : FilterChannelBase(gain, samplingRate)
@@ -26,6 +27,7 @@ ReverbChannel::ReverbChannel(float delaySeconds, float gain, int samplingRate) :
 		_allPassFilters[i] = new AllPassFilterChannel(allPassDelayBase / powf(3, i), gain, samplingRate);
 
 	_lowPassFilter->Set(8000, 0.1);
+	_samplingRate = samplingRate;
 
 }
 ReverbChannel::~ReverbChannel()
@@ -90,4 +92,13 @@ bool ReverbChannel::HasOutput(float absoluteTime) const
 	}
 
 	return false;
+}
+
+void ReverbChannel::SetConfiguration(const SynthConfiguration* configuration)
+{
+	// All Pass Filters
+	for (int index = 0; index < REVERB_ALLPASS_SIZE; index++)
+	{
+		_allPassFilters[index]->Set(configuration->GetReverbDelaySeconds(), configuration->GetReverbGain(), _samplingRate);
+	}
 }

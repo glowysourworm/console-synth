@@ -2,8 +2,8 @@
 #define ALLPASSFILTER_H
 
 #include "FilterChannelBase.h"
-#include "PlaybackFrame.h"
 
+#include "SynthConfiguration.h"
 #include <queue>
 
 class AllPassFilterChannel : public FilterChannelBase
@@ -12,8 +12,11 @@ public:
 	AllPassFilterChannel(float delaySeconds, float gain, unsigned int samplingRate);
 	~AllPassFilterChannel();
 
+	void Set(float delaySeconds, float gain, unsigned int samplingRate);
+
 	float Apply(float inputSample, float absoluteTime) override;
 	bool HasOutput(float absoluteTime) const override;
+	void SetConfiguration(const SynthConfiguration* configuration) override;
 
 private:
 

@@ -2,6 +2,7 @@
 #define BUDDA_Q_SCALE 6.f
 
 #include "FilterChannelBase.h"
+#include "SynthConfiguration.h"
 
 class ButterworthFilterChannel : public FilterChannelBase
 {
@@ -14,6 +15,8 @@ public:
 	bool HasOutput(float absoluteTime) const override;
 
 	void Set(float cutoffFrequency, float resonance);
+
+	void SetConfiguration(const SynthConfiguration* configuration) override;
 
 private:
 

@@ -1,5 +1,6 @@
 ﻿#include "AllPassFilterChannel.h"
 #include "FilterChannelBase.h"
+#include "SynthConfiguration.h"
 #include <queue>
 
 AllPassFilterChannel::AllPassFilterChannel(float delaySeconds, float gain, unsigned int samplingRate) : FilterChannelBase(gain, samplingRate)
@@ -13,6 +14,17 @@ AllPassFilterChannel::~AllPassFilterChannel()
 {
 	delete _delayedInput;
 	delete _delayedOutput;
+}
+
+void AllPassFilterChannel::Set(float delaySeconds, float gain, unsigned int samplingRate)
+{
+	delete _delayedInput;
+	delete _delayedOutput;
+
+	_bufferSize = (int)(delaySeconds * samplingRate);
+
+	_delayedInput = new std::queue<float>();
+	_delayedOutput = new std::queue<float>();
 }
 
 float AllPassFilterChannel::Apply(float sample, float absoluteTime)
@@ -54,4 +66,8 @@ bool AllPassFilterChannel::HasOutput(float absoluteTime) const
 	return _delayedOutput->size() > 0 &&
 		_delayedOutput->front() > 0 &&
 		this->GetGain() > 0;
+}
+
+void AllPassFilterChannel::SetConfiguration(const SynthConfiguration* configuration)
+{
 }

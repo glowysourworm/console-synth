@@ -2,6 +2,7 @@
 
 #include "FilterBase.h"
 #include "PlaybackFrame.h"
+#include "SynthConfiguration.h"
 #include "kCathedral.h"
 
 class AirwindowsEffect : public FilterBase
@@ -14,6 +15,7 @@ public:
 
 	virtual void GetSample(PlaybackFrame* frame, float absoluteTime) override;
 	virtual bool HasOutput(float absoluteTime) const override;
+	void SetConfiguration(const SynthConfiguration* configuration) override;
 
 private:
 

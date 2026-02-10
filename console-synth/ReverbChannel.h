@@ -5,6 +5,7 @@
 #include "ButterworthFilterChannel.h"
 #include "CombFilterChannel.h"
 #include "FilterChannelBase.h"
+#include "SynthConfiguration.h"
 
 // Implements Schroeder Reverb
 //
@@ -16,8 +17,10 @@ public:
 
 	float Apply(float sample, float absoluteTime) override;
 	bool HasOutput(float absoluteTime) const override;
+	void SetConfiguration(const SynthConfiguration* configuration) override;
 
 private:
+	unsigned int _samplingRate;
 	CombFilterChannel** _combFilters;
 	AllPassFilterChannel** _allPassFilters;
 	ButterworthFilterChannel* _lowPassFilter;

@@ -2,6 +2,7 @@
 #include "FilterBase.h"
 #include "FilterChannelBase.h"
 #include "PlaybackFrame.h"
+#include "SynthConfiguration.h"
 #include <exception>
 #include <vector>
 
@@ -54,4 +55,15 @@ bool Filter::HasOutput(float absoluteTime) const
 	}
 
 	return hasOutput;
+}
+
+void Filter::SetConfiguration(const SynthConfiguration* configuration)
+{
+	if (this->GetNumberOfChannels() != _channels->size())
+		throw new std::exception("Filter channel count does not match the playback channel count!");
+
+	for (int index = 0; index < this->GetNumberOfChannels(); index++)
+	{
+		_channels->at(index)->SetConfiguration(configuration);
+	}
 }

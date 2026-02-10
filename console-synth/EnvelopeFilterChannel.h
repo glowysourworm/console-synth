@@ -4,6 +4,7 @@
 #include "Envelope.h"
 #include "FilterChannelBase.h"
 #include "OscillatorBase.h"
+#include "SynthConfiguration.h"
 
 class EnvelopeFilterChannel : public FilterChannelBase
 {
@@ -21,11 +22,14 @@ public:
 
 	float Apply(float inputSample, float absoluteTime) override;
 	bool HasOutput(float absoluteTime) const override;
+	void SetConfiguration(const SynthConfiguration* configuration) override;
 
 	void Engage(float absoluteTime);
 	void DisEngage(float absoluteTime);
 
 private:
+
+	void ConstructOscillator();
 
 	float ApplyConstant(float sample, float absoluteTime);
 	float ApplyEnvelope(float sample, float absoluteTime);

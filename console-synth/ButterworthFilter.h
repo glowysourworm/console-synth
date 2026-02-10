@@ -4,6 +4,7 @@
 #include "ButterworthFilterChannel.h"
 #include "FilterBase.h"
 #include "PlaybackFrame.h"
+#include "SynthConfiguration.h"
 
 class ButterworthFilter : public FilterBase
 {
@@ -16,6 +17,8 @@ public:
 	virtual bool HasOutput(float absoluteTime) const = 0;
 
 	void Set(float cutoffFrequency, float resonance);
+
+	void SetConfiguration(const SynthConfiguration* configuration) override;
 
 private:
 

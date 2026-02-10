@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Accumulator.h"
 #include "Constant.h"
 #include "PlaybackBuffer.h"
 #include "PlaybackDevice.h"
@@ -7,6 +8,7 @@
 #include "PlaybackParameters.h"
 #include "Synth.h"
 #include "SynthConfiguration.h"
+#include <cmath>
 
 template<SignalValue TSignal>
 class SynthPlaybackDevice : public PlaybackDevice<TSignal>
@@ -16,16 +18,20 @@ public:
 	SynthPlaybackDevice();
 	~SynthPlaybackDevice();
 
-	bool Initialize(const PlaybackParameters& parameters) override;
+	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters) override;
 
-	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
-	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
+	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput) override;
+	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput) override;
 
 	void SetNote(int midiNumber, bool pressed, double streamTime);
 	bool GetNote(int midiNumber) const;
 	bool HasNote(int midiNumber) const;
-	void ClearUnused(double streamTime);
-	void UpdateSynth(const SynthConfiguration& configuration);
+	void UpdateSynth(const SynthConfiguration* configuration);
+
+	/// <summary>
+	/// Returns average output for specified channel from the last frame buffer write
+	/// </summary>
+	TSignal GetOutput(int channelIndex) const;
 
 public:
 
@@ -39,6 +45,7 @@ private:
 	PlaybackFrame* _frame;
 	PlaybackParameters* _streamParameters;
 	Synth* _synth;
+	Accumulator<TSignal>** _output;
 	bool _initialized;
 };
 
@@ -58,18 +65,27 @@ SynthPlaybackDevice<TSignal>::~SynthPlaybackDevice()
 	delete _streamParameters;
 	delete _synth;
 	delete _frame;
+	
+	for (int index = 0; index < _streamParameters->GetNumberOfChannels(); index++)
+	{
+		delete _output[index];
+	}
+
+	delete[] _output;
 }
 
 template<SignalValue TSignal>
-bool SynthPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& parameters)
+bool SynthPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters)
 {
-	// Attack / Decay / Sustain / Release / Attack Peak / Sustain Peak
-	//
-	SynthConfiguration configuration;
-
 	_synth = new Synth(configuration, parameters.GetNumberOfChannels(), parameters.GetSamplingRate());
 	_frame = new PlaybackFrame(parameters.GetNumberOfChannels());
 	_streamParameters = new PlaybackParameters(parameters);
+	_output = new Accumulator<TSignal>*[parameters.GetNumberOfChannels()];
+
+	for (int index = 0; index < parameters.GetNumberOfChannels(); index++)
+	{
+		_output[index] = new Accumulator<TSignal>();
+	}
 
 	_initialized = true;
 
@@ -77,7 +93,7 @@ bool SynthPlaybackDevice<TSignal>::Initialize(const PlaybackParameters& paramete
 }
 
 template<SignalValue TSignal>
-inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime)
+inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput)
 {
 	if (!_initialized)
 		return -1;
@@ -93,13 +109,16 @@ inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffe
 		_frame->Clear();
 
 		// Get Samples for N channels
-		_synth->GetSample(_frame, absoluteTime);
+		hasOutput |= _synth->GetSample(_frame, absoluteTime);
 
 		// Interleved frames
 		for (unsigned int channelIndex = 0; channelIndex < _streamParameters->GetNumberOfChannels(); channelIndex++)
 		{
 			// Set output sample
 			outputBuffer[(2 * frameIndex) + channelIndex] = _frame->GetSample(channelIndex);
+
+			// Keep accumulator value for output UI
+			_output[channelIndex]->Add(fabsf(_frame->GetSample(channelIndex)));
 		}
 	}
 
@@ -107,10 +126,12 @@ inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffe
 }
 
 template<SignalValue TSignal>
-int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime)
+int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput)
 {
 	if (!_initialized)
 		return -1;
+
+	hasOutput = false;
 
 	//// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
 	//for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
@@ -150,15 +171,15 @@ bool SynthPlaybackDevice<TSignal>::HasNote(int midiNumber) const
 }
 
 template<SignalValue TSignal>
-void SynthPlaybackDevice<TSignal>::ClearUnused(double streamTime)
+void SynthPlaybackDevice<TSignal>::UpdateSynth(const SynthConfiguration* configuration)
 {
-	_synth->Clear(streamTime);
+	_synth->SetConfiguration(configuration);
 }
 
 template<SignalValue TSignal>
-void SynthPlaybackDevice<TSignal>::UpdateSynth(const SynthConfiguration& configuration)
+TSignal SynthPlaybackDevice<TSignal>::GetOutput(int channelIndex) const
 {
-	_synth->SetConfiguration(configuration);
+	return _output[channelIndex]->GetAvg();
 }
 
 template<SignalValue TSignal>

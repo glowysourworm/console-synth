@@ -1,3 +1,4 @@
+#include "Constant.h"
 #include "OscillatorBase.h"
 #include "PlaybackFrame.h"
 #include "SineOscillator.h"
@@ -15,4 +16,9 @@ SineOscillator::~SineOscillator()
 float SineOscillator::GetMonoSample(float absoluteTime)
 {
 	return sinf(2.0 * std::numbers::pi * this->GetFrequency() * absoluteTime);
+}
+
+OscillatorType SineOscillator::GetType() const
+{
+	return OscillatorType::Sine;
 }

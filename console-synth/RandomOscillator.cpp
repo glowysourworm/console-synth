@@ -1,3 +1,4 @@
+#include "Constant.h"
 #include "OscillatorBase.h"
 #include "PlaybackFrame.h"
 #include "RandomOscillator.h"
@@ -39,4 +40,9 @@ float RandomOscillator::GetMonoSample(float absoluteTime)
 
 	// Periodic value from the random array
 	return _randomValues[index];
+}
+
+OscillatorType RandomOscillator::GetType() const
+{
+	return OscillatorType::Random;
 }

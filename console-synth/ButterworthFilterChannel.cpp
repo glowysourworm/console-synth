@@ -1,5 +1,6 @@
 #include "ButterworthFilterChannel.h"
 #include "FilterChannelBase.h"
+#include "SynthConfiguration.h"
 #include <cmath>
 
 ButterworthFilterChannel::ButterworthFilterChannel(int samplingRate, float gain) : FilterChannelBase(gain, samplingRate)
@@ -67,6 +68,10 @@ void ButterworthFilterChannel::Set(float cutoffFrequency, float resonance)
 	this->outputGain *= bd;
 	this->coef2 *= bd;
 	this->coef3 = (bd_tmp - this->t2 * b1) * bd;
+}
+
+void ButterworthFilterChannel::SetConfiguration(const SynthConfiguration* configuration)
+{
 }
 
 float ButterworthFilterChannel::Apply(float inputSample, float absoluteTime)

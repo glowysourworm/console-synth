@@ -39,9 +39,14 @@ SynthConfiguration::SynthConfiguration()
 	_delaySeconds = 0.5;
 	_delayFeedback = false;
 	_delayGain = 0.6;
+	_delayWetDry = 0.8f;
 
 	_reverbDelaySeconds = 0.2;
 	_reverbGain = 0.5;
+	_reverbWetDry = 0.5f;
+
+	_leftRight = 0.5f;
+	_gain = 1.0f;
 }
 SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 {
@@ -82,9 +87,14 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 
 	_reverbDelaySeconds = copy.GetReverbDelaySeconds();
 	_reverbGain = copy.GetReverbGain();
+	_reverbWetDry = copy.GetReverbWetDry();
 
 	_delaySeconds = copy.GetDelaySeconds();
 	_delayFeedback = copy.GetDelayFeedback();
+	_delayWetDry = copy.GetDelayWetDry();
+
+	_leftRight = copy.GetOutputLeftRight();
+	_gain = copy.GetOutputGain();
 }
 SynthConfiguration::~SynthConfiguration()
 {
@@ -190,6 +200,10 @@ float SynthConfiguration::GetReverbGain() const
 {
 	return _reverbGain;
 }
+float SynthConfiguration::GetReverbWetDry() const
+{
+	return _reverbWetDry;
+}
 float SynthConfiguration::GetDelaySeconds() const
 {
 	return _delaySeconds;
@@ -201,6 +215,18 @@ float SynthConfiguration::GetDelayGain() const
 bool SynthConfiguration::GetDelayFeedback() const
 {
 	return _delayFeedback;
+}
+float SynthConfiguration::GetDelayWetDry() const
+{
+	return _delayWetDry;
+}
+float SynthConfiguration::GetOutputLeftRight() const
+{
+	return _leftRight;
+}
+float SynthConfiguration::GetOutputGain() const
+{
+	return _gain;
 }
 void SynthConfiguration::IterateKeymap(SynthNoteMap::KeymapIterationCallback callback) const
 {
@@ -397,6 +423,13 @@ void SynthConfiguration::SetReverbGain(float value)
 
 	_reverbGain = value;
 }
+void SynthConfiguration::SetReverbWetDry(float value)
+{
+	if (_reverbWetDry != value)
+		_isDirty = true;
+
+	_reverbWetDry = value;
+}
 void SynthConfiguration::SetDelaySeconds(float value)
 {
 	if (_delaySeconds != value)
@@ -417,4 +450,25 @@ void SynthConfiguration::SetDelayFeedback(bool value)
 		_isDirty = true;
 
 	_delayFeedback = value;
+}
+void SynthConfiguration::SetDelayWetDry(float value)
+{
+	if (_delayWetDry != value)
+		_isDirty = true;
+
+	_delayWetDry = value;
+}
+void SynthConfiguration::SetOutputLeftRight(float value)
+{
+	if (_leftRight != value)
+		_isDirty = true;
+
+	_leftRight = value;
+}
+void SynthConfiguration::SetOutputGain(float value)
+{
+	if (_gain != value)
+		_isDirty = true;
+
+	_gain = value;
 }

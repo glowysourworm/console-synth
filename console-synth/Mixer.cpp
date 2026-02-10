@@ -1,23 +1,54 @@
 #include "Mixer.h"
+#include "MixerChannel.h"
+#include "PlaybackFrame.h"
 #include <exception>
 #include <map>
 
-Mixer::Mixer()
+Mixer::Mixer(float gain, float leftRight, unsigned int numberOfChannels)
 {
-	_channels = new std::map<int, Mixer::MixerChannel>();
+	_channels = new std::map<int, MixerChannel*>();
+
+	_gain = gain;
+	_leftRight = leftRight;
+	_numberOfChannels = numberOfChannels;
 }
 Mixer::~Mixer()
 {
+	for (auto iter = _channels->begin(); iter != _channels->end(); ++iter)
+	{
+		delete iter->second;
+	}
+
 	delete _channels;
 }
 
-void Mixer::SetChannel(int channelKey, float sample, float relativeMix)
+void Mixer::Set(float gain, float leftRight)
 {
-	if (_channels->contains(channelKey))
-		_channels->at(channelKey).Set(sample, relativeMix);
+	_gain = gain;
+	_leftRight = leftRight;
+}
+
+bool Mixer::HasChannel(int channelKey) const
+{
+	return _channels->contains(channelKey);
+}
+
+void Mixer::SetChannel(int channelKey, float gain, float leftRight)
+{
+	// Channels not using L/R balance. The output will apply its L/R parameter to the sample frame.
+	if (!_channels->contains(channelKey))
+		_channels->insert({ channelKey, new MixerChannel(_numberOfChannels, gain, leftRight) });
 
 	else
-		_channels->insert({ channelKey, Mixer::MixerChannel(sample, relativeMix) });
+		_channels->at(channelKey)->Set(gain, leftRight);
+}
+
+void Mixer::SetSample(int channelKey, PlaybackFrame* source)
+{
+	if (!_channels->contains(channelKey))
+		throw new std::exception("Mixer channel not contained within the mixer!");
+
+	_channels->at(channelKey)->SetSample(source);
 }
 
 void Mixer::ClearChannel(int channelKey)
@@ -28,28 +59,29 @@ void Mixer::ClearChannel(int channelKey)
 	_channels->erase(channelKey);
 }
 
-float Mixer::Get()
+void Mixer::MixOutput(PlaybackFrame* dest)
 {
-	int engagedChannels = 0;
-	float result = 0;
-	float totalMixLevel = 0;
-
-	// Sum up the total mix level
-	//for (int i = 0; i < (int)_channels->size(); i++)
-	//{
-	//	totalMixLevel += _channels->at(i).mixLevel;
-	//}
-
-	// Do a relative weighting
+	// Mix channels into the current frame
 	for (auto iter = _channels->begin(); iter != _channels->end(); ++iter)
 	{
-		result += iter->second.sample * iter->second.mixLevel;
+		if (iter->second->GetFrame()->HasOutput())
+			iter->second->MixSample(dest);
 	}
 
-	if (_channels->size() > 0)
-		result = result / (double)_channels->size();
-	else
-		result = 0;
+	// Apply Output Parameters
+	//for (int index = 0; index < dest->GetChannelCount(); index++)
+	//{
+	//	// Left
+	//	if (index < dest->GetChannelCount() / 2)
+	//		dest->SetSample(index, dest->GetSample(index) * _gain * _leftRight);
 
-	return result;
+	//	// Right
+	//	else
+	//		dest->SetSample(index, dest->GetSample(index) * _gain * (1 - _leftRight));
+	//}
+}
+
+PlaybackFrame* Mixer::GetFrame(int channelKey)
+{
+	return _channels->at(channelKey)->GetFrame();
 }

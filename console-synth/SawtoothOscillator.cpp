@@ -1,3 +1,4 @@
+#include "Constant.h"
 #include "OscillatorBase.h"
 #include "PlaybackFrame.h"
 #include "SawtoothOscillator.h"
@@ -17,4 +18,9 @@ float SawtoothOscillator::GetMonoSample(float absoluteTime)
 	float periodTime = fmodf(absoluteTime, this->GetPeriod());
 
 	return (((this->GetHigh() - this->GetLow()) / this->GetPeriod()) * periodTime) + this->GetLow();
+}
+
+OscillatorType SawtoothOscillator::GetType() const
+{
+	return OscillatorType::Sawtooth;
 }

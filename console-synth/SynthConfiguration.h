@@ -45,10 +45,15 @@ public:
 
 	void SetReverbSeconds(float value);
 	void SetReverbGain(float value);
+	void SetReverbWetDry(float value);
 
 	void SetDelaySeconds(float value);
 	void SetDelayGain(float value);
 	void SetDelayFeedback(bool value);
+	void SetDelayWetDry(float value);
+
+	void SetOutputLeftRight(float value);
+	void SetOutputGain(float value);
 
 	int GetMidiLow() const;
 	int GetMidiHigh() const;
@@ -82,10 +87,15 @@ public:
 
 	float GetReverbDelaySeconds() const;
 	float GetReverbGain() const;
+	float GetReverbWetDry() const;
 
 	float GetDelaySeconds() const;
 	float GetDelayGain() const;
 	bool GetDelayFeedback() const;
+	float GetDelayWetDry() const;
+
+	float GetOutputLeftRight() const;
+	float GetOutputGain() const;
 
 public:
 
@@ -117,6 +127,7 @@ private:
 	float _envelopeFilterResonance;	
 	float _envelopeFilterOscillatorFrequency;
 
+	// Compressor
 	float _compressorGain;
 	float _compressorThreshold;
 	float _compressionRatio;
@@ -124,11 +135,19 @@ private:
 	float _compressorAttack;
 	float _compressorRelease;
 
+	// Reverb
 	float _reverbDelaySeconds;
 	float _reverbGain;
+	float _reverbWetDry;
 
+	// Delay
 	float _delaySeconds;
 	float _delayGain;
+	float _delayWetDry;
 	bool _delayFeedback;
+
+	// Output
+	float _leftRight;
+	float _gain;
 };
 

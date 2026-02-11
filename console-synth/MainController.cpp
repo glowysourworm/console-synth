@@ -1,6 +1,7 @@
 #include "AudioController.h"
 #include "LoopTimer.h"
 #include "MainController.h"
+#include "PlaybackParameters.h"
 #include "RtAudioController.h"
 #include "SynthConfiguration.h"
 #include "UIController.h"
@@ -80,39 +81,82 @@ MainController::~MainController()
 /// <summary>
 /// Initialization function for the synth backend. This must be called before starting the player!
 /// </summary>
-void MainController::Initialize()
+bool MainController::Initialize()
 {
 	// RT AUDIO
-	RtAudioController::Initialize(std::bind(&AudioController::ProcessAudioCallback,
-		_audioController,
-		std::placeholders::_1,
-		std::placeholders::_2,
-		std::placeholders::_3,
-		std::placeholders::_4));
+	bool success = RtAudioController::Initialize(std::bind(&AudioController::ProcessAudioCallback,
+												_audioController,
+												std::placeholders::_1,
+												std::placeholders::_2,
+												std::placeholders::_3,
+												std::placeholders::_4));
 
-	// Controllers
-	_audioController->Initialize();
+	// Audio Controller (for callback)
+	success &= _audioController->Initialize();
+
+	// RT AUDIO -> Open Stream (SynthConfiguration*)
+	success &= RtAudioController::OpenStream(_configuration);
+
+	// UI Controller (stream must be open) (Starts Thread!)
 	_uiController->Initialize(RtAudioController::GetPlaybackParameters());
+
+	return success;
 }
 
-void MainController::Dispose()
+bool MainController::Dispose()
 {
-	_audioController->Dispose();
+	bool success = _audioController->Dispose();
+
+	// Stops Thread!
 	_uiController->Dispose();
+
+	return success;
 }
 
 void MainController::Loop()
 {
-	// Primary Loop!!! We'll handle this loop - using our system timer to manage the 
-	//				   accuracy of the audio output; and also throttle events for the
-	//				   UI's backend. We should be redrawing ~10ms
-	while (_uiController->RunOnce())
+	// Playback Parameters (to update)
+	float streamTime, audioTime, frontendTime, latency, left, right;
+
+	// Primary Loop!!! 
+	//
+	// Audio Thread:  The RT Audio callback will arrive on their background thread from the audio backend. We
+	//				  just have to manage two shared pointers:  PlaybackParameters*, and SynthConfiguration*.
+	//				  The SynthPlaybackDevice* will be updated, from the synth configuration, during the 
+	//				  callback. So, this must be synchronized somehow. Probably a std::atomic which could be
+	//				  shared inside the SynthConfiguration*
+	// 
+	// UI Thread:  Unfortunately, the UI had to be run on a separate thread; but that won't really matter. We
+	//			   can interrupt the thread to post UI updates. We're going to keep track of the UI timer here
+	//			   and interrupt it every ~10ms.
+	// 
+	// The exit condition should be polled from the UI thread to this thread; and we'll use an interruption to
+	// give / send data while the loop runs.
+	//
+	while (true)
 	{
+		// We may use these on this thread since we're calling the audio controller from here. The
+		// callback from RT Audio WILL NOT SET this pointer's data!
+		//
+		PlaybackParameters* playbackParameters = RtAudioController::GetPlaybackParameters();
+
+		// Update Playback Parameters:
+		//
+		_audioController->GetUpdate(streamTime, audioTime, frontendTime, latency, left, right);
+		
+		playbackParameters->UpdateRTParameters(streamTime, _uiTimer->GetAvgMilli(), audioTime, frontendTime, latency);
+
 		// Synth Configuration:  Shared pointer with the RT Audio callback
 		//
 		if (_uiTimer->Mark())
 		{
-			// Update <- UI
+			// Update <- UI (If user has made UI changes, they get set in the SynthConfiguration*) (SHARED!)
+			//
+			//if (_uiController->IsDirty())
+			//	_uiController->FromUI(_configuration);
+
+			// Update -> UI (PlaybackParameters*) (NOT SHARED) (Member functions all go through this thread for playback parameters)
+			_uiController->ToUI(playbackParameters);
 		}
 
 		// CRITICAL SECTION:  This is an update from the UI, which will reset the synth parameters. So,
@@ -127,10 +171,7 @@ void MainController::Loop()
 			// This timer is not thread-safe; but the usage seems to be ok on both threads
 			// without stopping the audio stream. 
 			//
-			//_uiTimer->Reset();
-
-			//// Update -> UI
-			//_uiController->ToUI(RtAudioController::GetPlaybackParameters());
+			_uiTimer->Reset();
 
 			//// Reset Configuration Flag
 			//_configuration->ClearDirty();

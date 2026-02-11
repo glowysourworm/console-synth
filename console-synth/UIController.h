@@ -9,9 +9,9 @@
 #include "ReverbUI.h"
 #include "SynthConfiguration.h"
 #include "SynthInformationUI.h"
-#include <ftxui/component/loop.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-
+#include <ftxui/component/component_base.hpp>
+#include <mutex>
+#include <thread>
 class UIController
 {
 public:
@@ -23,12 +23,6 @@ public:
 	void Dispose();
 
 public:
-
-	/// <summary>
-	/// Run one cycle of the UI; and return true if the UI can continue running, or needs
-	/// to exit
-	/// </summary>
-	bool RunOnce() const;
 
 	/// <summary>
 	/// Returns true if there is a dirty status on the UI. This means that data needs to be
@@ -48,10 +42,13 @@ public:
 
 private:
 
+	void ThreadStart();
+
+private:
+
 	const SynthConfiguration* _configuration;
 
-	ftxui::ScreenInteractive* _screen;
-	ftxui::Loop* _loop;
+	ftxui::Component _view;							// Shared Pointer (std::shared_pointer)
 
 	SynthInformationUI* _synthInformationUI;
 	CompressorUI* _compressorUI;
@@ -61,5 +58,9 @@ private:
 	OscillatorUI* _oscillatorUI;
 	OutputUI* _outputUI;
 	ReverbUI* _reverbUI;
+
+	// This was needed to accomodate the FTXUI stack-based API (ftxui::Screen does not have a way to create a private pointer)
+	std::thread* _thread;
+	std::mutex* _lock;
 };
 

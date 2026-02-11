@@ -11,17 +11,17 @@
 SynthInformationUI::SynthInformationUI(const std::string& title, bool showBoxedWithTitle, const ftxui::Color& titleColor)
 	: UIBase(title, showBoxedWithTitle, titleColor)
 {
-	_hostApi = new std::string();
-	_deviceName = new std::string();
-	_streamFormat = new std::string();
-	_streamBufferSize = new std::string();
-	_samplingRate = new std::string();
+	_hostApi = new std::string("");
+	_deviceName = new std::string("");
+	_streamFormat = new std::string("");
+	_streamBufferSize = new std::string("");
+	_samplingRate = new std::string("");
 
-	_averageUITime = new std::string();
-	_averageCallbackTime = new std::string();
-	_averageFrontendTime = new std::string();
-	_streamTime = new std::string();
-	_streamLatency = new std::string();
+	_averageUITime = new std::string("");
+	_averageCallbackTime = new std::string("");
+	_averageFrontendTime = new std::string("");
+	_streamTime = new std::string("");
+	_streamLatency = new std::string("");
 }
 SynthInformationUI::~SynthInformationUI()
 {
@@ -39,12 +39,6 @@ SynthInformationUI::~SynthInformationUI()
 }
 ftxui::Component SynthInformationUI::GetComponent()
 {
-	// Synth Title
-	auto synthTitle = ftxui::vbox({
-		ftxui::text(*this->title) | ftxui::color(*this->titleColor),
-		ftxui::separator(),
-	}) | ftxui::flex_grow;
-
 	// Synth Information
 	auto synthInformation = ftxui::Container::Horizontal({
 
@@ -78,7 +72,13 @@ ftxui::Component SynthInformationUI::GetComponent()
 	return ftxui::Container::Vertical({
 
 		// Synth Title
-		ftxui::Renderer([&] { return synthTitle; }),
+		ftxui::Renderer([&] 
+		{ 
+			return ftxui::vbox({
+				ftxui::text(*this->title) | ftxui::color(*this->titleColor),
+				ftxui::separator(),
+			});
+		}),
 
 		// Synth Information
 		synthInformation

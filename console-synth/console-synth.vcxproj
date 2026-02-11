@@ -293,6 +293,7 @@
     <ClInclude Include="AirwindowsEffect.h" />
     <ClInclude Include="AllPassFilterChannel.h" />
     <ClInclude Include="AudioController.h" />
+    <ClInclude Include="BaseController.h" />
     <ClInclude Include="CompressorUI.h" />
     <ClInclude Include="DelayUI.h" />
     <ClInclude Include="EnvelopeFilterUI.h" />

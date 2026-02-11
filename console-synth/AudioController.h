@@ -3,6 +3,7 @@
 #include "IntervalTimer.h"
 #include "LoopTimer.h"
 #include "PlaybackClock.h"
+#include "PlaybackParameters.h"
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
 
@@ -19,7 +20,7 @@ public:
 	/// <summary>
 	/// Simple output function (this will be replaced with an output processing stage)
 	/// </summary>
-	void GetOutput(float& left, float& right);
+	void GetUpdate(float& streamTime, float& audioTime, float& frontendTime, float& latency, float& left, float& right);
 
 public:
 

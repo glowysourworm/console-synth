@@ -619,29 +619,31 @@
 //	}
 //}
 
+#include "Windows.h"
+#include "MainController.h"
 
 int main(int argc, char* argv[], char* envp[])
 {
-	//SetConsoleTitleA("Terminal Synth");
+	MainController controller;
 
-	//// Read midi file
-	//if (argc > 1)
-	//{
-	//}
+	SetConsoleTitleA("Terminal Synth");
 
-	//// Manual keyboard input
-	//else
-	//{
-	//	if (!InitializeAudioClient())
-	//		return -1;
+	// Read midi file
+	if (argc > 1)
+	{
+	}
 
-	//	InitializePlayback();
-	//}
+	// Manual keyboard input
+	else
+	{
+		if (!controller.Initialize())
+			return -1;
+	}
 
-	//LoopUI();
+	controller.Loop();
 
-	//if (!DisposeAudioClient())
-	//	return -1;
+	if (!controller.Dispose())
+		return -1;
 
 	return 0;
 }

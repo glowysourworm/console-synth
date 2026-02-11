@@ -9,16 +9,26 @@
 #include "SynthConfiguration.h"
 #include "SynthInformationUI.h"
 #include "UIController.h"
+#include <chrono>
 #include <ftxui/component/component.hpp>
+#include <ftxui/component/component_base.hpp>
 #include <ftxui/component/event.hpp>
 #include <ftxui/component/loop.hpp>
 #include <ftxui/component/mouse.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <ftxui/dom/node.hpp>
 #include <ftxui/screen/color.hpp>
+#include <ftxui/screen/screen.hpp>
+#include <memory>
+#include <mutex>
+#include <thread>
 
 UIController::UIController(const SynthConfiguration* configuration)
 {
+	_thread = nullptr;
+	_lock = nullptr;
+
     _configuration = configuration;
 
 	// Synth Information
@@ -121,7 +131,7 @@ void UIController::Initialize(const PlaybackParameters* parameters)
 	// UI BACKEND LOOP!! This will be run just for re-drawing purposes during our
 	//					 primary loop below.
 	//
-	auto synthSettings = ftxui::Container::Vertical({
+	_view = ftxui::Container::Vertical({
 		_synthInformationUI->GetComponent() | ftxui::flex_grow,		 
 		synthInputSettings | ftxui::flex_grow,
 		synthEffectsSettings | ftxui::flex_grow,
@@ -137,45 +147,20 @@ void UIController::Initialize(const PlaybackParameters* parameters)
 
 		// Cancel keyboard events
 		return true;
-	});
 
-	//// Initialize Screen (sizing)
-	//ftxui::ScreenInteractive::TerminalOutput().FitComponent();
+	}) | ftxui::flex_grow;
 
-	// FTXUI has an option to create an event loop (this will run their backend UI code)
-	//
-	// https://arthursonzogni.com/FTXUI/doc/examples_2component_2custom_loop_8cpp-example.html#_a8
-	//
-	//_loop  = new ftxui::Loop(&ftxui::ScreenInteractive::TerminalOutput(), synthSettings);
+	_thread = new std::thread(&UIController::ThreadStart, this);
+	_lock = new std::mutex();
 }
 
 void UIController::Dispose()
 {
-}
-
-bool UIController::RunOnce() const
-{
-	// These were added to help create UI classes. The stack-oriented rendering
-	// architecture of FTXUI is tricky to get to provide an update each call. You
-	// basically have to either follow their UI inheritance pattern (closely), or
-	// you have to add something to trigger re-rendering!
-	_oscillatorUI->UpdateComponent(true);
-	_envelopeUI->UpdateComponent(true);
-	_envelopeFilterUI->UpdateComponent(true);
-
-	_delayUI->UpdateComponent(true);
-	_reverbUI->UpdateComponent(true);
-	_compressorUI->UpdateComponent(true);
-	
-	_outputUI->UpdateComponent(true);
-
-	// Use custom event to force one UI update
-	_screen->PostEvent(ftxui::Event::Custom);
-
-	// UI Run
-	_loop->RunOnce();
-
-	return !_loop->HasQuitted();
+	_thread->join();
+	delete _thread;
+	delete _lock;
+	_thread = nullptr;
+	_lock = nullptr;
 }
 
 bool UIController::IsDirty() const
@@ -238,9 +223,47 @@ void UIController::FromUI(SynthConfiguration* configuration)
 
 void UIController::ToUI(const PlaybackParameters* parameters)
 {
+	_lock->lock();
+
 	// Synth Information
 	_synthInformationUI->Update(parameters);
 
 	// TODO
 	_outputUI->SetOutput(0, 0);
+
+	_lock->unlock();
+}
+
+void UIController::ThreadStart()
+{
+	auto screen = ftxui::ScreenInteractive::Fullscreen();
+	auto loop = ftxui::Loop(&screen, _view);
+
+	// FTXUI has an option to create an event loop (this will run their backend UI code)
+	//
+	// https://arthursonzogni.com/FTXUI/doc/examples_2component_2custom_loop_8cpp-example.html#_a8
+	//
+
+	while (!loop.HasQuitted())
+	{
+		// These were added to help create UI classes. The stack-oriented rendering
+		// architecture of FTXUI is tricky to get to provide an update each call. You
+		// basically have to either follow their UI inheritance pattern (closely), or
+		// you have to add something to trigger re-rendering!
+		_oscillatorUI->UpdateComponent(true);
+		_envelopeUI->UpdateComponent(true);
+		_envelopeFilterUI->UpdateComponent(true);
+
+		_delayUI->UpdateComponent(true);
+		_reverbUI->UpdateComponent(true);
+		_compressorUI->UpdateComponent(true);
+
+		_outputUI->UpdateComponent(true);
+
+		// Use custom event to force one UI update
+		screen.PostEvent(ftxui::Event::Custom);
+		loop.RunOnce();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(30));
+	}
 }

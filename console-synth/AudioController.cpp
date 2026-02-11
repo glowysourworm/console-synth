@@ -2,6 +2,8 @@
 #include "IntervalTimer.h"
 #include "LoopTimer.h"
 #include "PlaybackClock.h"
+#include "PlaybackParameters.h"
+#include "RtAudioController.h"
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
 #include "WindowsKeyCodes.h"
@@ -18,6 +20,8 @@ AudioController::AudioController(const SynthConfiguration* configuration)
 	_streamClock = new PlaybackClock();
 	_synthIntervalTimer = new IntervalTimer();
 
+	_synthDevice->Initialize(configuration, *RtAudioController::GetPlaybackParameters());
+
 	_outputL = 0;
 	_outputR = 0;
 }
@@ -32,6 +36,10 @@ bool AudioController::Initialize()
 {
 	if (_initialized)
 		throw new std::exception("Audio Controller already initialized!");
+
+	_streamClock->Reset();
+	_streamClock->Start();
+	_audioTimer->Reset();
 
 	_initialized = true;
 
@@ -124,11 +132,15 @@ bool AudioController::Dispose()
 	}
 }
 
-void AudioController::GetOutput(float& left, float& right)
+void AudioController::GetUpdate(float& streamTime, float& audioTime, float& frontendTime, float& latency, float& left, float& right)
 {
 	if (!_initialized)
 		throw new std::exception("Audio Controller not yet initialized!");
 
+	streamTime = _streamClock->GetTime();
+	audioTime = _audioTimer->GetAvgMilli();
+	frontendTime = _synthIntervalTimer->AvgMilli();
+	latency = 0;
 	left = _outputL;
 	right = _outputR;
 }

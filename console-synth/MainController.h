@@ -3,6 +3,7 @@
 #include "LoopTimer.h"
 #include "SynthConfiguration.h"
 #include "UIController.h"
+#include <thread>
 
 class MainController
 {
@@ -14,12 +15,12 @@ public:
 	/// <summary>
 	/// Initialization function for the synth backend. This must be called before starting the player!
 	/// </summary>
-	void Initialize();
+	bool Initialize();
 
 	/// <summary>
 	/// Disposes of backend, and controller resources
 	/// </summary>
-	void Dispose();
+	bool Dispose();
 
 	/// <summary>
 	/// Runs until the application should exit (this could be put on a separate thread.. if it helps CPU load.. 

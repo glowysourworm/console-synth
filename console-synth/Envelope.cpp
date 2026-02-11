@@ -141,6 +141,8 @@ bool Envelope::HasOutput(float absoluteTime)
 			_engagedTime = 0;
 			_disEngagedTime = 0;
 		}
+
+		return hasOutput;
 	}
 }
 

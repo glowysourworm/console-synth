@@ -59,6 +59,8 @@ float AllPassFilterChannel::Apply(float sample, float absoluteTime)
 
 		return result;
 	}
+
+	return 0.0f;
 }
 
 bool AllPassFilterChannel::HasOutput(float absoluteTime) const

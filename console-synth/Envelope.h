@@ -1,5 +1,4 @@
-#ifndef ENVELOPE_H
-#define ENVELOPE_H
+#pragma once
 
 class Envelope
 {
@@ -58,6 +57,3 @@ private:
 	float _disEngagedTime;
 	float _disEngagedLevel;
 };
-
-#endif ENVELOPE_H
-

@@ -178,6 +178,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Backup\_Source\Git\console-synth\vendor\ftxui-6.1.9-win64\lib;C:\Backup\_Source\Git\rtaudio\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ftxui-component.lib;ftxui-dom.lib;ftxui-screen.lib;rtaudiod.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y C:\Backup\_Source\Git\rtaudio\build\Debug\rtaudiod.dll $(OutDir)</Command>
@@ -239,6 +240,7 @@
     <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedralProc.cpp" />
     <ClCompile Include="AirwindowsEffect.cpp" />
     <ClCompile Include="AllPassFilterChannel.cpp" />
+    <ClCompile Include="AudioController.cpp" />
     <ClCompile Include="CompressorUI.cpp" />
     <ClCompile Include="DelayUI.cpp" />
     <ClCompile Include="EnvelopeFilterUI.cpp" />
@@ -246,6 +248,7 @@
     <ClCompile Include="IntervalTimer.cpp" />
     <ClCompile Include="ButterworthFilterChannel.cpp" />
     <ClCompile Include="Filter.cpp" />
+    <ClCompile Include="MainController.cpp" />
     <ClCompile Include="OscillatorBase.cpp" />
     <ClCompile Include="Binasc.cpp" />
     <ClCompile Include="ButterworthFilter.cpp" />
@@ -267,6 +270,7 @@
     <ClCompile Include="RandomOscillator.cpp" />
     <ClCompile Include="ReverbChannel.cpp" />
     <ClCompile Include="ReverbUI.cpp" />
+    <ClCompile Include="RtAudioController.cpp" />
     <ClCompile Include="SawtoothOscillator.cpp" />
     <ClCompile Include="SineOscillator.cpp" />
     <ClCompile Include="SliderUI.cpp" />
@@ -275,10 +279,12 @@
     <ClCompile Include="Synth.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="SynthConfiguration.cpp" />
+    <ClCompile Include="SynthInformationUI.cpp" />
     <ClCompile Include="SynthNote.cpp" />
     <ClCompile Include="SynthNoteMap.cpp" />
     <ClCompile Include="TriangleOscillator.cpp" />
     <ClCompile Include="UIBase.cpp" />
+    <ClCompile Include="UIController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.h" />
@@ -286,6 +292,7 @@
     <ClInclude Include="Accumulator.h" />
     <ClInclude Include="AirwindowsEffect.h" />
     <ClInclude Include="AllPassFilterChannel.h" />
+    <ClInclude Include="AudioController.h" />
     <ClInclude Include="CompressorUI.h" />
     <ClInclude Include="DelayUI.h" />
     <ClInclude Include="EnvelopeFilterUI.h" />
@@ -294,6 +301,7 @@
     <ClInclude Include="ButterworthFilter.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterChannelBase.h" />
+    <ClInclude Include="MainController.h" />
     <ClInclude Include="MixerChannel.h" />
     <ClInclude Include="OscillatorBase.h" />
     <ClInclude Include="Binasc.h" />
@@ -322,6 +330,7 @@
     <ClInclude Include="RandomOscillator.h" />
     <ClInclude Include="ReverbChannel.h" />
     <ClInclude Include="ReverbUI.h" />
+    <ClInclude Include="RtAudioController.h" />
     <ClInclude Include="SawtoothOscillator.h" />
     <ClInclude Include="SignalBase.h" />
     <ClInclude Include="SignalChannelBase.h" />
@@ -331,11 +340,13 @@
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="Synth.h" />
     <ClInclude Include="SynthConfiguration.h" />
+    <ClInclude Include="SynthInformationUI.h" />
     <ClInclude Include="SynthNote.h" />
     <ClInclude Include="SynthNoteMap.h" />
     <ClInclude Include="SynthPlaybackDevice.h" />
     <ClInclude Include="TriangleOscillator.h" />
     <ClInclude Include="UIBase.h" />
+    <ClInclude Include="UIController.h" />
     <ClInclude Include="WindowsKeyCodes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

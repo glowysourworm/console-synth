@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-class ReverbUI : UIBase
+class ReverbUI : public UIBase
 {
 public:
 	ReverbUI(bool enabled, float delay, float gain, float wetDry, const std::string& title, const ftxui::Color& titleColor);

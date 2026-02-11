@@ -13,8 +13,8 @@ public:
 
 	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters) override;
 
-	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput) override;
-	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput) override;
+	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
+	//int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 
 private:
 
@@ -95,45 +95,45 @@ bool MidiPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configura
 }
 
 template<SignalValue TSignal>
-inline int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput)
+int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime)
 {
 	return 0;
 }
-
-template<SignalValue TSignal>
-int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackStream, unsigned int numberOfFrames, double streamTime, bool& hasOutput)
-{
-	//if (!_initialized)
-	//	return 0;
-
-	//if (status == RTAUDIO_INPUT_OVERFLOW)
-	//{
-
-	//}
-	//else if (status == RTAUDIO_OUTPUT_UNDERFLOW)
-	//{
-
-	//}
-
-	//// Output frames should be interleved
-	//float* buffer = (float*)outputBuffer;
-	//float sampleSize = (1.0 / (float)SAMPLING_RATE);
-	//float systemTime = (float)_frameIndex / (float)SAMPLING_RATE;
-
-	//// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
-	//for (unsigned int i = 0; (i < nFrames) && (_frameIndex < _waveBufferLength); i++)
-	//{
-	//	float absoluteTime = (_frameIndex++) * sampleSize;
-	//	// float sample = _synth->GetSample(absoluteTime);
-	//	float sample = _waveBuffer[_frameIndex + i];
-
-	//	// Interleved frames
-	//	for (unsigned int j = 0; j < NUMBER_CHANNELS; j++)
-	//	{
-	//		// Initialize sample to zero
-	//		buffer[(2 * i) + j] = sample;
-	//	}
-	//}
-
-	return 0;
-}
+//
+//template<SignalValue TSignal>
+//int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackStream, unsigned int numberOfFrames, double streamTime)
+//{
+//	//if (!_initialized)
+//	//	return 0;
+//
+//	//if (status == RTAUDIO_INPUT_OVERFLOW)
+//	//{
+//
+//	//}
+//	//else if (status == RTAUDIO_OUTPUT_UNDERFLOW)
+//	//{
+//
+//	//}
+//
+//	//// Output frames should be interleved
+//	//float* buffer = (float*)outputBuffer;
+//	//float sampleSize = (1.0 / (float)SAMPLING_RATE);
+//	//float systemTime = (float)_frameIndex / (float)SAMPLING_RATE;
+//
+//	//// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
+//	//for (unsigned int i = 0; (i < nFrames) && (_frameIndex < _waveBufferLength); i++)
+//	//{
+//	//	float absoluteTime = (_frameIndex++) * sampleSize;
+//	//	// float sample = _synth->GetSample(absoluteTime);
+//	//	float sample = _waveBuffer[_frameIndex + i];
+//
+//	//	// Interleved frames
+//	//	for (unsigned int j = 0; j < NUMBER_CHANNELS; j++)
+//	//	{
+//	//		// Initialize sample to zero
+//	//		buffer[(2 * i) + j] = sample;
+//	//	}
+//	//}
+//
+//	return 0;
+//}

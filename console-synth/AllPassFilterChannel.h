@@ -1,6 +1,4 @@
-#ifndef ALLPASSFILTER_H
-#define ALLPASSFILTER_H
-
+#pragma once
 #include "FilterChannelBase.h"
 
 #include "SynthConfiguration.h"
@@ -24,6 +22,3 @@ private:
 	std::queue<float>* _delayedInput;
 	std::queue<float>* _delayedOutput;
 };
-
-#endif
-

@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-class EnvelopeFilterUI : UIBase
+class EnvelopeFilterUI : public UIBase
 {
 public:
 	EnvelopeFilterUI(EnvelopeFilterType type, 

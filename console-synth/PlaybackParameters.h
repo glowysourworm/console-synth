@@ -19,6 +19,12 @@ public:
 		_samplingRate = samplingRate;
 		_numberOfChannels = numberOfChannels;
 		_outputBufferFrameSize = outputBufferFrameSize;
+
+		_streamTime = 0;
+		_averageUIMilli = 0;
+		_averageFrontendMilli = 0;
+		_averageAudioMilli = 0;
+		_streamLatency = 0;
 	}
 	PlaybackParameters(const PlaybackParameters& copy)
 	{
@@ -28,6 +34,12 @@ public:
 		_samplingRate = copy.GetSamplingRate();
 		_numberOfChannels = copy.GetNumberOfChannels();
 		_outputBufferFrameSize = copy.GetOutputBufferFrameSize();
+
+		_streamTime = copy.GetStreamTime();
+		_averageUIMilli = copy.GetAvgUIMilli();
+		_averageFrontendMilli = copy.GetAvgAudioMilli();
+		_averageAudioMilli = copy.GetAvgFrontendMilli();
+		_streamLatency = copy.GetStreamLatency();
 	}
 	~PlaybackParameters()
 	{
@@ -44,6 +56,21 @@ public:
 	unsigned int GetNumberOfChannels() const { return _numberOfChannels; }
 	unsigned int GetOutputBufferFrameSize() const { return _outputBufferFrameSize; }
 
+	float GetStreamTime() const { return _streamTime; }
+	float GetAvgUIMilli() const { return _averageUIMilli; }
+	float GetAvgAudioMilli() const { return _averageFrontendMilli; }
+	float GetAvgFrontendMilli() const { return _averageAudioMilli; }
+	long GetStreamLatency() const { return _streamLatency; }
+
+	void UpdateRTParameters(float streamTime, float avgUIMilli, float avgAudioMilli, float avgFrontendMilli, long latency)
+	{
+		_streamTime = streamTime;
+		_averageUIMilli = avgUIMilli;
+		_averageFrontendMilli = avgFrontendMilli;
+		_averageAudioMilli = avgAudioMilli;
+		_streamLatency = latency;
+	}
+
 private:
 
 	std::string* _hostApi;
@@ -52,5 +79,11 @@ private:
 	unsigned int _samplingRate;
 	unsigned int _numberOfChannels;
 	unsigned int _outputBufferFrameSize;
+
+	float _streamTime;
+	float _averageUIMilli;
+	float _averageAudioMilli;
+	float _averageFrontendMilli;
+	long _streamLatency;
 };
 

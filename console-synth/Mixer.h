@@ -1,5 +1,4 @@
-#ifndef MIXER_H
-#define MIXER_H
+#pragma once
 
 #include "MixerChannel.h"
 #include "PlaybackFrame.h"
@@ -31,6 +30,3 @@ private:
 	float _leftRight;
 	unsigned int _numberOfChannels;
 };
-
-#endif
-

@@ -1,6 +1,4 @@
-#ifndef SYNTHNOTE_H
-#define SYNTHNOTE_H
-
+#pragma once
 #include "CompressorChannel.h"
 #include "Constant.h"
 #include "Envelope.h"
@@ -43,5 +41,3 @@ private:
 	bool _envelopeFilterEnabled;
 	bool _compressorEnabled;
 };
-
-#endif

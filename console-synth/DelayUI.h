@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-class DelayUI : UIBase
+class DelayUI : public UIBase
 {
 public:
 	DelayUI(bool enabled, bool feedbackEnabled, float delay, float gain, float wetDry, const std::string& title, const ftxui::Color& titleColor);

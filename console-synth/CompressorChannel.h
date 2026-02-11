@@ -1,5 +1,4 @@
-#ifndef COMPRESSOR_H
-#define COMPRESSOR_H
+#pragma once
 
 #include "FilterChannelBase.h"
 #include "SynthConfiguration.h"
@@ -30,6 +29,3 @@ private:
 	int _relaxationBufferLength;
 	float _relaxationValue;
 };
-
-#endif
-

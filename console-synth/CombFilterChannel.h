@@ -1,6 +1,4 @@
-#ifndef COMBFILTER_H
-#define COMBFILTER_H
-
+#pragma once
 #include "FilterChannelBase.h"
 #include "SynthConfiguration.h"
 #include <queue>
@@ -25,5 +23,3 @@ private:
 
 	bool _feedback;
 };
-
-#endif

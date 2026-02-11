@@ -20,8 +20,8 @@ public:
 
 	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters) override;
 
-	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput) override;
-	int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput) override;
+	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
+	//int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 
 	void SetNote(int midiNumber, bool pressed, double streamTime);
 	bool GetNote(int midiNumber) const;
@@ -57,6 +57,7 @@ SynthPlaybackDevice<TSignal>::SynthPlaybackDevice()
 	_streamParameters = nullptr;
 	_synth = nullptr;
 	_initialized = false;
+	_output = nullptr;
 }
 
 template<SignalValue TSignal>
@@ -93,7 +94,7 @@ bool SynthPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configur
 }
 
 template<SignalValue TSignal>
-inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput)
+int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime)
 {
 	if (!_initialized)
 		return -1;
@@ -109,7 +110,7 @@ inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffe
 		_frame->Clear();
 
 		// Get Samples for N channels
-		hasOutput |= _synth->GetSample(_frame, absoluteTime);
+		_synth->GetSample(_frame, absoluteTime);
 
 		// Interleved frames
 		for (unsigned int channelIndex = 0; channelIndex < _streamParameters->GetNumberOfChannels(); channelIndex++)
@@ -124,33 +125,33 @@ inline int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffe
 
 	return 0;
 }
-
-template<SignalValue TSignal>
-int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime, bool& hasOutput)
-{
-	if (!_initialized)
-		return -1;
-
-	hasOutput = false;
-
-	//// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
-	//for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
-	//{
-	//	double absoluteTime = streamTime + (frameIndex / (double)playbackBuffer->GetSamplingRate());
-
-	//	// Interleved frames
-	//	for (unsigned int channelIndex = 0; channelIndex < playbackBuffer->GetNumberOfChannels(); channelIndex++)
-	//	{
-	//		// Initialize sample to zero
-	//		TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
-
-	//		// Set output sample
-	//		playbackBuffer->SetBufferFrame(sample, frameIndex, channelIndex);
-	//	}
-	//}
-
-	return 0;
-}
+//
+//template<SignalValue TSignal>
+//int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime)
+//{
+//	if (!_initialized)
+//		return -1;
+//
+//	//hasOutput = false;
+//
+//	//// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
+//	//for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
+//	//{
+//	//	double absoluteTime = streamTime + (frameIndex / (double)playbackBuffer->GetSamplingRate());
+//
+//	//	// Interleved frames
+//	//	for (unsigned int channelIndex = 0; channelIndex < playbackBuffer->GetNumberOfChannels(); channelIndex++)
+//	//	{
+//	//		// Initialize sample to zero
+//	//		TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
+//
+//	//		// Set output sample
+//	//		playbackBuffer->SetBufferFrame(sample, frameIndex, channelIndex);
+//	//	}
+//	//}
+//
+//	return 0;
+//}
 
 template<SignalValue TSignal>
 void SynthPlaybackDevice<TSignal>::SetNote(int midiNumber, bool pressed, double streamTime)

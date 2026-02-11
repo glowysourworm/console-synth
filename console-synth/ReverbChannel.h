@@ -1,6 +1,4 @@
-#ifndef REVERB_H
-#define REVERB_H
-
+#pragma once
 #include "AllPassFilterChannel.h"
 #include "ButterworthFilterChannel.h"
 #include "CombFilterChannel.h"
@@ -25,6 +23,3 @@ private:
 	AllPassFilterChannel** _allPassFilters;
 	ButterworthFilterChannel* _lowPassFilter;
 };
-
-#endif
-

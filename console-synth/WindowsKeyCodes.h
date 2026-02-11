@@ -1,5 +1,4 @@
-#ifndef WINDOWS_KEY_CODES_H
-#define WINDOWS_KEY_CODES_H
+#pragma once
 
 
 // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
@@ -60,5 +59,3 @@ enum class WindowsKeyCodes : int
 	RIGHT_BRACKET = 0xDD,		// VK_OEM_6 (right bracket)	
 	APOSTROPHE = 0xDE,			// VK_OEM_7
 };
-
-#endif

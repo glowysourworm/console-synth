@@ -1,5 +1,4 @@
-#ifndef SYNTH_H
-#define SYNTH_H
+#pragma once
 
 #include <map>
 
@@ -65,6 +64,3 @@ private:
 	unsigned int _numberOfChannels;
 	unsigned int _samplingRate;
 };
-
-#endif
-

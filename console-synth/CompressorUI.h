@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-class CompressorUI : UIBase
+class CompressorUI : public UIBase
 {
 public:
 	CompressorUI(bool enabled, 

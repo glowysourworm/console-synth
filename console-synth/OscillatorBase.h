@@ -1,10 +1,8 @@
-#ifndef AMPLITUDEOSCILLATOR_H
-#define AMPLITUDEOSCILLATOR_H
+#pragma once
 
 #include "Constant.h"
 #include "PlaybackFrame.h"
 #include "SignalBase.h"
-#include <cmath>
 
 class OscillatorBase : public SignalBase
 {
@@ -32,5 +30,3 @@ private:
 	float _frequency;
 	float _period;
 };
-
-#endif

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BaseController.h"
 #include "IntervalTimer.h"
 #include "LoopTimer.h"
 #include "PlaybackClock.h"
@@ -7,15 +8,15 @@
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
 
-class AudioController
+class AudioController : public BaseController
 {
 public:
 
-	AudioController(const SynthConfiguration* configuration);
+	AudioController();
 	~AudioController();
 
-	bool Initialize();
-	bool Dispose();
+	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters) override;
+	bool Dispose() override;
 
 	/// <summary>
 	/// Simple output function (this will be replaced with an output processing stage)
@@ -36,14 +37,13 @@ public:
 
 private:
 
-	void ProcessKeyStrokes(double streamTime);
+	void ProcessKeyStrokes(double streamTime, SynthConfiguration* configuration);
 
 private:
 
 	bool _initialized;
 
 	SynthPlaybackDevice<float>* _synthDevice;
-	const SynthConfiguration* _configuration;
 
 	PlaybackClock* _streamClock;
 	LoopTimer* _audioTimer;

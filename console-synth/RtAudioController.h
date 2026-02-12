@@ -19,8 +19,6 @@ public:
 	/// </summary>
 	using AudioCallbackDelegate = std::function<int(float* outputBuffer, unsigned int numberFrames, double streamTime, SynthConfiguration* configuration)>;
 
-	//using AudioCallbackDelegate = std::function<int(float*, unsigned int, void*)>;
-
 	/// <summary>
 	/// Primary RT Audio Callback:  They have a separate thread managing the device audio. So, this will be on their thread; and we 
 	/// will process all of our SynthPlaybackDevice* work here - including key strokes. 
@@ -71,8 +69,15 @@ public:
 	static bool IsStreamOpen();
 	static bool IsStreamRunning();
 
-	static PlaybackParameters* GetParameters()
+	/// <summary>
+	/// Directly returns parameters that may or may not have been initialized! This will be the only 
+	/// instance pointer!
+	/// </summary>
+	static PlaybackParameters* GetPlaybackParametersUnsafe()
 	{
+		if (RtAudioController::Parameters == nullptr)
+			RtAudioController::Parameters = new PlaybackParameters("Not Initializied", "Not Initialized", "Not Initialized", 0, 0, 0);
+
 		return RtAudioController::Parameters;
 	}
 

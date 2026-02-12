@@ -61,12 +61,21 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{5f3d3bde-aebf-4130-bf3c-c2345932b5f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Controller">
+      <UniqueIdentifier>{cbd085ba-d6cb-4792-801d-3b67f107221e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vendor\airwindows">
+      <UniqueIdentifier>{db32ec96-9cd5-43d6-9475-b35721f2a00b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vendor\airwindows">
+      <UniqueIdentifier>{fd6e209f-91a9-45d9-ae8b-277278b95414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controller">
+      <UniqueIdentifier>{eab1df1b-84e7-4ba5-af05-4a3182995f2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="program.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StopWatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Binasc.cpp">
@@ -87,29 +96,14 @@
     <ClCompile Include="Options.cpp">
       <Filter>Source Files\Vendor\smf</Filter>
     </ClCompile>
-    <ClCompile Include="AllPassFilter.cpp">
-      <Filter>Source Files\Filter</Filter>
-    </ClCompile>
-    <ClCompile Include="AmplitudeOscillator.cpp">
-      <Filter>Source Files\Signal</Filter>
-    </ClCompile>
     <ClCompile Include="ButterworthFilter.cpp">
       <Filter>Source Files\Filter</Filter>
-    </ClCompile>
-    <ClCompile Include="CombFilter.cpp">
-      <Filter>Source Files\Filter</Filter>
-    </ClCompile>
-    <ClCompile Include="Compressor.cpp">
-      <Filter>Source Files\Effect</Filter>
     </ClCompile>
     <ClCompile Include="Envelope.cpp">
       <Filter>Source Files\Signal</Filter>
     </ClCompile>
     <ClCompile Include="Mixer.cpp">
       <Filter>Source Files\Signal</Filter>
-    </ClCompile>
-    <ClCompile Include="Reverb.cpp">
-      <Filter>Source Files\Effect</Filter>
     </ClCompile>
     <ClCompile Include="Synth.cpp">
       <Filter>Source Files\Synth</Filter>
@@ -138,14 +132,8 @@
     <ClCompile Include="SynthConfiguration.cpp">
       <Filter>Source Files\Synth</Filter>
     </ClCompile>
-    <ClCompile Include="EnvelopeFilter.cpp">
-      <Filter>Source Files\Filter</Filter>
-    </ClCompile>
     <ClCompile Include="SynthNoteMap.cpp">
       <Filter>Source Files\Synth</Filter>
-    </ClCompile>
-    <ClCompile Include="LoopTimer.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlaybackClock.cpp">
       <Filter>Source Files\Playback</Filter>
@@ -171,8 +159,71 @@
     <ClCompile Include="DelayUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedralProc.cpp">
+      <Filter>Source Files\Vendor\airwindows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.cpp">
+      <Filter>Source Files\Vendor\airwindows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.cpp">
+      <Filter>Source Files\Vendor\airwindows</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioController.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="MainController.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="UIController.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="RtAudioController.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="CombFilterChannel.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="ButterworthFilterChannel.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="AllPassFilterChannel.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
     <ClCompile Include="CompressorUI.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SynthInformationUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CompressorChannel.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ReverbChannel.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="AirwindowsEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvelopeFilterChannel.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="StopWatch.cpp">
+      <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="LoopTimer.cpp">
+      <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="IntervalTimer.cpp">
+      <Filter>Source Files\Playback</Filter>
+    </ClCompile>
+    <ClCompile Include="Filter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="OscillatorBase.cpp">
+      <Filter>Source Files\Signal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,9 +231,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Constant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StopWatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Options.h">
@@ -203,16 +251,7 @@
     <ClInclude Include="Binasc.h">
       <Filter>Header Files\Vendor\smf</Filter>
     </ClInclude>
-    <ClInclude Include="AmplitudeOscillator.h">
-      <Filter>Header Files\Signal</Filter>
-    </ClInclude>
-    <ClInclude Include="AllPassFilter.h">
-      <Filter>Header Files\Filter</Filter>
-    </ClInclude>
     <ClInclude Include="ButterworthFilter.h">
-      <Filter>Header Files\Filter</Filter>
-    </ClInclude>
-    <ClInclude Include="CombFilter.h">
       <Filter>Header Files\Filter</Filter>
     </ClInclude>
     <ClInclude Include="Envelope.h">
@@ -220,12 +259,6 @@
     </ClInclude>
     <ClInclude Include="Mixer.h">
       <Filter>Header Files\Signal</Filter>
-    </ClInclude>
-    <ClInclude Include="Reverb.h">
-      <Filter>Header Files\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="Compressor.h">
-      <Filter>Header Files\Effect</Filter>
     </ClInclude>
     <ClInclude Include="Synth.h">
       <Filter>Header Files\Synth</Filter>
@@ -263,17 +296,11 @@
     <ClInclude Include="SynthConfiguration.h">
       <Filter>Header Files\Synth</Filter>
     </ClInclude>
-    <ClInclude Include="EnvelopeFilter.h">
-      <Filter>Header Files\Filter</Filter>
-    </ClInclude>
     <ClInclude Include="SynthNoteMap.h">
       <Filter>Header Files\Synth</Filter>
     </ClInclude>
     <ClInclude Include="PlaybackBuffer.h">
       <Filter>Header Files\Playback</Filter>
-    </ClInclude>
-    <ClInclude Include="LoopTimer.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlaybackClock.h">
       <Filter>Header Files\Playback</Filter>
@@ -302,8 +329,89 @@
     <ClInclude Include="DelayUI.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="BaseController.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioController.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="AirwindowsEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="AllPassFilterChannel.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="ButterworthFilterChannel.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="CombFilterChannel.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="CompressorChannel.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.h">
+      <Filter>Header Files\Vendor\airwindows</Filter>
+    </ClInclude>
+    <ClInclude Include="Accumulator.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
     <ClInclude Include="CompressorUI.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvelopeFilterChannel.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterChannelBase.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Filter.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="IntervalTimer.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.h">
+      <Filter>Header Files\Vendor\airwindows</Filter>
+    </ClInclude>
+    <ClInclude Include="LoopTimer.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaybackFrame.h">
+      <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="MainController.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="MixerChannel.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="OscillatorBase.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ReverbChannel.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="RtAudioController.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalChannelBase.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="SynthInformationUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIController.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalBase.h">
+      <Filter>Header Files\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="StopWatch.h">
+      <Filter>Header Files\Playback</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

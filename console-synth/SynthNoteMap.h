@@ -1,13 +1,17 @@
 #pragma once
 
 #include "WindowsKeyCodes.h"
+#include <functional>
 #include <map>
 
 class SynthNoteMap
 {
 public:
 
+	using KeymapIterationCallback = std::function<void(WindowsKeyCodes keyCode, int midiNote)>;
+
 	SynthNoteMap();
+	SynthNoteMap(const SynthNoteMap& copy);
 	~SynthNoteMap();
 
 	void Add(WindowsKeyCodes keyCode, int midiNote);
@@ -15,8 +19,6 @@ public:
 	WindowsKeyCodes GetKeyCode(int midiNote) const;
 	int GetMidiNote(WindowsKeyCodes keyCode) const;
 	bool HasMidiNote(WindowsKeyCodes keyCode) const;
-
-	typedef void (KeymapIterationCallback)(WindowsKeyCodes keyCode, int midiNote);
 
 	/// <summary>
 	/// Iterates the keymap with the provided callback

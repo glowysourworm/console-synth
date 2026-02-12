@@ -58,6 +58,7 @@ public:
 	int GetMidiLow() const;
 	int GetMidiHigh() const;
 
+	SynthNoteMap GetNoteMap() const;
 	bool HasMidiNote(WindowsKeyCodes keyCode) const;
 	int GetMidiNote(WindowsKeyCodes keyCode) const;
 	WindowsKeyCodes GetKeyCode(int midiNote) const;

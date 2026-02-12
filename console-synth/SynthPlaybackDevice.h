@@ -18,7 +18,7 @@ public:
 	SynthPlaybackDevice();
 	~SynthPlaybackDevice();
 
-	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters) override;
+	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters) override;
 
 	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 	//int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
@@ -43,9 +43,10 @@ public:
 private:
 
 	PlaybackFrame* _frame;
-	PlaybackParameters* _streamParameters;
 	Synth* _synth;
 	Accumulator<TSignal>** _output;
+	unsigned int _numberOfChannels;
+	unsigned int _samplingRate;
 	bool _initialized;
 };
 
@@ -54,7 +55,6 @@ template<SignalValue TSignal>
 SynthPlaybackDevice<TSignal>::SynthPlaybackDevice()
 {
 	_frame = nullptr;
-	_streamParameters = nullptr;
 	_synth = nullptr;
 	_initialized = false;
 	_output = nullptr;
@@ -63,11 +63,10 @@ SynthPlaybackDevice<TSignal>::SynthPlaybackDevice()
 template<SignalValue TSignal>
 SynthPlaybackDevice<TSignal>::~SynthPlaybackDevice()
 {
-	delete _streamParameters;
 	delete _synth;
 	delete _frame;
 	
-	for (int index = 0; index < _streamParameters->GetNumberOfChannels(); index++)
+	for (int index = 0; index < _numberOfChannels; index++)
 	{
 		delete _output[index];
 	}
@@ -76,14 +75,16 @@ SynthPlaybackDevice<TSignal>::~SynthPlaybackDevice()
 }
 
 template<SignalValue TSignal>
-bool SynthPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters)
+bool SynthPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters)
 {
-	_synth = new Synth(configuration, parameters.GetNumberOfChannels(), parameters.GetSamplingRate());
-	_frame = new PlaybackFrame(parameters.GetNumberOfChannels());
-	_streamParameters = new PlaybackParameters(parameters);
-	_output = new Accumulator<TSignal>*[parameters.GetNumberOfChannels()];
+	_numberOfChannels = parameters->GetNumberOfChannels();
+	_samplingRate = parameters->GetSamplingRate();
 
-	for (int index = 0; index < parameters.GetNumberOfChannels(); index++)
+	_synth = new Synth(configuration, _numberOfChannels, _samplingRate);
+	_frame = new PlaybackFrame(_numberOfChannels);
+	_output = new Accumulator<TSignal>*[_numberOfChannels];
+
+	for (int index = 0; index < _numberOfChannels; index++)
 	{
 		_output[index] = new Accumulator<TSignal>();
 	}
@@ -104,7 +105,7 @@ int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsi
 	// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
 	for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
 	{
-		double absoluteTime = streamTime + (frameIndex / (double)_streamParameters->GetSamplingRate());
+		double absoluteTime = streamTime + (frameIndex / (double)_samplingRate);
 
 		// Clear Frame
 		_frame->Clear();
@@ -113,7 +114,7 @@ int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsi
 		_synth->GetSample(_frame, absoluteTime);
 
 		// Interleved frames
-		for (unsigned int channelIndex = 0; channelIndex < _streamParameters->GetNumberOfChannels(); channelIndex++)
+		for (unsigned int channelIndex = 0; channelIndex < _numberOfChannels; channelIndex++)
 		{
 			// Set output sample
 			outputBuffer[(2 * frameIndex) + channelIndex] = _frame->GetSample(channelIndex);

@@ -58,11 +58,25 @@ public:
 
 	float GetStreamTime() const { return _streamTime; }
 	float GetAvgUIMilli() const { return _averageUIMilli; }
-	float GetAvgAudioMilli() const { return _averageFrontendMilli; }
-	float GetAvgFrontendMilli() const { return _averageAudioMilli; }
+	float GetAvgAudioMilli() const { return _averageAudioMilli; }
+	float GetAvgFrontendMilli() const { return _averageFrontendMilli; }
 	long GetStreamLatency() const { return _streamLatency; }
 
-	void UpdateRTParameters(float streamTime, float avgUIMilli, float avgAudioMilli, float avgFrontendMilli, long latency)
+	void UpdateDevice(const std::string& hostApi, 
+					  const std::string& deviceFormat, 
+					  const std::string& deviceName, 
+					  unsigned int samplingRate, 
+					  unsigned int numberChannels, 
+					  unsigned int bufferFrameSize)
+	{
+		_hostApi = new std::string(hostApi);
+		_deviceFormat = new std::string(deviceFormat);
+		_deviceName = new std::string(deviceName);
+		_samplingRate = samplingRate;
+		_numberOfChannels = numberChannels;
+		_outputBufferFrameSize = bufferFrameSize;
+	}
+	void UpdateRT(float streamTime, float avgUIMilli, float avgAudioMilli, float avgFrontendMilli, long latency)
 	{
 		_streamTime = streamTime;
 		_averageUIMilli = avgUIMilli;

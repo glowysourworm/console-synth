@@ -11,14 +11,12 @@ class MidiPlaybackDevice : public PlaybackDevice<TSignal>
 {
 public:
 
-	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters) override;
+	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters) override;
 
 	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 	//int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 
 private:
-
-	PlaybackParameters* _streamParameters;
 
 	Synth* _synth;
 	int _frameIndex;
@@ -29,10 +27,9 @@ private:
 };
 
 template<SignalValue TSignal>
-bool MidiPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters)
+bool MidiPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters)
 {
 	_initialized = true;
-	_streamParameters = parameters;
 
 	//MidiFile midi;
 

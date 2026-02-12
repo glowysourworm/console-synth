@@ -81,8 +81,16 @@ ftxui::Component SynthInformationUI::GetComponent()
 		}),
 
 		// Synth Information
-		synthInformation
-	});
+		synthInformation,
+
+		// Footer
+		ftxui::Renderer([&]
+		{
+			return ftxui::vbox({
+				ftxui::separator()
+			});
+		})
+	}) | ftxui::border;
 }
 void SynthInformationUI::UpdateComponent(bool clearDirty)
 {

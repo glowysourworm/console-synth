@@ -9,6 +9,17 @@ SynthNoteMap::SynthNoteMap()
 	_keyCodeMap = new std::map<WindowsKeyCodes, int>();
 	_keyCodeReverseMap = new std::map<int, WindowsKeyCodes>();
 }
+SynthNoteMap::SynthNoteMap(const SynthNoteMap& copy)
+{
+	_keyCodeMap = new std::map<WindowsKeyCodes, int>();
+	_keyCodeReverseMap = new std::map<int, WindowsKeyCodes>();
+
+	SynthNoteMap* that = this;
+
+	copy.Iterate([&that](WindowsKeyCodes keyCode, int midiNote) {
+		that->Add(keyCode, midiNote);
+	});
+}
 SynthNoteMap::~SynthNoteMap()
 {
 	delete _keyCodeMap;

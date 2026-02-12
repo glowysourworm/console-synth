@@ -5,84 +5,34 @@
 #include "RtAudioController.h"
 #include "SynthConfiguration.h"
 #include "UIController.h"
-#include "WindowsKeyCodes.h"
 #include <chrono>
 #include <functional>
 #include <thread>
 
 MainController::MainController()
 {
-	_configuration = new SynthConfiguration();
+	_configuration = nullptr;
 	_uiTimer = new LoopTimer(0.075);
-
-	// Octave 1
-	_configuration->SetMidiNote(WindowsKeyCodes::Z, 21);
-	_configuration->SetMidiNote(WindowsKeyCodes::X, 22);
-	_configuration->SetMidiNote(WindowsKeyCodes::C, 23);
-	_configuration->SetMidiNote(WindowsKeyCodes::V, 24);
-	_configuration->SetMidiNote(WindowsKeyCodes::B, 25);
-	_configuration->SetMidiNote(WindowsKeyCodes::N, 26);
-	_configuration->SetMidiNote(WindowsKeyCodes::M, 27);
-	_configuration->SetMidiNote(WindowsKeyCodes::COMMA, 28);
-	_configuration->SetMidiNote(WindowsKeyCodes::PERIOD, 29);
-	_configuration->SetMidiNote(WindowsKeyCodes::QUESTION_MARK, 30);
-
-	// Octave 2
-	_configuration->SetMidiNote(WindowsKeyCodes::A, 33);
-	_configuration->SetMidiNote(WindowsKeyCodes::S, 34);
-	_configuration->SetMidiNote(WindowsKeyCodes::D, 35);
-	_configuration->SetMidiNote(WindowsKeyCodes::F, 36);
-	_configuration->SetMidiNote(WindowsKeyCodes::G, 37);
-	_configuration->SetMidiNote(WindowsKeyCodes::H, 38);
-	_configuration->SetMidiNote(WindowsKeyCodes::J, 39);
-	_configuration->SetMidiNote(WindowsKeyCodes::K, 40);
-	_configuration->SetMidiNote(WindowsKeyCodes::L, 41);
-	_configuration->SetMidiNote(WindowsKeyCodes::SEMICOLON, 42);
-	_configuration->SetMidiNote(WindowsKeyCodes::APOSTROPHE, 43);
-
-	// Octave 3
-	_configuration->SetMidiNote(WindowsKeyCodes::Q, 44);
-	_configuration->SetMidiNote(WindowsKeyCodes::W, 45);
-	_configuration->SetMidiNote(WindowsKeyCodes::E, 46);
-	_configuration->SetMidiNote(WindowsKeyCodes::R, 47);
-	_configuration->SetMidiNote(WindowsKeyCodes::T, 48);
-	_configuration->SetMidiNote(WindowsKeyCodes::Y, 49);
-	_configuration->SetMidiNote(WindowsKeyCodes::U, 50);
-	_configuration->SetMidiNote(WindowsKeyCodes::I, 51);
-	_configuration->SetMidiNote(WindowsKeyCodes::O, 52);
-	_configuration->SetMidiNote(WindowsKeyCodes::P, 53);
-	_configuration->SetMidiNote(WindowsKeyCodes::LEFT_BRACKET, 54);
-	_configuration->SetMidiNote(WindowsKeyCodes::RIGHT_BRACKET, 55);
-
-	// Octave 4
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_1, 56);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_2, 57);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_3, 58);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_4, 59);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_5, 60);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_6, 61);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_7, 62);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_8, 63);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_9, 64);
-	_configuration->SetMidiNote(WindowsKeyCodes::NUMBER_0, 65);
-	_configuration->SetMidiNote(WindowsKeyCodes::MINUS, 66);
-	_configuration->SetMidiNote(WindowsKeyCodes::PLUS, 67);
-
-	_audioController = new AudioController(_configuration);
-	_uiController = new UIController(_configuration);
+	_audioController = new AudioController();
+	_uiController = new UIController();
 }
 
 MainController::~MainController()
 {
 	delete _configuration;
 	delete _uiTimer;
+	delete _audioController;
+	delete _uiController;
 }
 
 /// <summary>
 /// Initialization function for the synth backend. This must be called before starting the player!
 /// </summary>
-bool MainController::Initialize()
+bool MainController::Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters)
 {
+	// (Constructor pattern...)
+	_configuration = new SynthConfiguration(*configuration);
+
 	// RT AUDIO
 	bool success = RtAudioController::Initialize(std::bind(&AudioController::ProcessAudioCallback,
 												_audioController,
@@ -91,26 +41,22 @@ bool MainController::Initialize()
 												std::placeholders::_3,
 												std::placeholders::_4));
 
-	// Audio Controller (for callback)
-	success &= _audioController->Initialize();
-
-	// RT AUDIO -> Open Stream (SynthConfiguration*)
+	// RT AUDIO -> Open Stream (SynthConfiguration*)(PlaybackParameteres*) (INITIALIZE!)
 	success &= RtAudioController::OpenStream(_configuration);
 
+	// Audio Controller (for callback)
+	success &= _audioController->Initialize(configuration, parameters);
+
 	// UI Controller (stream must be open) (Starts Thread!)
-	_uiController->Initialize(RtAudioController::GetPlaybackParameters());
+	success &= _uiController->Initialize(configuration, parameters);
 
 	return success;
 }
 
 bool MainController::Dispose()
 {
-	bool success = _audioController->Dispose();
-
-	// Stops Thread!
-	_uiController->Dispose();
-
-	return success;
+	// Stops UI thread
+	return _audioController->Dispose() && _uiController->Dispose();
 }
 
 void MainController::Loop()
@@ -144,7 +90,7 @@ void MainController::Loop()
 		//
 		_audioController->GetUpdate(streamTime, audioTime, frontendTime, latency, left, right);
 		
-		playbackParameters->UpdateRTParameters(streamTime, _uiTimer->GetAvgMilli(), audioTime, frontendTime, latency);
+		playbackParameters->UpdateRT(streamTime, _uiTimer->GetAvgMilli(), audioTime, frontendTime, latency);
 
 		// Synth Configuration:  Shared pointer with the RT Audio callback
 		//

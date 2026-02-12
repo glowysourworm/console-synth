@@ -16,7 +16,7 @@ public:
 	/// Initialization of playback device is required before starting RT Audio playback.
 	/// </summary>
 	/// <returns>Returns true if device is ready, otherwise false for some sort of error</returns>
-	virtual bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters& parameters) = 0;
+	virtual bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters) = 0;
 
 	/// <summary>
 	/// Tells the playback device to write its output to the playback buffer. The write should start at frame index 0, and

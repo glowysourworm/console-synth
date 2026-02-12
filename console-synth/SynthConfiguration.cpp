@@ -69,6 +69,7 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 	_hasCompressor = copy.GetHasCompressor();
 	_hasEnvelopeFilter = copy.GetHasEnvelopeFilter();
 
+	_keyMap = new SynthNoteMap(copy.GetNoteMap());
 	_noteEnvelope = new Envelope(copy.GetNoteEnvelope());
 	_envelopeFilter = new Envelope(copy.GetEnvelopeFilter());
 
@@ -138,7 +139,10 @@ bool SynthConfiguration::GetHasEnvelopeFilter() const
 {
 	return _hasEnvelopeFilter;
 }
-
+SynthNoteMap SynthConfiguration::GetNoteMap() const
+{
+	return *_keyMap;
+}
 Envelope SynthConfiguration::GetNoteEnvelope() const
 {
 	return *_noteEnvelope;

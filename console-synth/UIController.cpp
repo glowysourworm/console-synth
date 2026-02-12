@@ -17,64 +17,23 @@
 #include <ftxui/component/mouse.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <ftxui/dom/node.hpp>
 #include <ftxui/screen/color.hpp>
-#include <ftxui/screen/screen.hpp>
 #include <memory>
 #include <mutex>
 #include <thread>
 
-UIController::UIController(const SynthConfiguration* configuration)
+UIController::UIController()
 {
 	_thread = nullptr;
 	_lock = nullptr;
+	_oscillatorUI = nullptr;
+	_envelopeUI = nullptr;
+	_envelopeFilterUI = nullptr;
+	_compressorUI = nullptr;
+	_outputUI = nullptr;
+	_reverbUI = nullptr;
+	_delayUI = nullptr;
 
-    _configuration = configuration;
-
-	// Synth Information
-	_synthInformationUI = new SynthInformationUI("Terminal Synth", true, ftxui::Color::GreenYellow);
-
-	// Source Oscillator
-	_oscillatorUI = new OscillatorUI("Oscillator", true, ftxui::Color::Blue);
-
-	// Note Envelope
-	_envelopeUI = new EnvelopeUI(_configuration->GetNoteEnvelope(), "Input Envelope", true, ftxui::Color::BlueLight);
-
-	// Envelope Filter (Oscillator)
-	_envelopeFilterUI = new EnvelopeFilterUI(_configuration->GetEnvelopeFilterType(),
-		_configuration->GetEnvelopeFilterOscillatorType(),
-		_configuration->GetEnvelopeFilter(),
-		_configuration->GetEnvelopeFilterCutoff(),
-		_configuration->GetEnvelopeFilterResonance(),
-		_configuration->GetEnvelopeFilterOscillatorFrequency(),
-		_configuration->GetHasEnvelopeFilter(),
-		"Envelope Filter", ftxui::Color::Red);
-	// Reverb
-	_reverbUI = new ReverbUI(_configuration->GetHasReverb(),
-		_configuration->GetReverbDelaySeconds(),
-		_configuration->GetReverbGain(),
-		_configuration->GetReverbWetDry(),
-		"Reverb", ftxui::Color::Green);
-
-	// Delay
-	_delayUI = new DelayUI(_configuration->GetHasDelay(),
-		_configuration->GetDelayFeedback(),
-		_configuration->GetDelaySeconds(),
-		_configuration->GetDelayGain(),
-		_configuration->GetDelayWetDry(),
-		"Delay", ftxui::Color::Purple);
-
-	// Compressor
-	_compressorUI = new CompressorUI(_configuration->GetHasCompressor(),
-		_configuration->GetCompressorThreshold(),
-		_configuration->GetCompressorGain(),
-		_configuration->GetCompressorAttack(),
-		_configuration->GetCompressorRelease(),
-		_configuration->GetCompressionRatio(),
-		"Compressor", ftxui::Color::HotPink);
-
-	// Output
-	_outputUI = new OutputUI(_configuration->GetOutputGain(), _configuration->GetOutputLeftRight(), "Output", ftxui::Color::Green);
 }
 
 UIController::~UIController()
@@ -88,7 +47,7 @@ UIController::~UIController()
 	delete _delayUI;
 }
 
-void UIController::Initialize(const PlaybackParameters* parameters)
+bool UIController::Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters)
 {
 	// FTX-UI (Terminal Loop / Renderer)
 	// 
@@ -105,6 +64,51 @@ void UIController::Initialize(const PlaybackParameters* parameters)
 	//
 	// https://arthursonzogni.github.io/FTXUI/
 	//
+
+	// Synth Information
+	_synthInformationUI = new SynthInformationUI("Terminal Synth", true, ftxui::Color::GreenYellow);
+
+	// Source Oscillator
+	_oscillatorUI = new OscillatorUI("Oscillator", true, ftxui::Color::Blue);
+
+	// Note Envelope
+	_envelopeUI = new EnvelopeUI(configuration->GetNoteEnvelope(), "Input Envelope", true, ftxui::Color::BlueLight);
+
+	// Envelope Filter (Oscillator)
+	_envelopeFilterUI = new EnvelopeFilterUI(configuration->GetEnvelopeFilterType(),
+		configuration->GetEnvelopeFilterOscillatorType(),
+		configuration->GetEnvelopeFilter(),
+		configuration->GetEnvelopeFilterCutoff(),
+		configuration->GetEnvelopeFilterResonance(),
+		configuration->GetEnvelopeFilterOscillatorFrequency(),
+		configuration->GetHasEnvelopeFilter(),
+		"Envelope Filter", ftxui::Color::Red);
+	// Reverb
+	_reverbUI = new ReverbUI(configuration->GetHasReverb(),
+		configuration->GetReverbDelaySeconds(),
+		configuration->GetReverbGain(),
+		configuration->GetReverbWetDry(),
+		"Reverb", ftxui::Color::Green);
+
+	// Delay
+	_delayUI = new DelayUI(configuration->GetHasDelay(),
+		configuration->GetDelayFeedback(),
+		configuration->GetDelaySeconds(),
+		configuration->GetDelayGain(),
+		configuration->GetDelayWetDry(),
+		"Delay", ftxui::Color::Purple);
+
+	// Compressor
+	_compressorUI = new CompressorUI(configuration->GetHasCompressor(),
+		configuration->GetCompressorThreshold(),
+		configuration->GetCompressorGain(),
+		configuration->GetCompressorAttack(),
+		configuration->GetCompressorRelease(),
+		configuration->GetCompressionRatio(),
+		"Compressor", ftxui::Color::HotPink);
+
+	// Output
+	_outputUI = new OutputUI(configuration->GetOutputGain(), configuration->GetOutputLeftRight(), "Output", ftxui::Color::Green);
 
 	auto synthInputSettings = ftxui::Container::Horizontal({
 
@@ -152,15 +156,19 @@ void UIController::Initialize(const PlaybackParameters* parameters)
 
 	_thread = new std::thread(&UIController::ThreadStart, this);
 	_lock = new std::mutex();
+
+	return true;
 }
 
-void UIController::Dispose()
+bool UIController::Dispose()
 {
 	_thread->join();
 	delete _thread;
 	delete _lock;
 	_thread = nullptr;
 	_lock = nullptr;
+
+	return true;
 }
 
 bool UIController::IsDirty() const

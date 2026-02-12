@@ -212,23 +212,26 @@ bool RtAudioController::OpenStream(void* userData)
 		unsigned int frontendFrameSize = outputBufferFrameSize;
 
 		RtAudioController::Instance->openStream(&outputParameters,	// 
-			NULL,									// Duplex Mode (input parameters)
-			RTAUDIO_FLOAT32,						// RT Audio Format
-			outputDevice.preferredSampleRate,		// Device Sampling Rate
-			&outputBufferFrameSize,					// Device (preferred) Frame Size (RT Audio will adjust this)
-			&RtAudioController::AudioCallback,		// Audio Callback
-			userData,								
-			&options);
+							NULL,									// Duplex Mode (input parameters)
+							RTAUDIO_FLOAT32,						// RT Audio Format
+							outputDevice.preferredSampleRate,		// Device Sampling Rate
+							&outputBufferFrameSize,					// Device (preferred) Frame Size (RT Audio will adjust this)
+							&RtAudioController::AudioCallback,		// Audio Callback
+							userData,								
+							&options);
 
 		auto hostApi = RtAudioController::Instance->getCurrentApi();
 
 		const char* deviceFormat = "Bizzare Unknown";
 
-		// Store output parameters
-		RtAudioController::Parameters = new PlaybackParameters(
-			RtAudioController::Instance->getApiDisplayName(hostApi).c_str(),
+		// Set Playback Parameters:  These are created in int main(); but they're invalid until
+		//							 we set "initialized" to true, as long as the controller pattern
+		//							 is strictly kept, you won't have a private pointer to them.
+		//
+		RtAudioController::Parameters->UpdateDevice(
+			RtAudioController::Instance->getApiDisplayName(hostApi),
 			deviceFormat,
-			outputDevice.name.c_str(),
+			outputDevice.name,
 			outputDevice.preferredSampleRate,
 			outputDevice.outputChannels,
 			outputBufferFrameSize);

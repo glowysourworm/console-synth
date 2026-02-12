@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SynthConfiguration.h"
 #include "PlaybackParameters.h"
+#include "SynthConfiguration.h"
 
 /// <summary>
 /// Simple base class to enforce Initialize / Dispose pattern on the controllers. The Synth, SynthPlaybackDevice, and

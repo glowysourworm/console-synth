@@ -1,26 +1,20 @@
 #pragma once
 #include "AudioController.h"
+#include "BaseController.h"
 #include "LoopTimer.h"
+#include "PlaybackParameters.h"
 #include "SynthConfiguration.h"
 #include "UIController.h"
-#include <thread>
 
-class MainController
+class MainController : public BaseController
 {
 public:
 
 	MainController();
 	~MainController();
 
-	/// <summary>
-	/// Initialization function for the synth backend. This must be called before starting the player!
-	/// </summary>
-	bool Initialize();
-
-	/// <summary>
-	/// Disposes of backend, and controller resources
-	/// </summary>
-	bool Dispose();
+	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters) override;
+	bool Dispose() override;
 
 	/// <summary>
 	/// Runs until the application should exit (this could be put on a separate thread.. if it helps CPU load.. 
@@ -30,10 +24,11 @@ public:
 
 private:
 
+	// Primary Owner of SynthConfiguration*
+	SynthConfiguration* _configuration;
+
 	AudioController* _audioController;
 	UIController* _uiController;
-
-	SynthConfiguration* _configuration;
 
 	LoopTimer* _uiTimer;
 };

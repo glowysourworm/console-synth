@@ -4,6 +4,7 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/event.hpp>
+#include <ftxui/component/mouse.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
 #include <string>
@@ -39,7 +40,21 @@ ftxui::Component SliderUI::GetComponent()
     this->UpdateComponent(false);
 
     // Create Component
-    auto componentUI = ftxui::Slider(_label, _value, _minValue, _maxValue, _increment) | ftxui::color(*this->titleColor);
+    auto componentUI = ftxui::Slider(_label, _value, _minValue, _maxValue, _increment) 
+        | ftxui::color(*this->titleColor) 
+        | ftxui::CatchEvent([&](ftxui::Event event) {
+            
+            // Only allow mouse events through
+            if (event.mouse().button == ftxui::Mouse::Left &&
+                event.is_mouse())
+            {
+                this->SetDirty();
+                return false;
+            }
+
+            // Cancel keyboard events
+            return true;
+        });
 
     return componentUI;
 }

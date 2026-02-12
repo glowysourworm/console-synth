@@ -18,6 +18,8 @@ public:
 
 	Envelope GetSelection() const;
 
+	bool GetDirty() const override;
+
 private:
 
 	// Oscillator Selected Index

@@ -173,19 +173,34 @@ bool UIController::Dispose()
 
 bool UIController::IsDirty() const
 {
-	return _oscillatorUI->GetDirty() ||
-			_envelopeUI->GetDirty() ||
-			_envelopeFilterUI->GetDirty() ||
-			_delayUI->GetDirty() ||
-			_reverbUI->GetDirty() ||
-			_compressorUI->GetDirty() ||
-			_outputUI->GetDirty();
+	_lock->lock();
 
-	return false;
+	bool isDirty = _oscillatorUI->GetDirty() ||
+					_envelopeUI->GetDirty() ||
+					_envelopeFilterUI->GetDirty() ||
+					_delayUI->GetDirty() ||
+					_reverbUI->GetDirty() ||
+					_compressorUI->GetDirty() ||
+					_outputUI->GetDirty();
+
+	_lock->unlock();
+
+	return isDirty;
 }
 
 void UIController::FromUI(SynthConfiguration* configuration)
 {
+	// std::atomic wait loop
+	while (true) {
+		if (!configuration->IsWaiting())
+		{
+			if (configuration->SetWait(true))
+				break;
+		}
+	}
+
+	_lock->lock();
+
 	// Enable
 	configuration->SetHasEnvelopeFilter(_envelopeFilterUI->GetEnabled());
 	configuration->SetHasDelay(_delayUI->GetEnabled());
@@ -227,6 +242,20 @@ void UIController::FromUI(SynthConfiguration* configuration)
 	// Output
 	configuration->SetOutputGain(_outputUI->GetGain());
 	configuration->SetOutputLeftRight(_outputUI->GetLeftRight());
+
+	// Clear Dirty UI Status
+	_oscillatorUI->UpdateComponent(true);
+	_envelopeUI->UpdateComponent(true);
+	_envelopeFilterUI->UpdateComponent(true);
+	_delayUI->UpdateComponent(true);
+	_reverbUI->UpdateComponent(true);
+	_compressorUI->UpdateComponent(true);
+	_outputUI->UpdateComponent(true);
+
+	_lock->unlock();
+
+	// std::atomic end loop (this should only run once!)
+	while (!configuration->SetWait(false)) {}
 }
 
 void UIController::ToUI(const PlaybackParameters* parameters)
@@ -258,15 +287,15 @@ void UIController::ThreadStart()
 		// architecture of FTXUI is tricky to get to provide an update each call. You
 		// basically have to either follow their UI inheritance pattern (closely), or
 		// you have to add something to trigger re-rendering!
-		_oscillatorUI->UpdateComponent(true);
-		_envelopeUI->UpdateComponent(true);
-		_envelopeFilterUI->UpdateComponent(true);
+		_oscillatorUI->UpdateComponent(false);
+		_envelopeUI->UpdateComponent(false);
+		_envelopeFilterUI->UpdateComponent(false);
 
-		_delayUI->UpdateComponent(true);
-		_reverbUI->UpdateComponent(true);
-		_compressorUI->UpdateComponent(true);
+		_delayUI->UpdateComponent(false);
+		_reverbUI->UpdateComponent(false);
+		_compressorUI->UpdateComponent(false);
 
-		_outputUI->UpdateComponent(true);
+		_outputUI->UpdateComponent(false);
 
 		// Use custom event to force one UI update
 		screen.PostEvent(ftxui::Event::Custom);

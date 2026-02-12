@@ -3,6 +3,8 @@
 #include "Envelope.h"
 #include "SynthNoteMap.h"
 #include "WindowsKeyCodes.h"
+#include <atomic>
+#include <thread>
 
 class SynthConfiguration
 {
@@ -12,8 +14,19 @@ public:
 	SynthConfiguration(const SynthConfiguration& copy);
 	~SynthConfiguration();	
 
+	/// <summary>
+	/// Returns an std::atomic provided waiting indicator which should be thread-safe.
+	/// </summary>
+	bool IsWaiting() const;
 	bool IsDirty() const;
 
+	/// <summary>
+	/// Attempts to set the std::atomic wait flag. If the user code does not synchronize, the
+	/// acquire will fail, and return false. So, your wait loop should ask IsWaiting, then double
+	/// check that wait sychronization was acquired. If you're clearing the wait flag, the return
+	/// value must ALSO be true!
+	/// </summary>
+	bool SetWait(bool desiredValue);
 	void ClearDirty();
 
 	void SetOscillatorType(OscillatorType value);
@@ -105,6 +118,12 @@ public:
 private:
 
 	SynthNoteMap* _keyMap;
+
+	// Using an std::atomic for thread synchronization
+	std::atomic<bool> _waitFlag;
+
+	// Using, also, a thread ID to manage the wait flag
+	std::thread::id _threadId;
 
 	// Tracks changes to the configuration
 	bool _isDirty;

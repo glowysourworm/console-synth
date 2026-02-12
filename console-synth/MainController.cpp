@@ -76,6 +76,15 @@ void MainController::Loop()
 	//			   can interrupt the thread to post UI updates. We're going to keep track of the UI timer here
 	//			   and interrupt it every ~10ms.
 	// 
+	// Synth Configuration: There must be an additional lock on the SynthConfiguration* during UI interaction.
+	//						This will be an std::atomic inside of the SynthConfiguration class; and must be
+	//						set / unset in the same function! (This will be evident when you're updating it
+	//						from the UI Controller)
+	// 
+	//						Also, this update will be very slow compared to the audio playback (~100ms / ~0.3ms);
+	//						and we'll not worry about it more until there's a user end case (like, we're trying to
+	//						use a MIDI keyboard and it's not fast enough)
+	// 
 	// The exit condition should be polled from the UI thread to this thread; and we'll use an interruption to
 	// give / send data while the loop runs.
 	//
@@ -92,39 +101,26 @@ void MainController::Loop()
 		
 		playbackParameters->UpdateRT(streamTime, _uiTimer->GetAvgMilli(), audioTime, frontendTime, latency);
 
-		// Synth Configuration:  Shared pointer with the RT Audio callback
+		// CRITICAL SECTION:  This is an update from the UI, which will reset the synth parameters. So,
+		//					  it is only allowed every ~100ms at the most.
+		//
+		//					  The std::mutex is in the UIController* (for To / From UI, and IsDirty)
+		//
+		//				      The SynthConfiguration* has an extra std::atomic<bool> for sync. with
+		//					  the audio thread callback.
 		//
 		if (_uiTimer->Mark())
 		{
 			// Update <- UI (If user has made UI changes, they get set in the SynthConfiguration*) (SHARED!)
 			//
-			//if (_uiController->IsDirty())
-			//	_uiController->FromUI(_configuration);
+			if (_uiController->IsDirty())
+				_uiController->FromUI(_configuration);
 
 			// Update -> UI (PlaybackParameters*) (NOT SHARED) (Member functions all go through this thread for playback parameters)
 			_uiController->ToUI(playbackParameters);
 		}
 
-		// CRITICAL SECTION:  This is an update from the UI, which will reset the synth parameters. So,
-		//					  it is only allowed every ~100ms at the most.
-		//
-		if (_configuration->IsDirty())
-		{
-			//_rtAudio->stopStream();
-
-			//_synthDevice->UpdateSynth(_configuration);
-
-			// This timer is not thread-safe; but the usage seems to be ok on both threads
-			// without stopping the audio stream. 
-			//
-			_uiTimer->Reset();
-
-			//// Reset Configuration Flag
-			//_configuration->ClearDirty();
-
-			//_rtAudio->startStream();
-		}
-
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
+		// ~3ms, on par with the UI thread (divided by 3.14!) >_<
+		std::this_thread::sleep_for(std::chrono::milliseconds(3));
 	}
 }

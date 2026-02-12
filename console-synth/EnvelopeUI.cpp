@@ -91,3 +91,12 @@ Envelope EnvelopeUI::GetSelection() const
 {
 	return *_envelope;
 }
+
+bool EnvelopeUI::GetDirty() const
+{
+	return _attack->GetDirty() ||
+		   _decay->GetDirty() ||
+		   _release->GetDirty() ||
+		   _attackPeak->GetDirty() ||
+		   _sustainPeak->GetDirty();
+}

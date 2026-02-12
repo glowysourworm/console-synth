@@ -28,18 +28,18 @@ public:
 public:
 
 	/// <summary>
-	/// Returns true if there is a dirty status on the UI. This means that data needs to be
+	/// (Shared Main Thread / UI Thread) Returns true if there is a dirty status on the UI. This means that data needs to be
 	/// collected during this pass.
 	/// </summary>
 	bool IsDirty() const;
 
 	/// <summary>
-	/// Takes data from the UI and updates the configuration
+	/// (Shared Main Thread / UI Thread) Takes data from the UI and updates the configuration
 	/// </summary>
 	void FromUI(SynthConfiguration* configuration);
 
 	/// <summary>
-	/// Pushes data from the playback parameters to the UI
+	/// (Shared Main Thread / UI Thread) Pushes data from the playback parameters to the UI
 	/// </summary>
 	void ToUI(const PlaybackParameters* parameters);
 

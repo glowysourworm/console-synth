@@ -3,11 +3,14 @@
 #include "SynthConfiguration.h"
 #include "SynthNoteMap.h"
 #include "WindowsKeyCodes.h"
+#include <atomic>
+#include <thread>
 
 SynthConfiguration::SynthConfiguration()
 {
 	_keyMap = new SynthNoteMap();
-
+	
+	_waitFlag = false;							// std::atomic
 	_isDirty = false;
 
 	_oscillatorType = OscillatorType::Sine;
@@ -109,9 +112,35 @@ SynthConfiguration::~SynthConfiguration()
 		delete _envelopeFilter;
 }
 
+bool SynthConfiguration::IsWaiting() const
+{
+	return _waitFlag;	// std::atomic
+}
+
 bool SynthConfiguration::IsDirty() const
 {
 	return _isDirty;
+}
+
+bool SynthConfiguration::SetWait(bool desiredValue)
+{
+	std::thread::id threadId = std::this_thread::get_id();
+
+	// Waiting on another thread
+	if (_waitFlag && _threadId != threadId)
+		return false;
+
+	else
+	{
+		// Set thread's desired value
+		_waitFlag = desiredValue;					// std::atomic
+
+		// "Locking" for this thread
+		if (desiredValue)
+			_threadId = threadId;
+		
+		return true;
+	}
 }
 
 void SynthConfiguration::ClearDirty()

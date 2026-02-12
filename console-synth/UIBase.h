@@ -40,7 +40,7 @@ public:
 	/// <summary>
 	/// Returns status of the UI (has there been changes)
 	/// </summary>
-	bool GetDirty() const;
+	virtual bool GetDirty() const;
 
 protected:
 

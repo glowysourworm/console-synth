@@ -55,15 +55,31 @@ int AudioController::ProcessAudioCallback(float* outputBuffer, unsigned int numb
 	// Frontend Processing Time (Start!)
 	_synthIntervalTimer->Reset();
 
+	// std::atomic wait loop
+	while (true) {
+		if (!configuration->IsWaiting())
+		{
+			if (configuration->SetWait(true))
+				break;
+		}
+	}
+
 	// Windows API, SynthConfiguration*, SynthPlaybackDevice* (be aware of usage)
 	//
 	this->ProcessKeyStrokes(streamTime, configuration);
 
+	// Update SynthPlaybackDevice* (using shared configuration)
+	_synthDevice->UpdateSynth(configuration);
+
+	// Write playback buffer from synth device
 	int returnValue = _synthDevice->WritePlaybackBuffer((void*)outputBuffer, numberOfFrames, streamTime);
 
 	// Get output for the UI
 	_outputL = _synthDevice->GetOutput(0);
 	_outputR = _synthDevice->GetOutput(1);
+
+	// std::atomic end loop (this should only run once!)
+	while (!configuration->SetWait(false)) {}
 
 	// Frontend Processing Time (Mark.)
 	_synthIntervalTimer->Mark();

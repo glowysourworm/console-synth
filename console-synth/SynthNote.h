@@ -19,6 +19,7 @@ public:
 	int GetMidiNumber() const;
 	float GetFrequency() const;
 	void GetSample(PlaybackFrame* frame, float absoluteTime) const;
+	void AddSample(PlaybackFrame* frame, float absoluteTime) const;
 
 
 	bool IsEngaged();

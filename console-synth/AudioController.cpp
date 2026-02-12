@@ -64,19 +64,33 @@ int AudioController::ProcessAudioCallback(float* outputBuffer, unsigned int numb
 		}
 	}
 
+	int rtAudioReturnValue = 0;
+
+	// Last Output
+	bool lastOutput = _synthDevice->GetLastOutput();
+
 	// Windows API, SynthConfiguration*, SynthPlaybackDevice* (be aware of usage)
 	//
-	this->ProcessKeyStrokes(streamTime, configuration);
+	bool pressedKeys = this->ProcessKeyStrokes(streamTime, configuration);
 
-	// Update SynthPlaybackDevice* (using shared configuration)
-	_synthDevice->UpdateSynth(configuration);
+	// Optimize CPU
+	if (lastOutput || pressedKeys)
+	{
+		// Update SynthPlaybackDevice* (using shared configuration)
+		_synthDevice->UpdateSynth(configuration);
 
-	// Write playback buffer from synth device
-	int returnValue = _synthDevice->WritePlaybackBuffer((void*)outputBuffer, numberOfFrames, streamTime);
+		// Write playback buffer from synth device
+		rtAudioReturnValue = _synthDevice->WritePlaybackBuffer((void*)outputBuffer, numberOfFrames, streamTime, configuration);
 
-	// Get output for the UI
-	_outputL = _synthDevice->GetOutput(0);
-	_outputR = _synthDevice->GetOutput(1);
+		// Get output for the UI
+		_outputL = _synthDevice->GetOutput(0);
+		_outputR = _synthDevice->GetOutput(1);
+	}
+	else
+	{
+		_outputL = 0;
+		_outputR = 0;
+	}
 
 	// std::atomic end loop (this should only run once!)
 	while (!configuration->SetWait(false)) {}
@@ -84,13 +98,15 @@ int AudioController::ProcessAudioCallback(float* outputBuffer, unsigned int numb
 	// Frontend Processing Time (Mark.)
 	_synthIntervalTimer->Mark();
 
-	return returnValue;
+	return rtAudioReturnValue;
 }
 
-void AudioController::ProcessKeyStrokes(double streamTime, SynthConfiguration* configuration)
+bool AudioController::ProcessKeyStrokes(double streamTime, SynthConfiguration* configuration)
 {
 	if (!_initialized)
 		throw new std::exception("Audio Controller not yet initialized!");
+
+	bool pressedKeys = false;
 
 	// Iterate Key Codes (probably the most direct method)
 	//
@@ -115,9 +131,12 @@ void AudioController::ProcessKeyStrokes(double streamTime, SynthConfiguration* c
 		int midiNote = configuration->GetMidiNote((WindowsKeyCodes)keyCode);
 
 		// Engage / Dis-Engage
-		if (_synthDevice->HasNote(midiNote))
-			_synthDevice->SetNote(midiNote, isPressed, streamTime);
+		_synthDevice->SetNote(midiNote, isPressed, streamTime, configuration);
+
+		pressedKeys |= isPressed;
 	}
+
+	return pressedKeys;
 }
 bool AudioController::Dispose()
 {

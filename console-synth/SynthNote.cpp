@@ -115,6 +115,17 @@ void SynthNote::GetSample(PlaybackFrame* frame, float absoluteTime) const
 	}
 }
 
+void SynthNote::AddSample(PlaybackFrame* frame, float absoluteTime) const
+{
+	PlaybackFrame noteFrame(frame->GetChannelCount());
+
+	// Create Sample
+	this->GetSample(&noteFrame, absoluteTime);
+
+	// Add Output
+	frame->AddFrame(&noteFrame);
+}
+
 float SynthNote::GetFrequency() const
 {
 	return 440 * powf(2, ((_midiNumber - 69.0) / 12.0));

@@ -60,6 +60,17 @@ public:
 		}
 	}
 
+	void AddFrame(const PlaybackFrame* copy)
+	{
+		if (_numberOfChannels != copy->GetChannelCount())
+			throw new std::exception("Mismatching channel count:  PlaybackFrame.h");
+
+		for (int index = 0; index < _numberOfChannels; index++)
+		{
+			_frameSamples[index] += copy->GetSample(index);
+		}
+	}
+
 	void SetSample(int channel, float sample)
 	{
 		_frameSamples[channel] = sample;
@@ -81,18 +92,6 @@ public:
 	unsigned int GetChannelCount() const
 	{
 		return _numberOfChannels;
-	}
-
-	bool HasOutput() const
-	{
-		bool hasOutput = false;
-
-		for (int index = 0; index < _numberOfChannels && !hasOutput; index++)
-		{
-			hasOutput |= fabsf(_frameSamples[index]) > 0;
-		}
-
-		return hasOutput;
 	}
 
 private:

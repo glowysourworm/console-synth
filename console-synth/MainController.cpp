@@ -99,7 +99,7 @@ void MainController::Loop()
 		//
 		_audioController->GetUpdate(streamTime, audioTime, frontendTime, latency, left, right);
 		
-		playbackParameters->UpdateRT(streamTime, _uiTimer->GetAvgMilli(), audioTime, frontendTime, latency);
+		playbackParameters->UpdateRT(left, right, streamTime, _uiTimer->GetAvgMilli(), audioTime, frontendTime, latency);
 
 		// CRITICAL SECTION:  This is an update from the UI, which will reset the synth parameters. So,
 		//					  it is only allowed every ~100ms at the most.
@@ -121,6 +121,6 @@ void MainController::Loop()
 		}
 
 		// ~3ms, on par with the UI thread (divided by 3.14!) >_<
-		std::this_thread::sleep_for(std::chrono::milliseconds(3));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }

@@ -37,7 +37,10 @@ public:
 
 private:
 
-	void ProcessKeyStrokes(double streamTime, SynthConfiguration* configuration);
+	/// <summary>
+	/// Sets synth device for new pressed keys. Returns true if there are keys that are pressed.
+	/// </summary>
+	bool ProcessKeyStrokes(double streamTime, SynthConfiguration* configuration);
 
 private:
 

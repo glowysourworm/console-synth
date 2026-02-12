@@ -265,8 +265,8 @@ void UIController::ToUI(const PlaybackParameters* parameters)
 	// Synth Information
 	_synthInformationUI->Update(parameters);
 
-	// TODO
-	_outputUI->SetOutput(0, 0);
+	// Synth Output Channels
+	_outputUI->SetOutput(parameters->GetOutputLeft(), parameters->GetOutputRight());
 
 	_lock->unlock();
 }

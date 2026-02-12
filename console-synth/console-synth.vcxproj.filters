@@ -102,9 +102,6 @@
     <ClCompile Include="Envelope.cpp">
       <Filter>Source Files\Signal</Filter>
     </ClCompile>
-    <ClCompile Include="Mixer.cpp">
-      <Filter>Source Files\Signal</Filter>
-    </ClCompile>
     <ClCompile Include="Synth.cpp">
       <Filter>Source Files\Synth</Filter>
     </ClCompile>
@@ -225,6 +222,9 @@
     <ClCompile Include="OscillatorBase.cpp">
       <Filter>Source Files\Signal</Filter>
     </ClCompile>
+    <ClCompile Include="SynthNoteQueue.cpp">
+      <Filter>Source Files\Synth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsKeyCodes.h">
@@ -255,9 +255,6 @@
       <Filter>Header Files\Filter</Filter>
     </ClInclude>
     <ClInclude Include="Envelope.h">
-      <Filter>Header Files\Signal</Filter>
-    </ClInclude>
-    <ClInclude Include="Mixer.h">
       <Filter>Header Files\Signal</Filter>
     </ClInclude>
     <ClInclude Include="Synth.h">
@@ -412,6 +409,9 @@
     </ClInclude>
     <ClInclude Include="StopWatch.h">
       <Filter>Header Files\Playback</Filter>
+    </ClInclude>
+    <ClInclude Include="SynthNoteQueue.h">
+      <Filter>Header Files\Synth</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

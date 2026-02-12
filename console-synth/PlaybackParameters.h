@@ -35,6 +35,8 @@ public:
 		_numberOfChannels = copy.GetNumberOfChannels();
 		_outputBufferFrameSize = copy.GetOutputBufferFrameSize();
 
+		_outputLeft = copy.GetOutputLeft();
+		_outputRight = copy.GetOutputRight();
 		_streamTime = copy.GetStreamTime();
 		_averageUIMilli = copy.GetAvgUIMilli();
 		_averageFrontendMilli = copy.GetAvgAudioMilli();
@@ -56,6 +58,8 @@ public:
 	unsigned int GetNumberOfChannels() const { return _numberOfChannels; }
 	unsigned int GetOutputBufferFrameSize() const { return _outputBufferFrameSize; }
 
+	float GetOutputLeft() const { return _outputLeft; }
+	float GetOutputRight() const { return _outputRight; }
 	float GetStreamTime() const { return _streamTime; }
 	float GetAvgUIMilli() const { return _averageUIMilli; }
 	float GetAvgAudioMilli() const { return _averageAudioMilli; }
@@ -76,8 +80,10 @@ public:
 		_numberOfChannels = numberChannels;
 		_outputBufferFrameSize = bufferFrameSize;
 	}
-	void UpdateRT(float streamTime, float avgUIMilli, float avgAudioMilli, float avgFrontendMilli, long latency)
+	void UpdateRT(float outputLeft, float outputRight, float streamTime, float avgUIMilli, float avgAudioMilli, float avgFrontendMilli, long latency)
 	{
+		_outputLeft = outputLeft;
+		_outputRight = outputRight;
 		_streamTime = streamTime;
 		_averageUIMilli = avgUIMilli;
 		_averageFrontendMilli = avgFrontendMilli;
@@ -94,6 +100,8 @@ private:
 	unsigned int _numberOfChannels;
 	unsigned int _outputBufferFrameSize;
 
+	float _outputLeft;
+	float _outputRight;
 	float _streamTime;
 	float _averageUIMilli;
 	float _averageAudioMilli;

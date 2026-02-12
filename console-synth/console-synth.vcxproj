@@ -262,7 +262,6 @@
     <ClCompile Include="MidiEventList.cpp" />
     <ClCompile Include="MidiFile.cpp" />
     <ClCompile Include="MidiMessage.cpp" />
-    <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OscillatorUI.cpp" />
     <ClCompile Include="OutputUI.cpp" />
@@ -282,6 +281,7 @@
     <ClCompile Include="SynthInformationUI.cpp" />
     <ClCompile Include="SynthNote.cpp" />
     <ClCompile Include="SynthNoteMap.cpp" />
+    <ClCompile Include="SynthNoteQueue.cpp" />
     <ClCompile Include="TriangleOscillator.cpp" />
     <ClCompile Include="UIBase.cpp" />
     <ClCompile Include="UIController.cpp" />
@@ -319,7 +319,6 @@
     <ClInclude Include="MidiFile.h" />
     <ClInclude Include="MidiMessage.h" />
     <ClInclude Include="MidiPlaybackDevice.h" />
-    <ClInclude Include="Mixer.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="OscillatorUI.h" />
     <ClInclude Include="OutputUI.h" />
@@ -344,6 +343,7 @@
     <ClInclude Include="SynthInformationUI.h" />
     <ClInclude Include="SynthNote.h" />
     <ClInclude Include="SynthNoteMap.h" />
+    <ClInclude Include="SynthNoteQueue.h" />
     <ClInclude Include="SynthPlaybackDevice.h" />
     <ClInclude Include="TriangleOscillator.h" />
     <ClInclude Include="UIBase.h" />

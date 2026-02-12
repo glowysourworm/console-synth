@@ -13,7 +13,7 @@ public:
 
 	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters) override;
 
-	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
+	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, const SynthConfiguration* configuration) override;
 	//int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
 
 private:
@@ -92,7 +92,7 @@ bool MidiPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configura
 }
 
 template<SignalValue TSignal>
-int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime)
+int MidiPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, const SynthConfiguration* configuration)
 {
 	return 0;
 }

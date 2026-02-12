@@ -1,19 +1,20 @@
 #include "AudioController.h"
 #include "IntervalTimer.h"
 #include "LoopTimer.h"
+#include "MidiPlaybackDevice.h"
 #include "PlaybackClock.h"
 #include "PlaybackParameters.h"
 #include "SynthConfiguration.h"
 #include "SynthPlaybackDevice.h"
-#include "WindowsKeyCodes.h"
-#include <Windows.h>
 #include <exception>
+#include <string>
 
 AudioController::AudioController()
 {
 	_initialized = false;
 
 	_synthDevice = new SynthPlaybackDevice<float>();
+	_midiDevice = new MidiPlaybackDevice<float>();
 	_audioTimer = new LoopTimer(0.001);
 	_streamClock = new PlaybackClock();
 	_synthIntervalTimer = new IntervalTimer();
@@ -34,12 +35,16 @@ bool AudioController::Initialize(const SynthConfiguration* configuration, const 
 		throw new std::exception("Audio Controller already initialized!");
 
 	_synthDevice->Initialize(configuration, parameters);
+	_midiDevice->Initialize(configuration, parameters);
 
 	_streamClock->Reset();
 	_streamClock->Start();
 	_audioTimer->Reset();
 
 	_initialized = true;
+
+	// Only block callback during mode switching
+	_blockCallback = false;
 
 	return true;
 }
@@ -51,6 +56,10 @@ int AudioController::ProcessAudioCallback(float* outputBuffer, unsigned int numb
 
 	// Full Audio Loop Timer
 	_audioTimer->Mark();
+
+	// Mode Switching (MIDI / Synth)
+	if (_blockCallback)
+		return 0;
 
 	// Frontend Processing Time (Start!)
 	_synthIntervalTimer->Reset();
@@ -67,20 +76,19 @@ int AudioController::ProcessAudioCallback(float* outputBuffer, unsigned int numb
 	int rtAudioReturnValue = 0;
 
 	// Last Output
-	bool lastOutput = _synthDevice->GetLastOutput();
+	bool lastOutput = _midiMode ? _midiDevice->GetLastOutput() : _synthDevice->GetLastOutput();
 
 	// Windows API, SynthConfiguration*, SynthPlaybackDevice* (be aware of usage)
 	//
-	bool pressedKeys = this->ProcessKeyStrokes(streamTime, configuration);
+	bool pressedKeys = _midiMode ? _midiDevice->SetForPlayback(numberOfFrames, streamTime, configuration) :
+								   _synthDevice->SetForPlayback(numberOfFrames, streamTime, configuration);
 
 	// Optimize CPU
 	if (lastOutput || pressedKeys)
 	{
-		// Update SynthPlaybackDevice* (using shared configuration)
-		_synthDevice->UpdateSynth(configuration);
-
 		// Write playback buffer from synth device
-		rtAudioReturnValue = _synthDevice->WritePlaybackBuffer((void*)outputBuffer, numberOfFrames, streamTime, configuration);
+		rtAudioReturnValue = _midiMode ? _midiDevice->WritePlaybackBuffer(outputBuffer, numberOfFrames, streamTime, configuration) :
+										 _synthDevice->WritePlaybackBuffer(outputBuffer, numberOfFrames, streamTime, configuration);
 
 		// Get output for the UI
 		_outputL = _synthDevice->GetOutput(0);
@@ -101,43 +109,6 @@ int AudioController::ProcessAudioCallback(float* outputBuffer, unsigned int numb
 	return rtAudioReturnValue;
 }
 
-bool AudioController::ProcessKeyStrokes(double streamTime, SynthConfiguration* configuration)
-{
-	if (!_initialized)
-		throw new std::exception("Audio Controller not yet initialized!");
-
-	bool pressedKeys = false;
-
-	// Iterate Key Codes (probably the most direct method)
-	//
-	for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
-	{
-		// Check that enum is defined
-		if (keyCode < 0x30 ||
-			keyCode == 0x40 ||
-			(keyCode > 0x5A && keyCode < 0x80) ||
-			(keyCode > 0x80 && keyCode < 0xBB) ||
-			(keyCode > 0xBF && keyCode < 0xDB) ||
-			(keyCode > 0xDE))
-			continue;
-
-		if (!configuration->HasMidiNote((WindowsKeyCodes)keyCode))
-			continue;
-
-		// Pressed
-		bool isPressed = GetAsyncKeyState(keyCode) & 0x8000;
-
-		// Midi Note
-		int midiNote = configuration->GetMidiNote((WindowsKeyCodes)keyCode);
-
-		// Engage / Dis-Engage
-		_synthDevice->SetNote(midiNote, isPressed, streamTime, configuration);
-
-		pressedKeys |= isPressed;
-	}
-
-	return pressedKeys;
-}
 bool AudioController::Dispose()
 {
 	if (!_initialized)
@@ -146,9 +117,11 @@ bool AudioController::Dispose()
 	try
 	{
 		delete _synthDevice;
+		delete _midiDevice;
 		delete _streamClock;
 		delete _audioTimer;
 
+		_midiDevice = NULL;
 		_synthDevice = NULL;
 		_streamClock = NULL;
 		_audioTimer = NULL;
@@ -164,6 +137,37 @@ bool AudioController::Dispose()
 	}
 
 	return false;
+}
+
+void AudioController::SetMidiMode(const std::string& midiFile)
+{
+	if (!_initialized)
+		throw new std::exception("Audio Controller not yet initialized!");
+
+	// std::atomic block to prepare midi playback device
+	_blockCallback = true;
+
+	_midiMode = true;
+
+	// Prepare MIDI Playback
+	_midiDevice->Load(midiFile);
+
+	_blockCallback = false;
+}
+
+void AudioController::SetSynthMode()
+{
+	if (!_initialized)
+		throw new std::exception("Audio Controller not yet initialized!");
+
+	// std::atomic block to prepare synth playback device
+	_blockCallback = true;
+
+	_midiMode = false;
+
+	// Nothing else to do..
+
+	_blockCallback = false;
 }
 
 void AudioController::GetUpdate(float& streamTime, float& audioTime, float& frontendTime, float& latency, float& left, float& right)

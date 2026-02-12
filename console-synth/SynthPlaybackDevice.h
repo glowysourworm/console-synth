@@ -8,7 +8,10 @@
 #include "PlaybackParameters.h"
 #include "Synth.h"
 #include "SynthConfiguration.h"
+#include "WindowsKeyCodes.h"
+#include <Windows.h>
 #include <cmath>
+#include <exception>
 
 template<SignalValue TSignal>
 class SynthPlaybackDevice : public PlaybackDevice<TSignal>
@@ -20,30 +23,20 @@ public:
 
 	bool Initialize(const SynthConfiguration* configuration, const PlaybackParameters* parameters) override;
 
-	int WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, const SynthConfiguration* configuration) override;
-	//int WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime) override;
+	bool SetForPlayback(unsigned int numberOfFrames, double streamTime, const SynthConfiguration* configuration) override;
 
-	void SetNote(int midiNumber, bool pressed, double streamTime, const SynthConfiguration* configuration);
-	void UpdateSynth(const SynthConfiguration* configuration);
+	int WritePlaybackBuffer(
+		TSignal* playbackBuffer,
+		unsigned int numberOfFrames, 
+		double streamTime, 
+		const SynthConfiguration* configuration) override;
+
+	bool GetLastOutput() const override;
 
 	/// <summary>
 	/// Returns average output for specified channel from the last frame buffer write
 	/// </summary>
 	TSignal GetOutput(int channelIndex) const;
-
-	/// <summary>
-	/// Returns true if the synth had output last call to WritePlaybackBuffer. This output means there's more in the 
-	/// synth device to write until there's nothing left; and the output buffer can write silence, which saves CPU
-	/// cycles.
-	/// </summary>
-	bool GetLastOutput() const;
-
-public:
-
-	/// <summary>
-	/// Gets the currently active notes in the synth as an array of midi note numbers
-	/// </summary>
-	void GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const;
 
 private:
 
@@ -104,7 +97,49 @@ bool SynthPlaybackDevice<TSignal>::Initialize(const SynthConfiguration* configur
 }
 
 template<SignalValue TSignal>
-int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsigned int numberOfFrames, double streamTime, const SynthConfiguration* configuration)
+bool SynthPlaybackDevice<TSignal>::SetForPlayback(unsigned int numberOfFrames, double streamTime, const SynthConfiguration* configuration)
+{
+	if (!_initialized)
+		throw new std::exception("Audio Controller not yet initialized!");
+
+	// Update synth configuration
+	_synth->SetConfiguration(configuration);
+
+	bool pressedKeys = false;
+
+	// Iterate Key Codes (probably the most direct method)
+	//
+	for (int keyCode = (int)WindowsKeyCodes::NUMBER_0; keyCode <= (int)WindowsKeyCodes::PERIOD; keyCode++)
+	{
+		// Check that enum is defined
+		if (keyCode < 0x30 ||
+			keyCode == 0x40 ||
+			(keyCode > 0x5A && keyCode < 0x80) ||
+			(keyCode > 0x80 && keyCode < 0xBB) ||
+			(keyCode > 0xBF && keyCode < 0xDB) ||
+			(keyCode > 0xDE))
+			continue;
+
+		if (!configuration->HasMidiNote((WindowsKeyCodes)keyCode))
+			continue;
+
+		// Pressed
+		bool isPressed = GetAsyncKeyState(keyCode) & 0x8000;
+
+		// Midi Note
+		int midiNote = configuration->GetMidiNote((WindowsKeyCodes)keyCode);
+
+		// Engage / Dis-Engage
+		_synth->Set(midiNote, isPressed, streamTime, configuration);
+
+		pressedKeys |= isPressed;
+	}
+
+	return pressedKeys;
+}
+
+template<SignalValue TSignal>
+int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(TSignal* playbackBuffer, unsigned int numberOfFrames, double streamTime, const SynthConfiguration* configuration)
 {
 	if (!_initialized)
 		return -1;
@@ -135,45 +170,6 @@ int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(void* playbackBuffer, unsi
 
 	return 0;
 }
-//
-//template<SignalValue TSignal>
-//int SynthPlaybackDevice<TSignal>::WritePlaybackBuffer(PlaybackBuffer<TSignal>* playbackBuffer, unsigned int numberOfFrames, double streamTime)
-//{
-//	if (!_initialized)
-//		return -1;
-//
-//	//hasOutput = false;
-//
-//	//// Calculate frame data (BUFFER SIZE = NUMBER OF CHANNELS x NUMBER OF FRAMES)
-//	//for (unsigned int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++)
-//	//{
-//	//	double absoluteTime = streamTime + (frameIndex / (double)playbackBuffer->GetSamplingRate());
-//
-//	//	// Interleved frames
-//	//	for (unsigned int channelIndex = 0; channelIndex < playbackBuffer->GetNumberOfChannels(); channelIndex++)
-//	//	{
-//	//		// Initialize sample to zero
-//	//		TSignal sample = (TSignal)_synth->GetSample(absoluteTime);
-//
-//	//		// Set output sample
-//	//		playbackBuffer->SetBufferFrame(sample, frameIndex, channelIndex);
-//	//	}
-//	//}
-//
-//	return 0;
-//}
-
-template<SignalValue TSignal>
-void SynthPlaybackDevice<TSignal>::SetNote(int midiNumber, bool pressed, double streamTime, const SynthConfiguration* configuration)
-{
-	_synth->Set(midiNumber, pressed, streamTime, configuration);
-}
-
-template<SignalValue TSignal>
-void SynthPlaybackDevice<TSignal>::UpdateSynth(const SynthConfiguration* configuration)
-{
-	_synth->SetConfiguration(configuration);
-}
 
 template<SignalValue TSignal>
 TSignal SynthPlaybackDevice<TSignal>::GetOutput(int channelIndex) const
@@ -182,13 +178,7 @@ TSignal SynthPlaybackDevice<TSignal>::GetOutput(int channelIndex) const
 }
 
 template<SignalValue TSignal>
-inline bool SynthPlaybackDevice<TSignal>::GetLastOutput() const
+bool SynthPlaybackDevice<TSignal>::GetLastOutput() const
 {
 	return _lastOutput;
-}
-
-template<SignalValue TSignal>
-void SynthPlaybackDevice<TSignal>::GetNotes(int array[MIDI_PIANO_SIZE], int& arrayLength) const
-{
-	_synth->GetNotes(array, arrayLength);
 }

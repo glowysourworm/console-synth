@@ -3,6 +3,7 @@
 #include "Envelope.h"
 #include "SynthNoteMap.h"
 #include "WindowsKeyCodes.h"
+#include <AirwinRegistry.h>
 #include <atomic>
 #include <thread>
 
@@ -68,6 +69,8 @@ public:
 	void SetOutputLeftRight(float value);
 	void SetOutputGain(float value);
 
+	AirwinRegistry* GetEffectRegistry() const;
+
 	int GetMidiLow() const;
 	int GetMidiHigh() const;
 
@@ -116,6 +119,8 @@ public:
 	void IterateKeymap(SynthNoteMap::KeymapIterationCallback callback) const;
 
 private:
+
+	AirwinRegistry* _airwinEffectRegistry;
 
 	SynthNoteMap* _keyMap;
 

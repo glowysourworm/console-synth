@@ -94,7 +94,7 @@ int main(int argc, char* argv[], char* envp[])
 	if (!controller.Dispose())
 		return -1;
 
-	// We created this copy
+	// We created this copy (also deletes airwindows plugins)
 	delete configuration;
 
 	return 0;

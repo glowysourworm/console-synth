@@ -3,12 +3,17 @@
 #include "SynthConfiguration.h"
 #include "SynthNoteMap.h"
 #include "WindowsKeyCodes.h"
+#include <AirwinRegistry.h>
 #include <atomic>
 #include <thread>
 
 SynthConfiguration::SynthConfiguration()
 {
+	_airwinEffectRegistry = new AirwinRegistry();
 	_keyMap = new SynthNoteMap();
+
+	// LOAD AIRWIN PLUGINS! (This may take a couple seconds)
+	_airwinEffectRegistry->Load();
 	
 	_waitFlag = false;							// std::atomic
 	_isDirty = false;
@@ -62,6 +67,8 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 	if (_envelopeFilter != nullptr)
 		delete _envelopeFilter;
 
+	_airwinEffectRegistry = copy.GetEffectRegistry();
+
 	_midiLow = copy.GetMidiLow();
 	_midiHigh = copy.GetMidiHigh();
 
@@ -102,6 +109,9 @@ SynthConfiguration::SynthConfiguration(const SynthConfiguration& copy)
 }
 SynthConfiguration::~SynthConfiguration()
 {
+	if (_airwinEffectRegistry != nullptr)
+		delete _airwinEffectRegistry;
+
 	if (_keyMap != nullptr)
 		delete _keyMap;
 
@@ -504,4 +514,9 @@ void SynthConfiguration::SetOutputGain(float value)
 		_isDirty = true;
 
 	_gain = value;
+}
+
+AirwinRegistry* SynthConfiguration::GetEffectRegistry() const
+{
+	return _airwinEffectRegistry;
 }

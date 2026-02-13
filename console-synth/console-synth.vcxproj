@@ -118,7 +118,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CopyLocalProjectReference>true</CopyLocalProjectReference>
-    <IncludePath>C:\Backup\_Source\Git\console-synth\vendor\airwin2rack-DAWPlugin;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Backup\_Source\Git\console-synth\vendor\airwin2rack-DAWPlugin;C:\Backup\_Source\Git\console-synth\airwindows-plugins;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Backup\_Source\Git\console-synth\airwindows-plugins;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Brinstar|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -351,6 +352,11 @@
     <ClInclude Include="UIBase.h" />
     <ClInclude Include="UIController.h" />
     <ClInclude Include="WindowsKeyCodes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\airwindows-plugins\airwindows-plugins.vcxproj">
+      <Project>{6334518d-36f2-45f5-b518-bb88898954ff}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

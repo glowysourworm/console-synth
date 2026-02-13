@@ -52,6 +52,8 @@ _UCRT_RESTORE_CLANG_WARNINGS
 #include <stdio.h>
 #include <cmath>
 #include <cstdio>
+#include <exception>
+#include <string>
 
 typedef int32_t VstInt32;
 typedef int32_t VstPlugCategory;
@@ -73,7 +75,9 @@ struct AirwinConsolidatedBase
     void setSampleRate(float sr) { sampleRate = sr; }
     float getSampleRate()
     {
-        assert(sampleRate > 2000);
+        if (sampleRate < 2000)
+            throw std::exception("Sampling rate initialization error (Airwindows Plugin Registry)");
+
         return sampleRate;
     }
 

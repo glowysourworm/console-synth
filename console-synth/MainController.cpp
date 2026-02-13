@@ -44,6 +44,9 @@ bool MainController::Initialize(const SynthConfiguration* configuration, const P
 	// RT AUDIO -> Open Stream (SynthConfiguration*)(PlaybackParameteres*) (INITIALIZE!)
 	success &= RtAudioController::OpenStream(_configuration);
 
+	// Airwindows Plugins:  Require sampling rate!
+	success &= _configuration->LoadAirwinRegistry(parameters->GetSamplingRate());
+
 	// Audio Controller (for callback)
 	success &= _audioController->Initialize(configuration, parameters);
 

@@ -11,9 +11,6 @@ SynthConfiguration::SynthConfiguration()
 {
 	_airwinEffectRegistry = new AirwinRegistry();
 	_keyMap = new SynthNoteMap();
-
-	// LOAD AIRWIN PLUGINS! (This may take a couple seconds)
-	_airwinEffectRegistry->Load(0);
 	
 	_waitFlag = false;							// std::atomic
 	_isDirty = false;
@@ -120,6 +117,12 @@ SynthConfiguration::~SynthConfiguration()
 
 	if (_envelopeFilter != nullptr)
 		delete _envelopeFilter;
+}
+
+bool SynthConfiguration::LoadAirwinRegistry(float samplingRate)
+{
+	// LOAD AIRWIN PLUGINS! (This may take a couple seconds)
+	return _airwinEffectRegistry->Load(samplingRate);
 }
 
 bool SynthConfiguration::IsWaiting() const

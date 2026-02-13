@@ -237,6 +237,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AirwindowsEffect.cpp" />
+    <ClCompile Include="AirwindowsEffectUI.cpp" />
     <ClCompile Include="AllPassFilterChannel.cpp" />
     <ClCompile Include="AudioController.cpp" />
     <ClCompile Include="CompressorUI.cpp" />
@@ -288,6 +289,7 @@
   <ItemGroup>
     <ClInclude Include="Accumulator.h" />
     <ClInclude Include="AirwindowsEffect.h" />
+    <ClInclude Include="AirwindowsEffectUI.h" />
     <ClInclude Include="AllPassFilterChannel.h" />
     <ClInclude Include="AudioController.h" />
     <ClInclude Include="BaseController.h" />

@@ -69,6 +69,12 @@ public:
 	void SetOutputLeftRight(float value);
 	void SetOutputGain(float value);
 
+	/// <summary>
+	/// Loads airwin effects plugins. This requires that the RT Audio connection be established
+	/// to get the device sampling rate. So, it must follow an initialization procedure (there should
+	/// be another base class for systematizing this; but we can add that later)
+	/// </summary>
+	bool LoadAirwinRegistry(float samplingRate);
 	AirwinRegistry* GetEffectRegistry() const;
 
 	int GetMidiLow() const;

@@ -28,6 +28,7 @@ public:
     /// </summary>
     bool Load(float samplingRate);
 
+    AirwinRegistryEntry* GetPlugin(const std::string& airwinPluginName) const;
     void GetPlugins(std::vector<std::string>& destination);
     void GetCategories(std::vector<std::string>& destination);
     void GetCategoryList(std::vector<std::string>& destination, const std::string& category);

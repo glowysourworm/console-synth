@@ -213,6 +213,9 @@
     <ClCompile Include="MainUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="AirwindowsEffectUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsKeyCodes.h">
@@ -396,6 +399,9 @@
       <Filter>Header Files\Synth</Filter>
     </ClInclude>
     <ClInclude Include="MainUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="AirwindowsEffectUI.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

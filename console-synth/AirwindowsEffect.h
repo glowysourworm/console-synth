@@ -4,6 +4,10 @@
 #include "PlaybackFrame.h"
 #include "SynthConfiguration.h"
 
+/// <summary>
+/// Airwindows Effect Wrapper:  This will hold a plugin from the airwindows-plugins project. Each plugin will follow the
+/// FilterBase initialization path; and has already been properly loaded by the application.
+/// </summary>
 class AirwindowsEffect : public FilterBase
 {
 public:

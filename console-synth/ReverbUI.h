@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/screen/color.hpp>
@@ -13,6 +14,7 @@ public:
 	ReverbUI(bool enabled, float delay, float gain, float wetDry, const std::string& title, const ftxui::Color& titleColor);
 	~ReverbUI();
 
+	void Initialize(const SynthConfiguration* configuration) override;
 	ftxui::Component GetComponent() override;
 	void UpdateComponent(bool clearDirty) override;
 

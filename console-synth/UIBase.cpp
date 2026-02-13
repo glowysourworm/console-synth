@@ -1,4 +1,6 @@
+#include "SynthConfiguration.h"
 #include "UIBase.h"
+#include <exception>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/node.hpp>
@@ -13,6 +15,7 @@ UIBase::UIBase(const std::string& title, bool showBoxedWithTitle, const ftxui::C
 
 	_componentUI = nullptr;
 	_isDirty = false;
+	_isInitialized = false;
 }
 
 UIBase::~UIBase()
@@ -21,8 +24,19 @@ UIBase::~UIBase()
 	delete this->titleColor;
 }
 
+void UIBase::Initialize(const SynthConfiguration* configuration)
+{
+	if (_isInitialized)
+		throw new std::exception("UIBase component already initialized!");
+
+	_isInitialized = true;
+}
+
 ftxui::Element UIBase::Render()
 {
+	if (!_isInitialized)
+		throw new std::exception("UIBase component not initialized before using");
+
 	this->UpdateComponent(false);
 
 	if (_componentUI == nullptr)
@@ -33,6 +47,9 @@ ftxui::Element UIBase::Render()
 
 ftxui::Component UIBase::GetRenderer()
 {
+	if (!_isInitialized)
+		throw new std::exception("UIBase component not initialized before using");
+
 	if (_componentUI == nullptr)
 		_componentUI = this->GetComponent();
 

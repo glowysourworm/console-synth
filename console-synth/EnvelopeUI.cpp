@@ -1,6 +1,7 @@
 #include "Envelope.h"
 #include "EnvelopeUI.h"
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -27,6 +28,17 @@ EnvelopeUI::~EnvelopeUI()
 	delete _release;
 	delete _attackPeak;
 	delete _sustainPeak;
+}
+
+void EnvelopeUI::Initialize(const SynthConfiguration* configuration)
+{
+	UIBase::Initialize(configuration);
+
+	_attack->Initialize(configuration);
+	_decay->Initialize(configuration);
+	_release->Initialize(configuration);
+	_attackPeak->Initialize(configuration);
+	_sustainPeak->Initialize(configuration);
 }
 
 ftxui::Component EnvelopeUI::GetComponent()

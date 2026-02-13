@@ -1,5 +1,6 @@
 #include "OutputUI.h"
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -20,6 +21,14 @@ OutputUI::~OutputUI()
 {
 	delete _gainUI;
 	delete _leftRightUI;
+}
+
+void OutputUI::Initialize(const SynthConfiguration* configuration)
+{
+    UIBase::Initialize(configuration);
+
+    _gainUI->Initialize(configuration);
+    _leftRightUI->Initialize(configuration);
 }
 
 ftxui::Component OutputUI::GetComponent()
@@ -74,4 +83,9 @@ void OutputUI::SetOutput(float left, float right)
 {
     _left = left;
     _right = right;
+}
+
+bool OutputUI::GetDirty() const
+{
+    return _gainUI->GetDirty() || _leftRightUI->GetDirty();
 }

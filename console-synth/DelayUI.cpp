@@ -1,5 +1,6 @@
 #include "DelayUI.h"
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -24,6 +25,15 @@ DelayUI::~DelayUI()
     delete _gainUI;
     delete _onOffStrs;
     delete _wetDryUI;
+}
+
+void DelayUI::Initialize(const SynthConfiguration* configuration)
+{
+    UIBase::Initialize(configuration);
+
+    _delayUI->Initialize(configuration);
+    _gainUI->Initialize(configuration);
+    _wetDryUI->Initialize(configuration);
 }
 
 ftxui::Component DelayUI::GetComponent()

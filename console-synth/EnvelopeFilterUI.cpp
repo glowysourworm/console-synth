@@ -4,6 +4,8 @@
 #include "EnvelopeUI.h"
 #include "OscillatorUI.h"
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -45,6 +47,17 @@ EnvelopeFilterUI::~EnvelopeFilterUI()
 	delete _oscillatorUI;
 	delete _onOffStrs;
 	delete _filterTypeStrs;
+}
+
+void EnvelopeFilterUI::Initialize(const SynthConfiguration* configuration)
+{
+	UIBase::Initialize(configuration);
+
+	_cutoffUI->Initialize(configuration);
+	_resonanceUI->Initialize(configuration);
+	_oscillatorFrequencyUI->Initialize(configuration);
+	_envelopeUI->Initialize(configuration);
+	_oscillatorUI->Initialize(configuration);
 }
 
 ftxui::Component EnvelopeFilterUI::GetComponent()

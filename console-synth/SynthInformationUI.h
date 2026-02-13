@@ -1,5 +1,6 @@
 #pragma once
 #include "PlaybackParameters.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/screen/color.hpp>
@@ -11,6 +12,7 @@ public:
 	SynthInformationUI(const std::string& title, bool showBoxedWithTitle, const ftxui::Color& titleColor);
 	~SynthInformationUI();
 
+	void Initialize(const SynthConfiguration* configuration) override;
 	ftxui::Component GetComponent() override;
 	void UpdateComponent(bool clearDirty) override;
 

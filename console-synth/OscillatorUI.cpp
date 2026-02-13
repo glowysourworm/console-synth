@@ -1,5 +1,6 @@
 #include "Constant.h"
 #include "OscillatorUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -27,6 +28,11 @@ OscillatorUI::~OscillatorUI()
 
 	delete _oscillatorItems;
 	delete _oscillatorSelectedIndex;
+}
+
+void OscillatorUI::Initialize(const SynthConfiguration* configuration)
+{
+	UIBase::Initialize(configuration);
 }
 
 ftxui::Component OscillatorUI::GetComponent()

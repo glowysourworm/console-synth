@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/node.hpp>
@@ -22,6 +23,7 @@ public:
 				 const ftxui::Color& titleColor);
 	~CompressorUI();
 
+	void Initialize(const SynthConfiguration* configuration) override;
 	ftxui::Component GetComponent() override;
 	void UpdateComponent(bool clearDirty) override;
 

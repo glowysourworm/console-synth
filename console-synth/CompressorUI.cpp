@@ -1,9 +1,9 @@
 #include "CompressorUI.h"
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
-#include <ftxui/component/event.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color.hpp>
 #include <string>
@@ -37,6 +37,17 @@ CompressorUI::~CompressorUI()
 	delete _compressionRatioUI;
 
 	delete _onOffStrs;
+}
+
+void CompressorUI::Initialize(const SynthConfiguration* configuration)
+{
+	UIBase::Initialize(configuration);
+
+	_thresholdUI->Initialize(configuration);
+	_gainUI->Initialize(configuration);
+	_attackUI->Initialize(configuration);
+	_releaseUI->Initialize(configuration);
+	_compressionRatioUI->Initialize(configuration);
 }
 
 ftxui::Component CompressorUI::GetComponent()

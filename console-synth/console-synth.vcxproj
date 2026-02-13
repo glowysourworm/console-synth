@@ -249,6 +249,7 @@
     <ClCompile Include="ButterworthFilterChannel.cpp" />
     <ClCompile Include="Filter.cpp" />
     <ClCompile Include="MainController.cpp" />
+    <ClCompile Include="MainUI.cpp" />
     <ClCompile Include="OscillatorBase.cpp" />
     <ClCompile Include="Binasc.cpp" />
     <ClCompile Include="ButterworthFilter.cpp" />
@@ -303,6 +304,7 @@
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterChannelBase.h" />
     <ClInclude Include="MainController.h" />
+    <ClInclude Include="MainUI.h" />
     <ClInclude Include="MixerChannel.h" />
     <ClInclude Include="OscillatorBase.h" />
     <ClInclude Include="Binasc.h" />

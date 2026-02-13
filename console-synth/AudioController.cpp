@@ -12,6 +12,7 @@
 AudioController::AudioController()
 {
 	_initialized = false;
+	_midiMode = false;
 
 	_synthDevice = new SynthPlaybackDevice<float>();
 	_midiDevice = new MidiPlaybackDevice<float>();

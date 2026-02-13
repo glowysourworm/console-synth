@@ -1,4 +1,5 @@
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <format>
 #include <ftxui/component/component.hpp>
@@ -33,6 +34,11 @@ SliderUI::~SliderUI()
     delete _increment;
     delete _labelFormat;
     delete _label;
+}
+
+void SliderUI::Initialize(const SynthConfiguration* configuration)
+{
+    UIBase::Initialize(configuration);
 }
 
 ftxui::Component SliderUI::GetComponent()

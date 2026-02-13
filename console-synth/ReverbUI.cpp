@@ -1,5 +1,6 @@
 #include "ReverbUI.h"
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
@@ -23,6 +24,15 @@ ReverbUI::~ReverbUI()
     delete _gainUI;
     delete _wetDryUI;
     delete _onOffStrs;
+}
+
+void ReverbUI::Initialize(const SynthConfiguration* configuration)
+{
+    UIBase::Initialize(configuration);
+
+    _delayUI->Initialize(configuration);
+    _gainUI->Initialize(configuration);
+    _wetDryUI->Initialize(configuration);
 }
 
 ftxui::Component ReverbUI::GetComponent()

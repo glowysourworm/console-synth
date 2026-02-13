@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SynthConfiguration.h"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/dom/node.hpp>
 #include <ftxui/screen/color.hpp>
@@ -15,6 +16,12 @@ public:
 
 	UIBase(const std::string& title, bool showBoxedWithTitle, const ftxui::Color& titleColor);
 	~UIBase();
+
+	/// <summary>
+	/// Initializes UI component from synth configuration
+	/// </summary>
+	/// <param name="configuration">Configuration (if needed for the UI component) is provided</param>
+	virtual void Initialize(const SynthConfiguration* configuration);
 
 	/// <summary>
 	/// Creates FTXUI dom element for rendering
@@ -58,5 +65,6 @@ protected:
 private:
 
 	bool _isDirty;
+	bool _isInitialized;
 };
 

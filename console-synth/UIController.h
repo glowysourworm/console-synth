@@ -1,17 +1,8 @@
 #pragma once
 #include "BaseController.h"
-#include "CompressorUI.h"
-#include "DelayUI.h"
-#include "EnvelopeFilterUI.h"
-#include "EnvelopeUI.h"
-#include "OscillatorUI.h"
-#include "OutputUI.h"
+#include "MainUI.h"
 #include "PlaybackParameters.h"
-#include "ReverbUI.h"
 #include "SynthConfiguration.h"
-#include "SynthInformationUI.h"
-#include <ftxui/component/component_base.hpp>
-#include <ftxui/component/loop.hpp>
 #include <mutex>
 #include <thread>
 
@@ -49,16 +40,7 @@ private:
 
 private:
 
-	ftxui::Component _view;							// Shared Pointer (std::shared_pointer)
-
-	SynthInformationUI* _synthInformationUI;
-	CompressorUI* _compressorUI;
-	DelayUI* _delayUI;
-	EnvelopeUI* _envelopeUI;
-	EnvelopeFilterUI* _envelopeFilterUI;
-	OscillatorUI* _oscillatorUI;
-	OutputUI* _outputUI;
-	ReverbUI* _reverbUI;
+	MainUI* _mainUI;
 
 	// This was needed to accomodate the FTXUI stack-based API (ftxui::Screen does not have a way to create a private pointer)
 	std::thread* _thread;

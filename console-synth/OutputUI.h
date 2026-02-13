@@ -1,6 +1,8 @@
 #pragma once
 
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/screen/color.hpp>
@@ -12,6 +14,7 @@ public:
 	OutputUI(float gain, float leftRight, const std::string& title, const ftxui::Color& titleColor);
 	~OutputUI();
 
+	void Initialize(const SynthConfiguration* configuration) override;
 	ftxui::Component GetComponent() override;
 	void UpdateComponent(bool clearDirty) override;
 
@@ -19,6 +22,8 @@ public:
 	float GetLeftRight() const;
 
 	void SetOutput(float left, float right);
+
+	bool GetDirty() const override;
 
 private:
 

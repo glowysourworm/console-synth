@@ -225,6 +225,9 @@
     <ClCompile Include="SynthNoteQueue.cpp">
       <Filter>Source Files\Synth</Filter>
     </ClCompile>
+    <ClCompile Include="MainUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsKeyCodes.h">
@@ -412,6 +415,9 @@
     </ClInclude>
     <ClInclude Include="SynthNoteQueue.h">
       <Filter>Header Files\Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="MainUI.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

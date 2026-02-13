@@ -2,6 +2,7 @@
 
 #include "Envelope.h"
 #include "SliderUI.h"
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/screen/color.hpp>
@@ -13,6 +14,7 @@ public:
 	EnvelopeUI(const Envelope& envelope, const std::string& title, bool showBoxedWithTitle, const ftxui::Color& titleColor);
 	~EnvelopeUI();
 
+	void Initialize(const SynthConfiguration* configuration) override;
 	ftxui::Component GetComponent() override;
 	void UpdateComponent(bool clearDirty) override;
 

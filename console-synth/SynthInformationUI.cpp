@@ -1,4 +1,5 @@
 #include "PlaybackParameters.h"
+#include "SynthConfiguration.h"
 #include "SynthInformationUI.h"
 #include "UIBase.h"
 #include <format>
@@ -36,6 +37,10 @@ SynthInformationUI::~SynthInformationUI()
 	delete _averageFrontendTime;
 	delete _streamTime;
 	delete _streamLatency;
+}
+void SynthInformationUI::Initialize(const SynthConfiguration* configuration)
+{
+	UIBase::Initialize(configuration);
 }
 ftxui::Component SynthInformationUI::GetComponent()
 {

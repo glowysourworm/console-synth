@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SynthConfiguration.h"
 #include "UIBase.h"
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/screen/color.hpp>
@@ -17,6 +18,7 @@ public:
 			 const ftxui::Color& titleColor);
 	~SliderUI();
 
+	void Initialize(const SynthConfiguration* configuration) override;
 	ftxui::Component GetComponent() override;
 	void UpdateComponent(bool clearDirty) override;
 

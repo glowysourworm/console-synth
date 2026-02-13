@@ -33,7 +33,7 @@ class Verbity2 :
     public AudioEffectX 
 {
 public:
-    Verbity2(audioMasterCallback audioMaster);
+    Verbity2(float samplingRate);
     ~Verbity2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

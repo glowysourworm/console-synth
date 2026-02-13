@@ -40,7 +40,7 @@ class kCosmos :
     public AudioEffectX 
 {
 public:
-    kCosmos(audioMasterCallback audioMaster);
+    kCosmos(float samplingRate);
     ~kCosmos();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

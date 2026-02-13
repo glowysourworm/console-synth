@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::VinylDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new VinylDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new VinylDither(samplingRate);}
 
-VinylDither::VinylDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+VinylDither::VinylDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

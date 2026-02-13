@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BitShiftGain {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BitShiftGain(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BitShiftGain(samplingRate);}
 
-BitShiftGain::BitShiftGain(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BitShiftGain::BitShiftGain(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	//this is reset: values being initialized only once. Startup values, whatever they are.

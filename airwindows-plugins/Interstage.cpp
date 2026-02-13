@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Interstage {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Interstage(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Interstage(samplingRate);}
 
-Interstage::Interstage(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Interstage::Interstage(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	iirSampleAL = 0.0;
 	iirSampleBL = 0.0;

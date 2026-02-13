@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DitherFloat {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DitherFloat(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DitherFloat(samplingRate);}
 
-DitherFloat::DitherFloat(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DitherFloat::DitherFloat(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

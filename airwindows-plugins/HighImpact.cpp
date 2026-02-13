@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::HighImpact {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new HighImpact(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new HighImpact(samplingRate);}
 
-HighImpact::HighImpact(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+HighImpact::HighImpact(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

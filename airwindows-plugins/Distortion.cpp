@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Distortion {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Distortion(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Distortion(samplingRate);}
 
-Distortion::Distortion(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Distortion::Distortion(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

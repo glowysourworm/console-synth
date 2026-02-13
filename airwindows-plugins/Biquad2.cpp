@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Biquad2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Biquad2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Biquad2(samplingRate);}
 
-Biquad2::Biquad2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Biquad2::Biquad2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 15; x++) {biquad[x] = 0.0;}
 	for (int x = 0; x < 11; x++) {bL[x] = 0.0; bR[x] = 0.0; f[x] = 0.0;}

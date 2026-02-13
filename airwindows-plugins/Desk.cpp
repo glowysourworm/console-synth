@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Desk {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Desk(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Desk(samplingRate);}
 
-Desk::Desk(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Desk::Desk(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	lastSampleL = 0.0;
 	lastOutSampleL = 0.0;

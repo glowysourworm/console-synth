@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestDrive {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestDrive(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestDrive(samplingRate);}
 
-PurestDrive::PurestDrive(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestDrive::PurestDrive(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 

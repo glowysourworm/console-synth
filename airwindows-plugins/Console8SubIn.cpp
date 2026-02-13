@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Console8SubIn {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Console8SubIn(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Console8SubIn(samplingRate);}
 
-Console8SubIn::Console8SubIn(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console8SubIn::Console8SubIn(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	iirAL = 0.0; iirBL = 0.0; iirAR = 0.0; iirBR = 0.0;
 	for (int x = 0; x < fix_total; x++) fix[x] = 0.0;

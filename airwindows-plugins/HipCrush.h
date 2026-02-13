@@ -39,7 +39,7 @@ class HipCrush :
     public AudioEffectX 
 {
 public:
-    HipCrush(audioMasterCallback audioMaster);
+    HipCrush(float samplingRate);
     ~HipCrush();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

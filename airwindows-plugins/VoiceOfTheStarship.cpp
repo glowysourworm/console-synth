@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::VoiceOfTheStarship {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new VoiceOfTheStarship(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new VoiceOfTheStarship(samplingRate);}
 
-VoiceOfTheStarship::VoiceOfTheStarship(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+VoiceOfTheStarship::VoiceOfTheStarship(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

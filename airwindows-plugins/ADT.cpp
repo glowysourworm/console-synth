@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ADT {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ADT(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ADT(samplingRate);}
 
-ADT::ADT(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ADT::ADT(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5; //0.0 to 2.0 headroom
 	B = 0.5; //delay time

@@ -34,7 +34,7 @@ class HermeTrim :
     public AudioEffectX 
 {
 public:
-    HermeTrim(audioMasterCallback audioMaster);
+    HermeTrim(float samplingRate);
     ~HermeTrim();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

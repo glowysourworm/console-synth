@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Pressure6 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Pressure6(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Pressure6(samplingRate);}
 
-Pressure6::Pressure6(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Pressure6::Pressure6(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

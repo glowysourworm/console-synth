@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestGain {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestGain(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestGain(samplingRate);}
 
-PurestGain::PurestGain(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestGain::PurestGain(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

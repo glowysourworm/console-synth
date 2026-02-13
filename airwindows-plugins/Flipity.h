@@ -30,7 +30,7 @@ class Flipity :
     public AudioEffectX 
 {
 public:
-    Flipity(audioMasterCallback audioMaster);
+    Flipity(float samplingRate);
     ~Flipity();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

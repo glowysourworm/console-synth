@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::HardVacuum {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new HardVacuum(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new HardVacuum(samplingRate);}
 
-HardVacuum::HardVacuum(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+HardVacuum::HardVacuum(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

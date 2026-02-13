@@ -39,7 +39,7 @@ class Pafnuty2 :
     public AudioEffectX 
 {
 public:
-    Pafnuty2(audioMasterCallback audioMaster);
+    Pafnuty2(float samplingRate);
     ~Pafnuty2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

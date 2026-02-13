@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ChromeOxide {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ChromeOxide(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ChromeOxide(samplingRate);}
 
-ChromeOxide::ChromeOxide(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ChromeOxide::ChromeOxide(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	iirSampleAL = 0.0;
 	iirSampleBL = 0.0;

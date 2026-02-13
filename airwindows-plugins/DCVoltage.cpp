@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DCVoltage {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DCVoltage(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DCVoltage(samplingRate);}
 
-DCVoltage::DCVoltage(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DCVoltage::DCVoltage(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	//this is reset: values being initialized only once. Startup values, whatever they are.

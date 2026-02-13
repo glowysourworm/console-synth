@@ -31,7 +31,7 @@ class CrickBass :
     public AudioEffectX 
 {
 public:
-    CrickBass(audioMasterCallback audioMaster);
+    CrickBass(float samplingRate);
     ~CrickBass();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

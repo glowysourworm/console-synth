@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Console5DarkCh {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Console5DarkCh(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Console5DarkCh(samplingRate);}
 
-Console5DarkCh::Console5DarkCh(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console5DarkCh::Console5DarkCh(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	lastSampleChannelL = 0.0;

@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DoublePaul {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DoublePaul(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DoublePaul(samplingRate);}
 
-DoublePaul::DoublePaul(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DoublePaul::DoublePaul(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for(int count = 0; count < 11; count++) {bL[count] = 0.0;bR[count] = 0.0;}
 	//this is reset: values being initialized only once. Startup values, whatever they are.

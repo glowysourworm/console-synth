@@ -30,7 +30,7 @@ class MSFlipTimer :
     public AudioEffectX 
 {
 public:
-    MSFlipTimer(audioMasterCallback audioMaster);
+    MSFlipTimer(float samplingRate);
     ~MSFlipTimer();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

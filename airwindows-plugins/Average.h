@@ -31,7 +31,7 @@ class Average :
     public AudioEffectX 
 {
 public:
-    Average(audioMasterCallback audioMaster);
+    Average(float samplingRate);
     ~Average();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -31,7 +31,7 @@ class NodeDither :
     public AudioEffectX 
 {
 public:
-    NodeDither(audioMasterCallback audioMaster);
+    NodeDither(float samplingRate);
     ~NodeDither();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

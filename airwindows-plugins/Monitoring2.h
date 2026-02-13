@@ -51,7 +51,7 @@ class Monitoring2 :
     public AudioEffectX 
 {
 public:
-    Monitoring2(audioMasterCallback audioMaster);
+    Monitoring2(float samplingRate);
     ~Monitoring2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

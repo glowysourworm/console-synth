@@ -33,7 +33,7 @@ class Lowpass2 :
     public AudioEffectX 
 {
 public:
-    Lowpass2(audioMasterCallback audioMaster);
+    Lowpass2(float samplingRate);
     ~Lowpass2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

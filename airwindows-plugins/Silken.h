@@ -35,7 +35,7 @@ class Silken :
     public AudioEffectX 
 {
 public:
-    Silken(audioMasterCallback audioMaster);
+    Silken(float samplingRate);
     ~Silken();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

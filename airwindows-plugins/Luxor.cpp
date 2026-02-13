@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Luxor {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Luxor(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Luxor(samplingRate);}
 
-Luxor::Luxor(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Luxor::Luxor(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.70;
 	B = 0.3333333;

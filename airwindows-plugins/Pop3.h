@@ -37,7 +37,7 @@ class Pop3 :
     public AudioEffectX 
 {
 public:
-    Pop3(audioMasterCallback audioMaster);
+    Pop3(float samplingRate);
     ~Pop3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

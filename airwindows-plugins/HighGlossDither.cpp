@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::HighGlossDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new HighGlossDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new HighGlossDither(samplingRate);}
 
-HighGlossDither::HighGlossDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+HighGlossDither::HighGlossDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	Position = 99999999;
 	flip = false;

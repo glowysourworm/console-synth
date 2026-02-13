@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::AutoPan {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new AutoPan(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new AutoPan(samplingRate);}
 
-AutoPan::AutoPan(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+AutoPan::AutoPan(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 0.5;

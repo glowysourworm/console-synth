@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::FinalClip {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new FinalClip(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new FinalClip(samplingRate);}
 
-FinalClip::FinalClip(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+FinalClip::FinalClip(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	lastSampleL = 0.0;
 	wasPosClipL = false;

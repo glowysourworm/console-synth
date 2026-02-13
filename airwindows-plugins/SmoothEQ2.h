@@ -37,7 +37,7 @@ class SmoothEQ2 :
     public AudioEffectX 
 {
 public:
-    SmoothEQ2(audioMasterCallback audioMaster);
+    SmoothEQ2(float samplingRate);
     ~SmoothEQ2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

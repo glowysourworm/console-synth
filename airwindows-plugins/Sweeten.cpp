@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Sweeten {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Sweeten(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Sweeten(samplingRate);}
 
-Sweeten::Sweeten(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Sweeten::Sweeten(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	for (int x = 0; x < 19; x++) savg[x] = 0.0;

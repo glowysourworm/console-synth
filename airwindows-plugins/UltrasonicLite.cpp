@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::UltrasonicLite {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new UltrasonicLite(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new UltrasonicLite(samplingRate);}
 
-UltrasonicLite::UltrasonicLite(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+UltrasonicLite::UltrasonicLite(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 15; x++) {biquadA[x] = 0.0;}
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

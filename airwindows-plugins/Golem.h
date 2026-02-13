@@ -32,7 +32,7 @@ class Golem :
     public AudioEffectX 
 {
 public:
-    Golem(audioMasterCallback audioMaster);
+    Golem(float samplingRate);
     ~Golem();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

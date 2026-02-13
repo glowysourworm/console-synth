@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::IronOxide5 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new IronOxide5(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new IronOxide5(samplingRate);}
 
-IronOxide5::IronOxide5(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+IronOxide5::IronOxide5(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5; //0.0 input trim in dB -18 to +18, default 0 ((A*36.0)-18.0)
 	B = 0.562341325190349; //15.0 ips 1.5 to 150.0 logarithmic. B*B

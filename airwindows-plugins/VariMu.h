@@ -33,7 +33,7 @@ class VariMu :
     public AudioEffectX 
 {
 public:
-    VariMu(audioMasterCallback audioMaster);
+    VariMu(float samplingRate);
     ~VariMu();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

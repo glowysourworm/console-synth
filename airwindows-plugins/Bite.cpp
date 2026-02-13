@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Bite {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Bite(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Bite(samplingRate);}
 
-Bite::Bite(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Bite::Bite(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

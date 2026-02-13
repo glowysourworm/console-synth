@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::AverMatrix {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new AverMatrix(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new AverMatrix(samplingRate);}
 
-AverMatrix::AverMatrix(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+AverMatrix::AverMatrix(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

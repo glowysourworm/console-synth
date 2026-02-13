@@ -29,7 +29,7 @@ class DoublePaul :
     public AudioEffectX 
 {
 public:
-    DoublePaul(audioMasterCallback audioMaster);
+    DoublePaul(float samplingRate);
     ~DoublePaul();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

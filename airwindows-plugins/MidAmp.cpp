@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::MidAmp {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new MidAmp(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new MidAmp(samplingRate);}
 
-MidAmp::MidAmp(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+MidAmp::MidAmp(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

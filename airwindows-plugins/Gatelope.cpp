@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Gatelope {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Gatelope(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Gatelope(samplingRate);}
 
-Gatelope::Gatelope(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Gatelope::Gatelope(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

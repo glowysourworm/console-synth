@@ -31,7 +31,7 @@ class Shape :
     public AudioEffectX 
 {
 public:
-    Shape(audioMasterCallback audioMaster);
+    Shape(float samplingRate);
     ~Shape();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

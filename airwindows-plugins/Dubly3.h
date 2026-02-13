@@ -33,7 +33,7 @@ class Dubly3 :
     public AudioEffectX 
 {
 public:
-    Dubly3(audioMasterCallback audioMaster);
+    Dubly3(float samplingRate);
     ~Dubly3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

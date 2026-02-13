@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DeNoise {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DeNoise(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DeNoise(samplingRate);}
 
-DeNoise::DeNoise(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DeNoise::DeNoise(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

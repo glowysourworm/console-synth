@@ -31,7 +31,7 @@ class Elliptical :
     public AudioEffectX 
 {
 public:
-    Elliptical(audioMasterCallback audioMaster);
+    Elliptical(float samplingRate);
     ~Elliptical();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

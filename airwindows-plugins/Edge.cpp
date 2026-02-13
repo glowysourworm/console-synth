@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Edge {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Edge(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Edge(samplingRate);}
 
-Edge::Edge(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Edge::Edge(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 1.0;

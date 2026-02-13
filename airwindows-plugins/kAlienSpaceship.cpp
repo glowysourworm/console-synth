@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::kAlienSpaceship {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new kAlienSpaceship(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new kAlienSpaceship(samplingRate);}
 
-kAlienSpaceship::kAlienSpaceship(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+kAlienSpaceship::kAlienSpaceship(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

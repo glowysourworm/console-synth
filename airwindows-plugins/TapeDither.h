@@ -31,7 +31,7 @@ class TapeDither :
     public AudioEffectX 
 {
 public:
-    TapeDither(audioMasterCallback audioMaster);
+    TapeDither(float samplingRate);
     ~TapeDither();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -30,7 +30,7 @@ class Silhouette :
     public AudioEffectX 
 {
 public:
-    Silhouette(audioMasterCallback audioMaster);
+    Silhouette(float samplingRate);
     ~Silhouette();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

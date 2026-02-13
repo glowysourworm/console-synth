@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Righteous4 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Righteous4(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Righteous4(samplingRate);}
 
-Righteous4::Righteous4(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Righteous4::Righteous4(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

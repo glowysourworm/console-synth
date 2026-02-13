@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Mastering2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Mastering2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Mastering2(samplingRate);}
 
-Mastering2::Mastering2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Mastering2::Mastering2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

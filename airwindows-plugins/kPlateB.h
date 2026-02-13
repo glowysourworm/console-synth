@@ -38,7 +38,7 @@ class kPlateB :
     public AudioEffectX 
 {
 public:
-    kPlateB(audioMasterCallback audioMaster);
+    kPlateB(float samplingRate);
     ~kPlateB();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

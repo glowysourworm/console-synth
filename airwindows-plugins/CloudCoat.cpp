@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::CloudCoat {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new CloudCoat(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new CloudCoat(samplingRate);}
 
-CloudCoat::CloudCoat(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+CloudCoat::CloudCoat(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

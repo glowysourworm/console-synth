@@ -31,7 +31,7 @@ class TapeDust :
     public AudioEffectX 
 {
 public:
-    TapeDust(audioMasterCallback audioMaster);
+    TapeDust(float samplingRate);
     ~TapeDust();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

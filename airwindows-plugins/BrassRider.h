@@ -31,7 +31,7 @@ class BrassRider :
     public AudioEffectX 
 {
 public:
-    BrassRider(audioMasterCallback audioMaster);
+    BrassRider(float samplingRate);
     ~BrassRider();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

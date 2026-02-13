@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Flipity {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Flipity(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Flipity(samplingRate);}
 
-Flipity::Flipity(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Flipity::Flipity(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

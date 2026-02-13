@@ -30,7 +30,7 @@ class BitShiftGain :
     public AudioEffectX 
 {
 public:
-    BitShiftGain(audioMasterCallback audioMaster);
+    BitShiftGain(float samplingRate);
     ~BitShiftGain();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

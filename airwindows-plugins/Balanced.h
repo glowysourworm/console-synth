@@ -30,7 +30,7 @@ class Balanced :
     public AudioEffectX 
 {
 public:
-    Balanced(audioMasterCallback audioMaster);
+    Balanced(float samplingRate);
     ~Balanced();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

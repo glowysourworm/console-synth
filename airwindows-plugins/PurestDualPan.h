@@ -33,7 +33,7 @@ class PurestDualPan :
     public AudioEffectX 
 {
 public:
-    PurestDualPan(audioMasterCallback audioMaster);
+    PurestDualPan(float samplingRate);
     ~PurestDualPan();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

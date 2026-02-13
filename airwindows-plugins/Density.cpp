@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Density {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Density(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Density(samplingRate);}
 
-Density::Density(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Density::Density(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.2; //equivalent of 0.0 in VST 0-1 scale for 'Density' control
 	B = 0.0;

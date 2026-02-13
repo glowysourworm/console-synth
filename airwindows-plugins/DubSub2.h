@@ -32,7 +32,7 @@ class DubSub2 :
     public AudioEffectX 
 {
 public:
-    DubSub2(audioMasterCallback audioMaster);
+    DubSub2(float samplingRate);
     ~DubSub2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

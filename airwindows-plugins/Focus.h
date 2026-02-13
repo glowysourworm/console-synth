@@ -34,7 +34,7 @@ class Focus :
     public AudioEffectX 
 {
 public:
-    Focus(audioMasterCallback audioMaster);
+    Focus(float samplingRate);
     ~Focus();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

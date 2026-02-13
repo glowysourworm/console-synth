@@ -29,7 +29,7 @@ class PurestConsole2Buss :
     public AudioEffectX 
 {
 public:
-    PurestConsole2Buss(audioMasterCallback audioMaster);
+    PurestConsole2Buss(float samplingRate);
     ~PurestConsole2Buss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

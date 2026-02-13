@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Parametric {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Parametric(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Parametric(samplingRate);}
 
-Parametric::Parametric(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Parametric::Parametric(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DitherMeDiskers {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DitherMeDiskers(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DitherMeDiskers(samplingRate);}
 
-DitherMeDiskers::DitherMeDiskers(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DitherMeDiskers::DitherMeDiskers(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	noiseShapingL = 0.0;
 	noiseShapingR = 0.0;

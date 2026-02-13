@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::StereoChorus {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new StereoChorus(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new StereoChorus(samplingRate);}
 
-StereoChorus::StereoChorus(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+StereoChorus::StereoChorus(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

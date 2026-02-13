@@ -32,7 +32,7 @@ class Baxandall3 :
     public AudioEffectX 
 {
 public:
-    Baxandall3(audioMasterCallback audioMaster);
+    Baxandall3(float samplingRate);
     ~Baxandall3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

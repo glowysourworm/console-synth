@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Swell {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Swell(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Swell(samplingRate);}
 
-Swell::Swell(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Swell::Swell(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.9;
 	B = 0.5;

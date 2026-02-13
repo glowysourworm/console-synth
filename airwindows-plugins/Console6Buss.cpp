@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Console6Buss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Console6Buss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Console6Buss(samplingRate);}
 
-Console6Buss::Console6Buss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console6Buss::Console6Buss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

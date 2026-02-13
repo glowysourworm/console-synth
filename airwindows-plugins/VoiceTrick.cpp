@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::VoiceTrick {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new VoiceTrick(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new VoiceTrick(samplingRate);}
 
-VoiceTrick::VoiceTrick(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+VoiceTrick::VoiceTrick(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	iirLowpassA = 0.0;

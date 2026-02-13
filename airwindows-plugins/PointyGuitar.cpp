@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PointyGuitar {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PointyGuitar(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PointyGuitar(samplingRate);}
 
-PointyGuitar::PointyGuitar(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PointyGuitar::PointyGuitar(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.6;
 	B = 0.5;

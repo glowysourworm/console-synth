@@ -38,7 +38,7 @@ class MultiBandDistortion :
     public AudioEffectX 
 {
 public:
-    MultiBandDistortion(audioMasterCallback audioMaster);
+    MultiBandDistortion(float samplingRate);
     ~MultiBandDistortion();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

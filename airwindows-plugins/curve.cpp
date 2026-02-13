@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::curve {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new curve(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new curve(samplingRate);}
 
-curve::curve(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+curve::curve(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	gain = 1.0;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

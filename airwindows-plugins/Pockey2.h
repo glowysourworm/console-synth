@@ -32,7 +32,7 @@ class Pockey2 :
     public AudioEffectX 
 {
 public:
-    Pockey2(audioMasterCallback audioMaster);
+    Pockey2(float samplingRate);
     ~Pockey2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

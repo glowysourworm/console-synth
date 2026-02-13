@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Calibre {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Calibre(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Calibre(samplingRate);}
 
-Calibre::Calibre(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Calibre::Calibre(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.74;
 	B = 0.3333333;

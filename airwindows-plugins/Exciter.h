@@ -31,7 +31,7 @@ class Exciter :
     public AudioEffectX 
 {
 public:
-    Exciter(audioMasterCallback audioMaster);
+    Exciter(float samplingRate);
     ~Exciter();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

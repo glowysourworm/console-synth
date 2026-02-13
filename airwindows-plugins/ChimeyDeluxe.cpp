@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ChimeyDeluxe {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ChimeyDeluxe(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ChimeyDeluxe(samplingRate);}
 
-ChimeyDeluxe::ChimeyDeluxe(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ChimeyDeluxe::ChimeyDeluxe(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

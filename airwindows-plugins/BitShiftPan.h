@@ -31,7 +31,7 @@ class BitShiftPan :
     public AudioEffectX 
 {
 public:
-    BitShiftPan(audioMasterCallback audioMaster);
+    BitShiftPan(float samplingRate);
     ~BitShiftPan();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

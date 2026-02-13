@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::MV2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new MV2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new MV2(samplingRate);}
 
-MV2::MV2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+MV2::MV2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

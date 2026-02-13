@@ -30,7 +30,7 @@ class Flutter :
     public AudioEffectX 
 {
 public:
-    Flutter(audioMasterCallback audioMaster);
+    Flutter(float samplingRate);
     ~Flutter();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

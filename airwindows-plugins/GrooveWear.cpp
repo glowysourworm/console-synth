@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::GrooveWear {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new GrooveWear(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new GrooveWear(samplingRate);}
 
-GrooveWear::GrooveWear(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+GrooveWear::GrooveWear(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.064;
 	B = 1.0;

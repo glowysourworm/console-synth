@@ -29,7 +29,7 @@ class ClipOnly2 :
     public AudioEffectX 
 {
 public:
-    ClipOnly2(audioMasterCallback audioMaster);
+    ClipOnly2(float samplingRate);
     ~ClipOnly2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

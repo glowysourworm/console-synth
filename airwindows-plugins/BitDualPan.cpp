@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BitDualPan {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BitDualPan(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BitDualPan(samplingRate);}
 
-BitDualPan::BitDualPan(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BitDualPan::BitDualPan(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

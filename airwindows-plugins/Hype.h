@@ -29,7 +29,7 @@ class Hype :
     public AudioEffectX 
 {
 public:
-    Hype(audioMasterCallback audioMaster);
+    Hype(float samplingRate);
     ~Hype();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

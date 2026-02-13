@@ -37,7 +37,7 @@ class DeNoise :
     public AudioEffectX 
 {
 public:
-    DeNoise(audioMasterCallback audioMaster);
+    DeNoise(float samplingRate);
     ~DeNoise();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

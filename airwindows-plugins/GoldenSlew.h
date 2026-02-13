@@ -30,7 +30,7 @@ class GoldenSlew :
     public AudioEffectX 
 {
 public:
-    GoldenSlew(audioMasterCallback audioMaster);
+    GoldenSlew(float samplingRate);
     ~GoldenSlew();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

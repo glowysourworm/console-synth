@@ -34,7 +34,7 @@ class Console4Buss :
     public AudioEffectX 
 {
 public:
-    Console4Buss(audioMasterCallback audioMaster);
+    Console4Buss(float samplingRate);
     ~Console4Buss();
     
     // Configuration

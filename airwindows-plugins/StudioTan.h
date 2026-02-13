@@ -30,7 +30,7 @@ class StudioTan :
     public AudioEffectX 
 {
 public:
-    StudioTan(audioMasterCallback audioMaster);
+    StudioTan(float samplingRate);
     ~StudioTan();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

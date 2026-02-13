@@ -33,7 +33,7 @@ class Density3 :
     public AudioEffectX 
 {
 public:
-    Density3(audioMasterCallback audioMaster);
+    Density3(float samplingRate);
     ~Density3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

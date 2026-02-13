@@ -33,7 +33,7 @@ class BiquadOneHalf :
     public AudioEffectX 
 {
 public:
-    BiquadOneHalf(audioMasterCallback audioMaster);
+    BiquadOneHalf(float samplingRate);
     ~BiquadOneHalf();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

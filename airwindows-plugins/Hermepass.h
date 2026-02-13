@@ -31,7 +31,7 @@ class Hermepass :
     public AudioEffectX 
 {
 public:
-    Hermepass(audioMasterCallback audioMaster);
+    Hermepass(float samplingRate);
     ~Hermepass();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

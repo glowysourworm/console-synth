@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::CrunchCoat {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new CrunchCoat(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new CrunchCoat(samplingRate);}
 
-CrunchCoat::CrunchCoat(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+CrunchCoat::CrunchCoat(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

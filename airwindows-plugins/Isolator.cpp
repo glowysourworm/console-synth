@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Isolator {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Isolator(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Isolator(samplingRate);}
 
-Isolator::Isolator(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Isolator::Isolator(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 15; x++) {biquadA[x] = 0.0; biquadB[x] = 0.0; biquadC[x] = 0.0;}
 	A = 1.0;

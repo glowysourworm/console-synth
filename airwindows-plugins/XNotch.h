@@ -33,7 +33,7 @@ class XNotch :
     public AudioEffectX 
 {
 public:
-    XNotch(audioMasterCallback audioMaster);
+    XNotch(float samplingRate);
     ~XNotch();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

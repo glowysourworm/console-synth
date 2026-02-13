@@ -50,7 +50,7 @@ class CrunchCoat :
     public AudioEffectX 
 {
 public:
-    CrunchCoat(audioMasterCallback audioMaster);
+    CrunchCoat(float samplingRate);
     ~CrunchCoat();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

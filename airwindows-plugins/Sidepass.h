@@ -30,7 +30,7 @@ class Sidepass :
     public AudioEffectX 
 {
 public:
-    Sidepass(audioMasterCallback audioMaster);
+    Sidepass(float samplingRate);
     ~Sidepass();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

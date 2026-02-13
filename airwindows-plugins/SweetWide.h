@@ -31,7 +31,7 @@ class SweetWide :
     public AudioEffectX 
 {
 public:
-    SweetWide(audioMasterCallback audioMaster);
+    SweetWide(float samplingRate);
     ~SweetWide();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

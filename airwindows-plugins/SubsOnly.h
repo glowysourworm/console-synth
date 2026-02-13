@@ -29,7 +29,7 @@ class SubsOnly :
     public AudioEffectX 
 {
 public:
-    SubsOnly(audioMasterCallback audioMaster);
+    SubsOnly(float samplingRate);
     ~SubsOnly();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -34,7 +34,7 @@ class Holt :
     public AudioEffectX 
 {
 public:
-    Holt(audioMasterCallback audioMaster);
+    Holt(float samplingRate);
     ~Holt();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

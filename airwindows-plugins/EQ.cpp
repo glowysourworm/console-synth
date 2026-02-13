@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::EQ {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new EQ(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new EQ(samplingRate);}
 
-EQ::EQ(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+EQ::EQ(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5; //Treble -12 to 12
 	B = 0.5; //Mid -12 to 12

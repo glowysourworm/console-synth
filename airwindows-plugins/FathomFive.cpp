@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::FathomFive {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new FathomFive(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new FathomFive(samplingRate);}
 
-FathomFive::FathomFive(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+FathomFive::FathomFive(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

@@ -30,7 +30,7 @@ class Tube :
     public AudioEffectX 
 {
 public:
-    Tube(audioMasterCallback audioMaster);
+    Tube(float samplingRate);
     ~Tube();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

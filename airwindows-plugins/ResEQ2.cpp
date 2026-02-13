@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ResEQ2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ResEQ2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ResEQ2(samplingRate);}
 
-ResEQ2::ResEQ2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ResEQ2::ResEQ2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ToVinyl4 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ToVinyl4(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ToVinyl4(samplingRate);}
 
-ToVinyl4::ToVinyl4(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ToVinyl4::ToVinyl4(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for(int count = 0; count < 11; count++) {
 		aMid[count] = 0.0;

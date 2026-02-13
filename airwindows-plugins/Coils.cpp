@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Coils {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Coils(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Coils(samplingRate);}
 
-Coils::Coils(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Coils::Coils(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

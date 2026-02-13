@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Infrasonic {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Infrasonic(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Infrasonic(samplingRate);}
 
-Infrasonic::Infrasonic(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Infrasonic::Infrasonic(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 15; x++) {biquadA[x] = 0.0; biquadB[x] = 0.0; biquadC[x] = 0.0; biquadD[x] = 0.0; biquadE[x] = 0.0;}
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

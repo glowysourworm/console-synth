@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DubSub {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DubSub(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DubSub(samplingRate);}
 
-DubSub::DubSub(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DubSub::DubSub(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.9;
 	B = 0.5;

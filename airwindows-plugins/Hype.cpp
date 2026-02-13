@@ -9,12 +9,14 @@
 #include <cmath>
 #include <cstdlib>
 #include <algorithm>
+#include "airwin_consolidated_base.h"
+#include <cstdint>
 namespace airwinconsolidated::Hype {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Hype(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Hype(samplingRate);}
 
-Hype::Hype(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Hype::Hype(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for(int count = 0; count < 10; count++) {softL[count] = 0.0; softR[count] = 0.0;}
 	double overallscale = 1.0;

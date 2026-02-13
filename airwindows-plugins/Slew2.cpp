@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Slew2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Slew2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Slew2(samplingRate);}
 
-Slew2::Slew2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Slew2::Slew2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 

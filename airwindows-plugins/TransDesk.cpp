@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TransDesk {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TransDesk(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TransDesk(samplingRate);}
 
-TransDesk::TransDesk(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TransDesk::TransDesk(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for(int count = 0; count < 19; count++) {dL[count] = 0; dR[count] = 0;}
 	gcount = 0;

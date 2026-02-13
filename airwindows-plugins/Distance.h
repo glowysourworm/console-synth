@@ -31,7 +31,7 @@ class Distance :
     public AudioEffectX 
 {
 public:
-    Distance(audioMasterCallback audioMaster);
+    Distance(float samplingRate);
     ~Distance();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

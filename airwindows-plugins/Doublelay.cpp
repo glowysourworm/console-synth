@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Doublelay {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Doublelay(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Doublelay(samplingRate);}
 
-Doublelay::Doublelay(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Doublelay::Doublelay(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.2;
 	B = 0.1;

@@ -35,7 +35,7 @@ class Pressure5 :
     public AudioEffectX 
 {
 public:
-    Pressure5(audioMasterCallback audioMaster);
+    Pressure5(float samplingRate);
     ~Pressure5();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

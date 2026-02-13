@@ -30,7 +30,7 @@ class AQuickVoiceClip :
     public AudioEffectX 
 {
 public:
-    AQuickVoiceClip(audioMasterCallback audioMaster);
+    AQuickVoiceClip(float samplingRate);
     ~AQuickVoiceClip();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

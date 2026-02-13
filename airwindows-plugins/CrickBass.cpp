@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::CrickBass {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new CrickBass(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new CrickBass(samplingRate);}
 
-CrickBass::CrickBass(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+CrickBass::CrickBass(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

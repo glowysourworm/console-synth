@@ -31,7 +31,7 @@ class Reverb :
     public AudioEffectX 
 {
 public:
-    Reverb(audioMasterCallback audioMaster);
+    Reverb(float samplingRate);
     ~Reverb();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

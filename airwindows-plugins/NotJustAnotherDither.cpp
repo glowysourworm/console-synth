@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::NotJustAnotherDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new NotJustAnotherDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new NotJustAnotherDither(samplingRate);}
 
-NotJustAnotherDither::NotJustAnotherDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+NotJustAnotherDither::NotJustAnotherDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

@@ -44,7 +44,7 @@ class kCathedral4 :
     public AudioEffectX 
 {
 public:
-    kCathedral4(audioMasterCallback audioMaster);
+    kCathedral4(float samplingRate);
     ~kCathedral4();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

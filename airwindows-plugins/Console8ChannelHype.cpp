@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Console8ChannelHype {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Console8ChannelHype(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Console8ChannelHype(samplingRate);}
 
-Console8ChannelHype::Console8ChannelHype(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console8ChannelHype::Console8ChannelHype(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	iirAL = 0.0; iirBL = 0.0; iirAR = 0.0; iirBR = 0.0;
 	for (int x = 0; x < fix_total; x++) fix[x] = 0.0;

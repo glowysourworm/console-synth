@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::EverySlew {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new EverySlew(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new EverySlew(samplingRate);}
 
-EverySlew::EverySlew(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+EverySlew::EverySlew(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

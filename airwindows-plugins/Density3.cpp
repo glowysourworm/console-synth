@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Density3 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Density3(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Density3(samplingRate);}
 
-Density3::Density3(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Density3::Density3(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

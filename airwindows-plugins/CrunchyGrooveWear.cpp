@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::CrunchyGrooveWear {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new CrunchyGrooveWear(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new CrunchyGrooveWear(samplingRate);}
 
-CrunchyGrooveWear::CrunchyGrooveWear(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+CrunchyGrooveWear::CrunchyGrooveWear(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.064;
 	B = 1.0;

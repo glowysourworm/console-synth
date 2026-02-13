@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Crystal {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Crystal(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Crystal(samplingRate);}
 
-Crystal::Crystal(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Crystal::Crystal(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.7;
 	B = 1.0;

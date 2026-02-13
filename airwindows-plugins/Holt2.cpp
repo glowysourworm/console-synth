@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Holt2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Holt2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Holt2(samplingRate);}
 
-Holt2::Holt2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Holt2::Holt2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.5;

@@ -33,7 +33,7 @@ class Neverland :
     public AudioEffectX 
 {
 public:
-    Neverland(audioMasterCallback audioMaster);
+    Neverland(float samplingRate);
     ~Neverland();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

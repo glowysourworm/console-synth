@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DitherMeTimbers {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DitherMeTimbers(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DitherMeTimbers(samplingRate);}
 
-DitherMeTimbers::DitherMeTimbers(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DitherMeTimbers::DitherMeTimbers(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	noiseShapingL = 0.0;
 	noiseShapingR = 0.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PaulWide {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PaulWide(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PaulWide(samplingRate);}
 
-PaulWide::PaulWide(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PaulWide::PaulWide(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Remap {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Remap(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Remap(samplingRate);}
 
-Remap::Remap(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Remap::Remap(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

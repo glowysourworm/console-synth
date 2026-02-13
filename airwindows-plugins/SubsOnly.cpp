@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SubsOnly {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SubsOnly(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SubsOnly(samplingRate);}
 
-SubsOnly::SubsOnly(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SubsOnly::SubsOnly(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	iirSampleAL = 0.0;
 	iirSampleBL = 0.0;

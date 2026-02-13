@@ -31,7 +31,7 @@ class Console0Channel :
     public AudioEffectX 
 {
 public:
-    Console0Channel(audioMasterCallback audioMaster);
+    Console0Channel(float samplingRate);
     ~Console0Channel();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

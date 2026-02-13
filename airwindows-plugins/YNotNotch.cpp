@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::YNotNotch {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new YNotNotch(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new YNotNotch(samplingRate);}
 
-YNotNotch::YNotNotch(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+YNotNotch::YNotNotch(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 0.5;

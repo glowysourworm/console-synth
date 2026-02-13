@@ -30,7 +30,7 @@ class PurestWarm :
     public AudioEffectX 
 {
 public:
-    PurestWarm(audioMasterCallback audioMaster);
+    PurestWarm(float samplingRate);
     ~PurestWarm();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

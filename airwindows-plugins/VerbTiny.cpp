@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::VerbTiny {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new VerbTiny(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new VerbTiny(samplingRate);}
 
-VerbTiny::VerbTiny(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+VerbTiny::VerbTiny(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

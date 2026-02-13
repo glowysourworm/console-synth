@@ -31,7 +31,7 @@ class Kalman :
     public AudioEffectX 
 {
 public:
-    Kalman(audioMasterCallback audioMaster);
+    Kalman(float samplingRate);
     ~Kalman();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

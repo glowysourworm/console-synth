@@ -32,7 +32,7 @@ class SurgeTide :
     public AudioEffectX 
 {
 public:
-    SurgeTide(audioMasterCallback audioMaster);
+    SurgeTide(float samplingRate);
     ~SurgeTide();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

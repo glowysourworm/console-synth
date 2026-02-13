@@ -31,7 +31,7 @@ class Aura :
     public AudioEffectX 
 {
 public:
-    Aura(audioMasterCallback audioMaster);
+    Aura(float samplingRate);
     ~Aura();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

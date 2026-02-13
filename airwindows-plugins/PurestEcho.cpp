@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestEcho {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestEcho(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestEcho(samplingRate);}
 
-PurestEcho::PurestEcho(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestEcho::PurestEcho(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 1.0;

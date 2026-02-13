@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BrassRider {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BrassRider(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BrassRider(samplingRate);}
 
-BrassRider::BrassRider(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BrassRider::BrassRider(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

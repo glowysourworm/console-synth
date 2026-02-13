@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::kBeyond {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new kBeyond(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new kBeyond(samplingRate);}
 
-kBeyond::kBeyond(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+kBeyond::kBeyond(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

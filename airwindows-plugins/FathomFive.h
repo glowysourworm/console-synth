@@ -33,7 +33,7 @@ class FathomFive :
     public AudioEffectX 
 {
 public:
-    FathomFive(audioMasterCallback audioMaster);
+    FathomFive(float samplingRate);
     ~FathomFive();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

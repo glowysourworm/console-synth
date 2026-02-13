@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Mackity {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Mackity(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Mackity(samplingRate);}
 
-Mackity::Mackity(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Mackity::Mackity(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 1.0;

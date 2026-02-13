@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::LRConvolve3 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new LRConvolve3(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new LRConvolve3(samplingRate);}
 
-LRConvolve3::LRConvolve3(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+LRConvolve3::LRConvolve3(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BezEQ {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BezEQ(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BezEQ(samplingRate);}
 
-BezEQ::BezEQ(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BezEQ::BezEQ(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.618;

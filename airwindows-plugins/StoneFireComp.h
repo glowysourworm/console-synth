@@ -39,7 +39,7 @@ class StoneFireComp :
     public AudioEffectX 
 {
 public:
-    StoneFireComp(audioMasterCallback audioMaster);
+    StoneFireComp(float samplingRate);
     ~StoneFireComp();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

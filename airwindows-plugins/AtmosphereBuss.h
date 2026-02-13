@@ -30,7 +30,7 @@ class AtmosphereBuss :
     public AudioEffectX 
 {
 public:
-    AtmosphereBuss(audioMasterCallback audioMaster);
+    AtmosphereBuss(float samplingRate);
     ~AtmosphereBuss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BrightAmbience3 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BrightAmbience3(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BrightAmbience3(samplingRate);}
 
-BrightAmbience3::BrightAmbience3(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BrightAmbience3::BrightAmbience3(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

@@ -33,7 +33,7 @@ class SingleEndedTriode :
     public AudioEffectX 
 {
 public:
-    SingleEndedTriode(audioMasterCallback audioMaster);
+    SingleEndedTriode(float samplingRate);
     ~SingleEndedTriode();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

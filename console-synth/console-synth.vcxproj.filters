@@ -64,12 +64,6 @@
     <Filter Include="Header Files\Controller">
       <UniqueIdentifier>{cbd085ba-d6cb-4792-801d-3b67f107221e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Vendor\airwindows">
-      <UniqueIdentifier>{db32ec96-9cd5-43d6-9475-b35721f2a00b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Vendor\airwindows">
-      <UniqueIdentifier>{fd6e209f-91a9-45d9-ae8b-277278b95414}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Controller">
       <UniqueIdentifier>{eab1df1b-84e7-4ba5-af05-4a3182995f2f}</UniqueIdentifier>
     </Filter>
@@ -155,15 +149,6 @@
     </ClCompile>
     <ClCompile Include="DelayUI.cpp">
       <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedralProc.cpp">
-      <Filter>Source Files\Vendor\airwindows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.cpp">
-      <Filter>Source Files\Vendor\airwindows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.cpp">
-      <Filter>Source Files\Vendor\airwindows</Filter>
     </ClCompile>
     <ClCompile Include="AudioController.cpp">
       <Filter>Source Files\Controller</Filter>
@@ -350,9 +335,6 @@
     <ClInclude Include="CompressorChannel.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.h">
-      <Filter>Header Files\Vendor\airwindows</Filter>
-    </ClInclude>
     <ClInclude Include="Accumulator.h">
       <Filter>Header Files\Playback</Filter>
     </ClInclude>
@@ -370,9 +352,6 @@
     </ClInclude>
     <ClInclude Include="IntervalTimer.h">
       <Filter>Header Files\Playback</Filter>
-    </ClInclude>
-    <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.h">
-      <Filter>Header Files\Vendor\airwindows</Filter>
     </ClInclude>
     <ClInclude Include="LoopTimer.h">
       <Filter>Header Files\Playback</Filter>

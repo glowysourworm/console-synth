@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Slew3 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Slew3(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Slew3(samplingRate);}
 
-Slew3::Slew3(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Slew3::Slew3(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	lastSampleAL = lastSampleBL = lastSampleCL = 0.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::RingModulator {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new RingModulator(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new RingModulator(samplingRate);}
 
-RingModulator::RingModulator(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+RingModulator::RingModulator(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

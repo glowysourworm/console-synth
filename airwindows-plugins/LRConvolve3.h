@@ -31,7 +31,7 @@ class LRConvolve3 :
     public AudioEffectX 
 {
 public:
-    LRConvolve3(audioMasterCallback audioMaster);
+    LRConvolve3(float samplingRate);
     ~LRConvolve3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

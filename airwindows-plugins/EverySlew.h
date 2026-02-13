@@ -33,7 +33,7 @@ class EverySlew :
     public AudioEffectX 
 {
 public:
-    EverySlew(audioMasterCallback audioMaster);
+    EverySlew(float samplingRate);
     ~EverySlew();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

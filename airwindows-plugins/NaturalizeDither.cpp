@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::NaturalizeDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new NaturalizeDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new NaturalizeDither(samplingRate);}
 
-NaturalizeDither::NaturalizeDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+NaturalizeDither::NaturalizeDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	bynL[0] = 1000;
 	bynL[1] = 301;

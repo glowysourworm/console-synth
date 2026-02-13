@@ -8,9 +8,9 @@
  */
 
 #include "airwin_consolidated_base.h"
+#include <cmath>
+#include <exception>
 #include <string>
-
-float AirwinConsolidatedBase::defaultSampleRate{0.f};
 
 bool string2float(const char *txt, float &f)
 {

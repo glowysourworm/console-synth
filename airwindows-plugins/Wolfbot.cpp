@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Wolfbot {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Wolfbot(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Wolfbot(samplingRate);}
 
-Wolfbot::Wolfbot(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Wolfbot::Wolfbot(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < kal_total; x++) {kHP[x] = 0.0; kLP[x] = 0.0;}
 

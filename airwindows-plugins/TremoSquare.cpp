@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TremoSquare {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TremoSquare(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TremoSquare(samplingRate);}
 
-TremoSquare::TremoSquare(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TremoSquare::TremoSquare(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

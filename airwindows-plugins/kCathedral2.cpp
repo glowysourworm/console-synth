@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::kCathedral2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new kCathedral2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new kCathedral2(samplingRate);}
 
-kCathedral2::kCathedral2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+kCathedral2::kCathedral2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	

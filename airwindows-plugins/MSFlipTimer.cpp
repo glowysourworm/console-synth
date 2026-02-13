@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::MSFlipTimer {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new MSFlipTimer(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new MSFlipTimer(samplingRate);}
 
-MSFlipTimer::MSFlipTimer(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+MSFlipTimer::MSFlipTimer(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	tick = 0;

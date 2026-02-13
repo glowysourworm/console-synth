@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::AtmosphereChannel {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new AtmosphereChannel(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new AtmosphereChannel(samplingRate);}
 
-AtmosphereChannel::AtmosphereChannel(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+AtmosphereChannel::AtmosphereChannel(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 

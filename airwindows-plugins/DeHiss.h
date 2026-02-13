@@ -31,7 +31,7 @@ class DeHiss :
     public AudioEffectX 
 {
 public:
-    DeHiss(audioMasterCallback audioMaster);
+    DeHiss(float samplingRate);
     ~DeHiss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

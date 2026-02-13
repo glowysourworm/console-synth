@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SubTight {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SubTight(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SubTight(samplingRate);}
 
-SubTight::SubTight(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SubTight::SubTight(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.3;
 	B = 0.5;

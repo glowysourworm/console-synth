@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Reverb {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Reverb(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Reverb(samplingRate);}
 
-Reverb::Reverb(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Reverb::Reverb(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 11; x++) {biquadA[x] = 0.0;biquadB[x] = 0.0;biquadC[x] = 0.0;}
 	

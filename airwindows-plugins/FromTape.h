@@ -34,7 +34,7 @@ class FromTape :
     public AudioEffectX 
 {
 public:
-    FromTape(audioMasterCallback audioMaster);
+    FromTape(float samplingRate);
     ~FromTape();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

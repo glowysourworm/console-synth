@@ -236,9 +236,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.cpp" />
-    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.cpp" />
-    <ClCompile Include="..\vendor\airwin2rack-DAWPlugin\kCathedralProc.cpp" />
     <ClCompile Include="AirwindowsEffect.cpp" />
     <ClCompile Include="AllPassFilterChannel.cpp" />
     <ClCompile Include="AudioController.cpp" />
@@ -289,8 +286,6 @@
     <ClCompile Include="UIController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\airwin_consolidated_base.h" />
-    <ClInclude Include="..\vendor\airwin2rack-DAWPlugin\kCathedral.h" />
     <ClInclude Include="Accumulator.h" />
     <ClInclude Include="AirwindowsEffect.h" />
     <ClInclude Include="AllPassFilterChannel.h" />

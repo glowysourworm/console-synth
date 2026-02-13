@@ -32,7 +32,7 @@ class IronOxideClassic :
     public AudioEffectX 
 {
 public:
-    IronOxideClassic(audioMasterCallback audioMaster);
+    IronOxideClassic(float samplingRate);
     ~IronOxideClassic();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

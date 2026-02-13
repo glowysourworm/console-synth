@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::YBandpass {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new YBandpass(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new YBandpass(samplingRate);}
 
-YBandpass::YBandpass(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+YBandpass::YBandpass(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 0.5;

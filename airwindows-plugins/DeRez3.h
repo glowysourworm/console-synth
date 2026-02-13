@@ -32,7 +32,7 @@ class DeRez3 :
     public AudioEffectX 
 {
 public:
-    DeRez3(audioMasterCallback audioMaster);
+    DeRez3(float samplingRate);
     ~DeRez3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

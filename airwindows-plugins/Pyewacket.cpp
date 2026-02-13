@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Pyewacket {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Pyewacket(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Pyewacket(samplingRate);}
 
-Pyewacket::Pyewacket(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Pyewacket::Pyewacket(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

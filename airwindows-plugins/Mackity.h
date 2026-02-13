@@ -31,7 +31,7 @@ class Mackity :
     public AudioEffectX 
 {
 public:
-    Mackity(audioMasterCallback audioMaster);
+    Mackity(float samplingRate);
     ~Mackity();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -3,7 +3,6 @@
 #include "FilterBase.h"
 #include "PlaybackFrame.h"
 #include "SynthConfiguration.h"
-#include "kCathedral.h"
 
 class AirwindowsEffect : public FilterBase
 {
@@ -19,7 +18,7 @@ public:
 
 private:
 
-	kCathedral* _effect;
+	//kCathedral* _effect;
 
 	float _delay;
 

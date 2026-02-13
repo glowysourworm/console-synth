@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Console7Crunch {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Console7Crunch(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Console7Crunch(samplingRate);}
 
-Console7Crunch::Console7Crunch(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console7Crunch::Console7Crunch(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.39;
 	gainchase = -1.0;

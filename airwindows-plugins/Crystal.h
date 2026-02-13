@@ -33,7 +33,7 @@ class Crystal :
     public AudioEffectX 
 {
 public:
-    Crystal(audioMasterCallback audioMaster);
+    Crystal(float samplingRate);
     ~Crystal();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

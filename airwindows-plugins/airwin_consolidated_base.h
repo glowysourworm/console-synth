@@ -53,7 +53,6 @@ _UCRT_RESTORE_CLANG_WARNINGS
 #include <cmath>
 #include <cstdio>
 
-typedef int32_t audioMasterCallback;
 typedef int32_t VstInt32;
 typedef int32_t VstPlugCategory;
 static constexpr int32_t kPlugCategEffect{1};
@@ -64,11 +63,13 @@ static constexpr int32_t kVstMaxVendorStrLen{32};
 
 struct AirwinConsolidatedBase
 {
-    AirwinConsolidatedBase(audioMasterCallback m, int, int) {}
+    AirwinConsolidatedBase(float samplingRate, int, int) 
+    {
+        sampleRate = samplingRate;
+    }
     virtual ~AirwinConsolidatedBase() = default;
 
-    static float defaultSampleRate;
-    float sampleRate{defaultSampleRate};
+    float sampleRate;
     void setSampleRate(float sr) { sampleRate = sr; }
     float getSampleRate()
     {

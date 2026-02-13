@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Floor {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Floor(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Floor(samplingRate);}
 
-Floor::Floor(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Floor::Floor(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

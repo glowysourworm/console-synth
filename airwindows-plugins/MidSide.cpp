@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::MidSide {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new MidSide(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new MidSide(samplingRate);}
 
-MidSide::MidSide(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+MidSide::MidSide(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

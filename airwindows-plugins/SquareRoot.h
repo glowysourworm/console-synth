@@ -33,7 +33,7 @@ class SquareRoot :
     public AudioEffectX 
 {
 public:
-    SquareRoot(audioMasterCallback audioMaster);
+    SquareRoot(float samplingRate);
     ~SquareRoot();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

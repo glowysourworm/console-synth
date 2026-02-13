@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Recurve {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Recurve(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Recurve(samplingRate);}
 
-Recurve::Recurve(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Recurve::Recurve(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	gain = 2.0;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

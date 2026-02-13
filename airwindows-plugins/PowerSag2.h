@@ -31,7 +31,7 @@ class PowerSag2 :
     public AudioEffectX 
 {
 public:
-    PowerSag2(audioMasterCallback audioMaster);
+    PowerSag2(float samplingRate);
     ~PowerSag2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

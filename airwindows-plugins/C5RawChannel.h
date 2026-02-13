@@ -30,7 +30,7 @@ class C5RawChannel :
     public AudioEffectX 
 {
 public:
-    C5RawChannel(audioMasterCallback audioMaster);
+    C5RawChannel(float samplingRate);
     ~C5RawChannel();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

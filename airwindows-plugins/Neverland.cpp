@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Neverland {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Neverland(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Neverland(samplingRate);}
 
-Neverland::Neverland(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Neverland::Neverland(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.74;
 	B = 0.3333333;

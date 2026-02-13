@@ -31,7 +31,7 @@ class VoiceOfTheStarship :
     public AudioEffectX 
 {
 public:
-    VoiceOfTheStarship(audioMasterCallback audioMaster);
+    VoiceOfTheStarship(float samplingRate);
     ~VoiceOfTheStarship();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

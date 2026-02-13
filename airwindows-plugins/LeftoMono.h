@@ -29,7 +29,7 @@ class LeftoMono :
     public AudioEffectX 
 {
 public:
-    LeftoMono(audioMasterCallback audioMaster);
+    LeftoMono(float samplingRate);
     ~LeftoMono();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

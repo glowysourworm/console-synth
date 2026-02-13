@@ -31,7 +31,7 @@ class PurestSaturation :
     public AudioEffectX 
 {
 public:
-    PurestSaturation(audioMasterCallback audioMaster);
+    PurestSaturation(float samplingRate);
     ~PurestSaturation();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -29,7 +29,7 @@ class ClipSoftly :
     public AudioEffectX 
 {
 public:
-    ClipSoftly(audioMasterCallback audioMaster);
+    ClipSoftly(float samplingRate);
     ~ClipSoftly();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

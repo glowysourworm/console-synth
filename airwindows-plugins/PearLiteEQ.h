@@ -33,7 +33,7 @@ class PearLiteEQ :
     public AudioEffectX 
 {
 public:
-    PearLiteEQ(audioMasterCallback audioMaster);
+    PearLiteEQ(float samplingRate);
     ~PearLiteEQ();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

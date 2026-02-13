@@ -31,7 +31,7 @@ class Thunder :
     public AudioEffectX 
 {
 public:
-    Thunder(audioMasterCallback audioMaster);
+    Thunder(float samplingRate);
     ~Thunder();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

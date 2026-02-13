@@ -35,7 +35,7 @@ class YLowpass :
     public AudioEffectX 
 {
 public:
-    YLowpass(audioMasterCallback audioMaster);
+    YLowpass(float samplingRate);
     ~YLowpass();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

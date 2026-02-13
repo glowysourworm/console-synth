@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DubCenter {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DubCenter(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DubCenter(samplingRate);}
 
-DubCenter::DubCenter(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DubCenter::DubCenter(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.9;
 	B = 0.5;

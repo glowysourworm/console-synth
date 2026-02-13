@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TapeHack2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TapeHack2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TapeHack2(samplingRate);}
 
-TapeHack2::TapeHack2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TapeHack2::TapeHack2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 1.0;

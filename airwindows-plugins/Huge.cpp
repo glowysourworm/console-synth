@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Huge {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Huge(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Huge(samplingRate);}
 
-Huge::Huge(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Huge::Huge(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.2;
 	B = 0.2;

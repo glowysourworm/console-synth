@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ConsoleXSubIn {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ConsoleXSubIn(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ConsoleXSubIn(samplingRate);}
 
-ConsoleXSubIn::ConsoleXSubIn(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ConsoleXSubIn::ConsoleXSubIn(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < biq_total; x++) {biquad[x] = 0.0;}
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

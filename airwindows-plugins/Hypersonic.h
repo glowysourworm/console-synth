@@ -29,7 +29,7 @@ class Hypersonic :
     public AudioEffectX 
 {
 public:
-    Hypersonic(audioMasterCallback audioMaster);
+    Hypersonic(float samplingRate);
     ~Hypersonic();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

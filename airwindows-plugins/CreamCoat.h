@@ -53,7 +53,7 @@ class CreamCoat :
     public AudioEffectX 
 {
 public:
-    CreamCoat(audioMasterCallback audioMaster);
+    CreamCoat(float samplingRate);
     ~CreamCoat();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

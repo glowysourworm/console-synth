@@ -30,7 +30,7 @@ class Mojo :
     public AudioEffectX 
 {
 public:
-    Mojo(audioMasterCallback audioMaster);
+    Mojo(float samplingRate);
     ~Mojo();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

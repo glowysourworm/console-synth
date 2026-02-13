@@ -31,7 +31,7 @@ class Acceleration2 :
     public AudioEffectX 
 {
 public:
-    Acceleration2(audioMasterCallback audioMaster);
+    Acceleration2(float samplingRate);
     ~Acceleration2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PrimeFIR {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PrimeFIR(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PrimeFIR(samplingRate);}
 
-PrimeFIR::PrimeFIR(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PrimeFIR::PrimeFIR(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.5;

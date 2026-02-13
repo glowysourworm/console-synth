@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Channel8 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Channel8(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Channel8(samplingRate);}
 
-Channel8::Channel8(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Channel8::Channel8(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	consoletype = 0.0;
 	drive = 0.0;

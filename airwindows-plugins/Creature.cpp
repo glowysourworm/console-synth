@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Creature {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Creature(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Creature(samplingRate);}
 
-Creature::Creature(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Creature::Creature(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.26;
 	B = 0.26;

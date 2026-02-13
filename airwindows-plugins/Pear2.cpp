@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Pear2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Pear2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Pear2(samplingRate);}
 
-Pear2::Pear2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Pear2::Pear2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.5;

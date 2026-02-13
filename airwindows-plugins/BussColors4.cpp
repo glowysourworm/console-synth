@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BussColors4 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BussColors4(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BussColors4(samplingRate);}
 
-BussColors4::BussColors4(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BussColors4::BussColors4(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

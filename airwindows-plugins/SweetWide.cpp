@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SweetWide {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SweetWide(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SweetWide(samplingRate);}
 
-SweetWide::SweetWide(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SweetWide::SweetWide(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

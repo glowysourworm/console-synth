@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestFade {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestFade(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestFade(samplingRate);}
 
-PurestFade::PurestFade(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestFade::PurestFade(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

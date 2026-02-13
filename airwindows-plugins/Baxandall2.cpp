@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Baxandall2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Baxandall2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Baxandall2(samplingRate);}
 
-Baxandall2::Baxandall2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Baxandall2::Baxandall2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

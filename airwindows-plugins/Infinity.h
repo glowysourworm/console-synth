@@ -33,7 +33,7 @@ class Infinity :
     public AudioEffectX 
 {
 public:
-    Infinity(audioMasterCallback audioMaster);
+    Infinity(float samplingRate);
     ~Infinity();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

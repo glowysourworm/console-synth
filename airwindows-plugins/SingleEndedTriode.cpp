@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SingleEndedTriode {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SingleEndedTriode(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SingleEndedTriode(samplingRate);}
 
-SingleEndedTriode::SingleEndedTriode(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SingleEndedTriode::SingleEndedTriode(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

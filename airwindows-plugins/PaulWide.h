@@ -31,7 +31,7 @@ class PaulWide :
     public AudioEffectX 
 {
 public:
-    PaulWide(audioMasterCallback audioMaster);
+    PaulWide(float samplingRate);
     ~PaulWide();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

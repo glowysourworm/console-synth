@@ -30,7 +30,7 @@ class VoiceTrick :
     public AudioEffectX 
 {
 public:
-    VoiceTrick(audioMasterCallback audioMaster);
+    VoiceTrick(float samplingRate);
     ~VoiceTrick();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

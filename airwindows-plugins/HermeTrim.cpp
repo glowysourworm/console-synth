@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::HermeTrim {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new HermeTrim(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new HermeTrim(samplingRate);}
 
-HermeTrim::HermeTrim(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+HermeTrim::HermeTrim(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

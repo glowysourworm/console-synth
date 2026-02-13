@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::OneCornerClip {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new OneCornerClip(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new OneCornerClip(samplingRate);}
 
-OneCornerClip::OneCornerClip(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+OneCornerClip::OneCornerClip(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.33333333333333333;
 	B = 0.966;

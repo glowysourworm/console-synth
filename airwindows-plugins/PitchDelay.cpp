@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PitchDelay {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PitchDelay(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PitchDelay(samplingRate);}
 
-PitchDelay::PitchDelay(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PitchDelay::PitchDelay(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

@@ -31,7 +31,7 @@ class SlewSonic :
     public AudioEffectX 
 {
 public:
-    SlewSonic(audioMasterCallback audioMaster);
+    SlewSonic(float samplingRate);
     ~SlewSonic();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -33,7 +33,7 @@ class AutoPan :
     public AudioEffectX 
 {
 public:
-    AutoPan(audioMasterCallback audioMaster);
+    AutoPan(float samplingRate);
     ~AutoPan();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

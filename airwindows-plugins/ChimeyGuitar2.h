@@ -39,7 +39,7 @@ class ChimeyGuitar2 :
     public AudioEffectX 
 {
 public:
-    ChimeyGuitar2(audioMasterCallback audioMaster);
+    ChimeyGuitar2(float samplingRate);
     ~ChimeyGuitar2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Elation {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Elation(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Elation(samplingRate);}
 
-Elation::Elation(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Elation::Elation(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.3333333;

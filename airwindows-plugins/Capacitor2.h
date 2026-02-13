@@ -33,7 +33,7 @@ class Capacitor2 :
     public AudioEffectX 
 {
 public:
-    Capacitor2(audioMasterCallback audioMaster);
+    Capacitor2(float samplingRate);
     ~Capacitor2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

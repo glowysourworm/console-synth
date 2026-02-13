@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::GoldenSlew {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new GoldenSlew(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new GoldenSlew(samplingRate);}
 
-GoldenSlew::GoldenSlew(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+GoldenSlew::GoldenSlew(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	for (int x = 0; x < gslew_total; x++) gslew[x] = 0.0;

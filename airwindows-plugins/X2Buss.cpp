@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::X2Buss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new X2Buss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new X2Buss(samplingRate);}
 
-X2Buss::X2Buss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+X2Buss::X2Buss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

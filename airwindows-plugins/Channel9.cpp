@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Channel9 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Channel9(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Channel9(samplingRate);}
 
-Channel9::Channel9(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Channel9::Channel9(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

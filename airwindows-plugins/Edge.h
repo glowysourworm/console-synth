@@ -34,7 +34,7 @@ class Edge :
     public AudioEffectX 
 {
 public:
-    Edge(audioMasterCallback audioMaster);
+    Edge(float samplingRate);
     ~Edge();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

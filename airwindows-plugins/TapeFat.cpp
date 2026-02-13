@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TapeFat {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TapeFat(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TapeFat(samplingRate);}
 
-TapeFat::TapeFat(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TapeFat::TapeFat(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Pafnuty {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Pafnuty(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Pafnuty(samplingRate);}
 
-Pafnuty::Pafnuty(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Pafnuty::Pafnuty(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

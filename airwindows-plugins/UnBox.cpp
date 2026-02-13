@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::UnBox {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new UnBox(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new UnBox(samplingRate);}
 
-UnBox::UnBox(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+UnBox::UnBox(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

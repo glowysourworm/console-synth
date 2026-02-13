@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TPDFDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TPDFDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TPDFDither(samplingRate);}
 
-TPDFDither::TPDFDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TPDFDither::TPDFDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

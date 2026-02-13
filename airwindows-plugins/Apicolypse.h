@@ -14,6 +14,7 @@
 #include <set>
 #include <string>
 #include <math.h>
+#include <cstdint>
 
 namespace airwinconsolidated::Apicolypse {
 enum {
@@ -33,7 +34,7 @@ class Apicolypse :
     public AudioEffectX 
 {
 public:
-    Apicolypse(audioMasterCallback audioMaster);
+    Apicolypse(float samplingRate);
     ~Apicolypse();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -30,7 +30,7 @@ class Console8SubOut :
     public AudioEffectX 
 {
 public:
-    Console8SubOut(audioMasterCallback audioMaster);
+    Console8SubOut(float samplingRate);
     ~Console8SubOut();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

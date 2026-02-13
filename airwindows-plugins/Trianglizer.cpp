@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Trianglizer {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Trianglizer(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Trianglizer(samplingRate);}
 
-Trianglizer::Trianglizer(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Trianglizer::Trianglizer(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

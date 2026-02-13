@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Fracture {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Fracture(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Fracture(samplingRate);}
 
-Fracture::Fracture(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Fracture::Fracture(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.25; //1 from 0 to 4: A*4
 	B = 0.5; //2 from 1 to 3: (B*2.999)+1

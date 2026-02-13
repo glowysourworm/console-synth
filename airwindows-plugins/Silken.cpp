@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Silken {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Silken(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Silken(samplingRate);}
 
-Silken::Silken(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Silken::Silken(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

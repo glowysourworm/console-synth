@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Gringer {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Gringer(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Gringer(samplingRate);}
 
-Gringer::Gringer(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Gringer::Gringer(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 9; x++) {inbandL[x] = 0.0; outbandL[x] = 0.0; inbandR[x] = 0.0; outbandR[x] = 0.0;}
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Srsly3 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Srsly3(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Srsly3(samplingRate);}
 
-Srsly3::Srsly3(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Srsly3::Srsly3(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

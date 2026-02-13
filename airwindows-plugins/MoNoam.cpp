@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::MoNoam {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new MoNoam(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new MoNoam(samplingRate);}
 
-MoNoam::MoNoam(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+MoNoam::MoNoam(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PeaksOnly {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PeaksOnly(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PeaksOnly(samplingRate);}
 
-PeaksOnly::PeaksOnly(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PeaksOnly::PeaksOnly(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for(int count = 0; count < 1502; count++) {aL[count] = 0.0; bL[count] = 0.0; cL[count] = 0.0; dL[count] = 0.0;aR[count] = 0.0; bR[count] = 0.0; cR[count] = 0.0; dR[count] = 0.0;}
 	ax = 1; bx = 1; cx = 1; dx = 1;

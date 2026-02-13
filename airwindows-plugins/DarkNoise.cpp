@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DarkNoise {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DarkNoise(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DarkNoise(samplingRate);}
 
-DarkNoise::DarkNoise(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DarkNoise::DarkNoise(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for(int count = 0; count < 8192; count++) {rL[count] = 0.5; rR[count] = 0.5;}
 	for(int x = 0; x < 11; x++) {

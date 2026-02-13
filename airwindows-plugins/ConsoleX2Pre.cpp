@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ConsoleX2Pre {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ConsoleX2Pre(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ConsoleX2Pre(samplingRate);}
 
-ConsoleX2Pre::ConsoleX2Pre(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ConsoleX2Pre::ConsoleX2Pre(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	TRM = 0.25;
 	MOR = 0.0;

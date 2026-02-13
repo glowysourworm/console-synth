@@ -30,7 +30,7 @@ class UltrasonX :
     public AudioEffectX 
 {
 public:
-    UltrasonX(audioMasterCallback audioMaster);
+    UltrasonX(float samplingRate);
     ~UltrasonX();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

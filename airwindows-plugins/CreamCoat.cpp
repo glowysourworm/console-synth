@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::CreamCoat {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new CreamCoat(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new CreamCoat(samplingRate);}
 
-CreamCoat::CreamCoat(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+CreamCoat::CreamCoat(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

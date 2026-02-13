@@ -33,7 +33,7 @@ class Precious :
     public AudioEffectX 
 {
 public:
-    Precious(audioMasterCallback audioMaster);
+    Precious(float samplingRate);
     ~Precious();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

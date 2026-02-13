@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Distance {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Distance(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Distance(samplingRate);}
 
-Distance::Distance(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Distance::Distance(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

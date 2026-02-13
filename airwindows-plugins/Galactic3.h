@@ -35,7 +35,7 @@ class Galactic3 :
     public AudioEffectX 
 {
 public:
-    Galactic3(audioMasterCallback audioMaster);
+    Galactic3(float samplingRate);
     ~Galactic3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

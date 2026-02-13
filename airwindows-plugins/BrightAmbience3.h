@@ -37,7 +37,7 @@ class BrightAmbience3 :
     public AudioEffectX 
 {
 public:
-    BrightAmbience3(audioMasterCallback audioMaster);
+    BrightAmbience3(float samplingRate);
     ~BrightAmbience3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

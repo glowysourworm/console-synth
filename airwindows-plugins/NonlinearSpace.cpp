@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::NonlinearSpace {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new NonlinearSpace(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new NonlinearSpace(samplingRate);}
 
-NonlinearSpace::NonlinearSpace(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+NonlinearSpace::NonlinearSpace(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.3; //this is the sample rate so it will become a 'popup' with fixed values
 	B = 0.5;

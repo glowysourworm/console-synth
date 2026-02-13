@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestConsole2Buss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestConsole2Buss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestConsole2Buss(samplingRate);}
 
-PurestConsole2Buss::PurestConsole2Buss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestConsole2Buss::PurestConsole2Buss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 15; x++) {biquadA[x] = 0.0;}
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

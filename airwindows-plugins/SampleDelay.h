@@ -33,7 +33,7 @@ class SampleDelay :
     public AudioEffectX 
 {
 public:
-    SampleDelay(audioMasterCallback audioMaster);
+    SampleDelay(float samplingRate);
     ~SampleDelay();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Console0Buss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Console0Buss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Console0Buss(samplingRate);}
 
-Console0Buss::Console0Buss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console0Buss::Console0Buss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

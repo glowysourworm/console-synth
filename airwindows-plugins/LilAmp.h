@@ -33,7 +33,7 @@ class LilAmp :
     public AudioEffectX 
 {
 public:
-    LilAmp(audioMasterCallback audioMaster);
+    LilAmp(float samplingRate);
     ~LilAmp();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

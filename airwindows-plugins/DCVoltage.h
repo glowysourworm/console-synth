@@ -30,7 +30,7 @@ class DCVoltage :
     public AudioEffectX 
 {
 public:
-    DCVoltage(audioMasterCallback audioMaster);
+    DCVoltage(float samplingRate);
     ~DCVoltage();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -40,7 +40,7 @@ class kPlateC :
     public AudioEffectX 
 {
 public:
-    kPlateC(audioMasterCallback audioMaster);
+    kPlateC(float samplingRate);
     ~kPlateC();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

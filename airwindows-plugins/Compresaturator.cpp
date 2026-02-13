@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Compresaturator {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Compresaturator(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Compresaturator(samplingRate);}
 
-Compresaturator::Compresaturator(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Compresaturator::Compresaturator(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5; //-12 to +12 dB
 	B = 0.5; //0 to 100%

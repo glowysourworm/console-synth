@@ -32,7 +32,7 @@ class TripleSpread :
     public AudioEffectX 
 {
 public:
-    TripleSpread(audioMasterCallback audioMaster);
+    TripleSpread(float samplingRate);
     ~TripleSpread();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

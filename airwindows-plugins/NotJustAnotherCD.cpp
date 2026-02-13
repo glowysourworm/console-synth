@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::NotJustAnotherCD {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new NotJustAnotherCD(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new NotJustAnotherCD(samplingRate);}
 
-NotJustAnotherCD::NotJustAnotherCD(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+NotJustAnotherCD::NotJustAnotherCD(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	bynL[0] = 1000;
 	bynL[1] = 301;

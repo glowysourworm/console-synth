@@ -34,7 +34,7 @@ class Logical4 :
     public AudioEffectX 
 {
 public:
-    Logical4(audioMasterCallback audioMaster);
+    Logical4(float samplingRate);
     ~Logical4();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

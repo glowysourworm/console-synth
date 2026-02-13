@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::kStation {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new kStation(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new kStation(samplingRate);}
 
-kStation::kStation(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+kStation::kStation(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

@@ -33,7 +33,7 @@ class ToVinyl4 :
     public AudioEffectX 
 {
 public:
-    ToVinyl4(audioMasterCallback audioMaster);
+    ToVinyl4(float samplingRate);
     ~ToVinyl4();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

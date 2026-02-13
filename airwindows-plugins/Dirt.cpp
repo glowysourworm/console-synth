@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Dirt {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Dirt(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Dirt(samplingRate);}
 
-Dirt::Dirt(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Dirt::Dirt(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 1.0;

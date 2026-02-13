@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BassAmp {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BassAmp(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BassAmp(samplingRate);}
 
-BassAmp::BassAmp(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BassAmp::BassAmp(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.75;
 	B = 0.0;

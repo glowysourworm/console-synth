@@ -34,7 +34,7 @@ class Dirt :
     public AudioEffectX 
 {
 public:
-    Dirt(audioMasterCallback audioMaster);
+    Dirt(float samplingRate);
     ~Dirt();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

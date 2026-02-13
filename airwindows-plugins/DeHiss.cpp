@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DeHiss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DeHiss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DeHiss(samplingRate);}
 
-DeHiss::DeHiss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DeHiss::DeHiss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

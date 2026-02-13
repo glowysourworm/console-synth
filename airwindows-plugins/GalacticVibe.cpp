@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::GalacticVibe {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new GalacticVibe(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new GalacticVibe(samplingRate);}
 
-GalacticVibe::GalacticVibe(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+GalacticVibe::GalacticVibe(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SmoothEQ3 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SmoothEQ3(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SmoothEQ3(samplingRate);}
 
-SmoothEQ3::SmoothEQ3(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SmoothEQ3::SmoothEQ3(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

@@ -31,7 +31,7 @@ class NotJustAnotherDither :
     public AudioEffectX 
 {
 public:
-    NotJustAnotherDither(audioMasterCallback audioMaster);
+    NotJustAnotherDither(float samplingRate);
     ~NotJustAnotherDither();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

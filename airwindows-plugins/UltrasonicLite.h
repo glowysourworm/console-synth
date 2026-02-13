@@ -29,7 +29,7 @@ class UltrasonicLite :
     public AudioEffectX 
 {
 public:
-    UltrasonicLite(audioMasterCallback audioMaster);
+    UltrasonicLite(float samplingRate);
     ~UltrasonicLite();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

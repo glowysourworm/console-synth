@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Hypersoft {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Hypersoft(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Hypersoft(samplingRate);}
 
-Hypersoft::Hypersoft(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Hypersoft::Hypersoft(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

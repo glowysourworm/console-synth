@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Stonefire {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Stonefire(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Stonefire(samplingRate);}
 
-Stonefire::Stonefire(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Stonefire::Stonefire(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

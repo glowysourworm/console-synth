@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Verbity {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Verbity(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Verbity(samplingRate);}
 
-Verbity::Verbity(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Verbity::Verbity(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.25;
 	B = 0.0;

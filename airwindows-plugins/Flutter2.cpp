@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Flutter2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Flutter2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Flutter2(samplingRate);}
 
-Flutter2::Flutter2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Flutter2::Flutter2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

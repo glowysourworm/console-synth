@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BiquadNonLin {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BiquadNonLin(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BiquadNonLin(samplingRate);}
 
-BiquadNonLin::BiquadNonLin(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BiquadNonLin::BiquadNonLin(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

@@ -32,7 +32,7 @@ class Pear :
     public AudioEffectX 
 {
 public:
-    Pear(audioMasterCallback audioMaster);
+    Pear(float samplingRate);
     ~Pear();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

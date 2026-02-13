@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::kCosmos {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new kCosmos(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new kCosmos(samplingRate);}
 
-kCosmos::kCosmos(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+kCosmos::kCosmos(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

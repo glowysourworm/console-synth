@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Highpass2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Highpass2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Highpass2(samplingRate);}
 
-Highpass2::Highpass2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Highpass2::Highpass2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5; //-1.0 to 1.0

@@ -30,7 +30,7 @@ class MidSide :
     public AudioEffectX 
 {
 public:
-    MidSide(audioMasterCallback audioMaster);
+    MidSide(float samplingRate);
     ~MidSide();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

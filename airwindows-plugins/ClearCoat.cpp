@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ClearCoat {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ClearCoat(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ClearCoat(samplingRate);}
 
-ClearCoat::ClearCoat(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ClearCoat::ClearCoat(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

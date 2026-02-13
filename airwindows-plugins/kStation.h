@@ -43,7 +43,7 @@ class kStation :
     public AudioEffectX 
 {
 public:
-    kStation(audioMasterCallback audioMaster);
+    kStation(float samplingRate);
     ~kStation();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

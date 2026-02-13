@@ -44,7 +44,7 @@ class kAlienSpaceship :
     public AudioEffectX 
 {
 public:
-    kAlienSpaceship(audioMasterCallback audioMaster);
+    kAlienSpaceship(float samplingRate);
     ~kAlienSpaceship();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

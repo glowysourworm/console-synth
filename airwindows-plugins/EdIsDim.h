@@ -30,7 +30,7 @@ class EdIsDim :
     public AudioEffectX 
 {
 public:
-    EdIsDim(audioMasterCallback audioMaster);
+    EdIsDim(float samplingRate);
     ~EdIsDim();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -32,7 +32,7 @@ class BeziComp :
     public AudioEffectX 
 {
 public:
-    BeziComp(audioMasterCallback audioMaster);
+    BeziComp(float samplingRate);
     ~BeziComp();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

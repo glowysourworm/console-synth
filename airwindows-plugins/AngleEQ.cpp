@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::AngleEQ {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new AngleEQ(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new AngleEQ(samplingRate);}
 
-AngleEQ::AngleEQ(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+AngleEQ::AngleEQ(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.4;

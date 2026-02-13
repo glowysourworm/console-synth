@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Console7Buss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Console7Buss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Console7Buss(samplingRate);}
 
-Console7Buss::Console7Buss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console7Buss::Console7Buss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	gainchase = -1.0;

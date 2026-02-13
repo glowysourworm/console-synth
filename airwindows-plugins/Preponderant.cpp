@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Preponderant {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Preponderant(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Preponderant(samplingRate);}
 
-Preponderant::Preponderant(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Preponderant::Preponderant(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.25;
 	B = 0.5;

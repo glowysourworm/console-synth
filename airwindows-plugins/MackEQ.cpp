@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::MackEQ {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new MackEQ(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new MackEQ(samplingRate);}
 
-MackEQ::MackEQ(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+MackEQ::MackEQ(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 0.5;

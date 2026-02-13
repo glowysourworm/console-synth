@@ -31,7 +31,7 @@ class RawGlitters :
     public AudioEffectX 
 {
 public:
-    RawGlitters(audioMasterCallback audioMaster);
+    RawGlitters(float samplingRate);
     ~RawGlitters();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

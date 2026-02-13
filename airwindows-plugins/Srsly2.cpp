@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Srsly2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Srsly2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Srsly2(samplingRate);}
 
-Srsly2::Srsly2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Srsly2::Srsly2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 11; x++) {
 		biquadM2[x] = 0.0;

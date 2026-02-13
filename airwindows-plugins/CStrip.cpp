@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::CStrip {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new CStrip(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new CStrip(samplingRate);}
 
-CStrip::CStrip(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+CStrip::CStrip(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5; //Treble -12 to 12
 	B = 0.5; //Mid -12 to 12

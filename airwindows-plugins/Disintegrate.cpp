@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Disintegrate {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Disintegrate(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Disintegrate(samplingRate);}
 
-Disintegrate::Disintegrate(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Disintegrate::Disintegrate(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

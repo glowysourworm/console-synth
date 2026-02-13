@@ -34,7 +34,7 @@ class Cojones :
     public AudioEffectX 
 {
 public:
-    Cojones(audioMasterCallback audioMaster);
+    Cojones(float samplingRate);
     ~Cojones();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

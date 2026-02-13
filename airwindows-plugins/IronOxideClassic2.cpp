@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::IronOxideClassic2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new IronOxideClassic2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new IronOxideClassic2(samplingRate);}
 
-IronOxideClassic2::IronOxideClassic2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+IronOxideClassic2::IronOxideClassic2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.562341325190349;

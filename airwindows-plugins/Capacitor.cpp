@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Capacitor {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Capacitor(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Capacitor(samplingRate);}
 
-Capacitor::Capacitor(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Capacitor::Capacitor(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

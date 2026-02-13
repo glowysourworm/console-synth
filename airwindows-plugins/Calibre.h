@@ -33,7 +33,7 @@ class Calibre :
     public AudioEffectX 
 {
 public:
-    Calibre(audioMasterCallback audioMaster);
+    Calibre(float samplingRate);
     ~Calibre();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Apicolypse {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Apicolypse(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Apicolypse(samplingRate);}
 
-Apicolypse::Apicolypse(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Apicolypse::Apicolypse(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.70;
 	B = 0.3333333;

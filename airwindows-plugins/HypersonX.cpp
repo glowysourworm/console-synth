@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::HypersonX {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new HypersonX(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new HypersonX(samplingRate);}
 
-HypersonX::HypersonX(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+HypersonX::HypersonX(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	

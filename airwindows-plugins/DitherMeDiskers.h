@@ -29,7 +29,7 @@ class DitherMeDiskers :
     public AudioEffectX 
 {
 public:
-    DitherMeDiskers(audioMasterCallback audioMaster);
+    DitherMeDiskers(float samplingRate);
     ~DitherMeDiskers();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

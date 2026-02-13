@@ -35,7 +35,7 @@ class ToTape6 :
     public AudioEffectX 
 {
 public:
-    ToTape6(audioMasterCallback audioMaster);
+    ToTape6(float samplingRate);
     ~ToTape6();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

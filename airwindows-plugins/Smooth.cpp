@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Smooth {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Smooth(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Smooth(samplingRate);}
 
-Smooth::Smooth(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Smooth::Smooth(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TapeDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TapeDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TapeDither(samplingRate);}
 
-TapeDither::TapeDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TapeDither::TapeDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

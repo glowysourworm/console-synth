@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Spiral2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Spiral2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Spiral2(samplingRate);}
 
-Spiral2::Spiral2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Spiral2::Spiral2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Acceleration {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Acceleration(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Acceleration(samplingRate);}
 
-Acceleration::Acceleration(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Acceleration::Acceleration(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.32;
 	B = 1.0;

@@ -30,7 +30,7 @@ class LRFlipTimer :
     public AudioEffectX 
 {
 public:
-    LRFlipTimer(audioMasterCallback audioMaster);
+    LRFlipTimer(float samplingRate);
     ~LRFlipTimer();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

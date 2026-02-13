@@ -31,7 +31,7 @@ class SpatializeDither :
     public AudioEffectX 
 {
 public:
-    SpatializeDither(audioMasterCallback audioMaster);
+    SpatializeDither(float samplingRate);
     ~SpatializeDither();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

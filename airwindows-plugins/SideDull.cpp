@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SideDull {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SideDull(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SideDull(samplingRate);}
 
-SideDull::SideDull(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SideDull::SideDull(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	iirSampleA = 0.0;

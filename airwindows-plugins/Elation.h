@@ -33,7 +33,7 @@ class Elation :
     public AudioEffectX 
 {
 public:
-    Elation(audioMasterCallback audioMaster);
+    Elation(float samplingRate);
     ~Elation();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

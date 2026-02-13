@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Sidepass {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Sidepass(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Sidepass(samplingRate);}
 
-Sidepass::Sidepass(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Sidepass::Sidepass(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	iirSampleA = 0.0;

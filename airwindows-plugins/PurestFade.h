@@ -31,7 +31,7 @@ class PurestFade :
     public AudioEffectX 
 {
 public:
-    PurestFade(audioMasterCallback audioMaster);
+    PurestFade(float samplingRate);
     ~PurestFade();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

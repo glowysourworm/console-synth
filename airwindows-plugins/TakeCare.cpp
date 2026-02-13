@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TakeCare {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TakeCare(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TakeCare(samplingRate);}
 
-TakeCare::TakeCare(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TakeCare::TakeCare(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.15;
 	B = 0.5;

@@ -32,7 +32,7 @@ class AverMatrix :
     public AudioEffectX 
 {
 public:
-    AverMatrix(audioMasterCallback audioMaster);
+    AverMatrix(float samplingRate);
     ~AverMatrix();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -32,7 +32,7 @@ class Channel9 :
     public AudioEffectX 
 {
 public:
-    Channel9(audioMasterCallback audioMaster);
+    Channel9(float samplingRate);
     ~Channel9();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

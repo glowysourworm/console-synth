@@ -31,7 +31,7 @@ class DigitalBlack :
     public AudioEffectX 
 {
 public:
-    DigitalBlack(audioMasterCallback audioMaster);
+    DigitalBlack(float samplingRate);
     ~DigitalBlack();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

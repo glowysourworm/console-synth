@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TapeBias {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TapeBias(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TapeBias(samplingRate);}
 
-TapeBias::TapeBias(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TapeBias::TapeBias(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 

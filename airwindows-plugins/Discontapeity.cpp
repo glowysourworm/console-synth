@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Discontapeity {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Discontapeity(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Discontapeity(samplingRate);}
 
-Discontapeity::Discontapeity(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Discontapeity::Discontapeity(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	

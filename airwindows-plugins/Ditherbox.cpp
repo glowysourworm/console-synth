@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Ditherbox {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Ditherbox(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Ditherbox(samplingRate);}
 
-Ditherbox::Ditherbox(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Ditherbox::Ditherbox(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.86;
 

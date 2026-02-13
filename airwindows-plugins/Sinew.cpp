@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Sinew {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Sinew(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Sinew(samplingRate);}
 
-Sinew::Sinew(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Sinew::Sinew(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	lastSinewL = 0.0;

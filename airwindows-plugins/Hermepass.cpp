@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Hermepass {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Hermepass(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Hermepass(samplingRate);}
 
-Hermepass::Hermepass(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Hermepass::Hermepass(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

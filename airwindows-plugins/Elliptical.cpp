@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Elliptical {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Elliptical(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Elliptical(samplingRate);}
 
-Elliptical::Elliptical(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Elliptical::Elliptical(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

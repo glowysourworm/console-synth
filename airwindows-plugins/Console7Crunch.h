@@ -30,7 +30,7 @@ class Console7Crunch :
     public AudioEffectX 
 {
 public:
-    Console7Crunch(audioMasterCallback audioMaster);
+    Console7Crunch(float samplingRate);
     ~Console7Crunch();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

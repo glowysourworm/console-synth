@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Overheads {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Overheads(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Overheads(samplingRate);}
 
-Overheads::Overheads(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Overheads::Overheads(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

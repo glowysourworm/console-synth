@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::AQuickVoiceClip {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new AQuickVoiceClip(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new AQuickVoiceClip(samplingRate);}
 
-AQuickVoiceClip::AQuickVoiceClip(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+AQuickVoiceClip::AQuickVoiceClip(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.42;
 	LataLast6Sample = LataLast5Sample = LataLast4Sample = 0.0;

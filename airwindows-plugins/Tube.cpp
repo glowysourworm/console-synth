@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Tube {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Tube(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Tube(samplingRate);}
 
-Tube::Tube(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Tube::Tube(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	previousSampleA = 0.0;

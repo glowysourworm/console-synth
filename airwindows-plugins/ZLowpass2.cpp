@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ZLowpass2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ZLowpass2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ZLowpass2(samplingRate);}
 
-ZLowpass2::ZLowpass2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ZLowpass2::ZLowpass2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 0.5;

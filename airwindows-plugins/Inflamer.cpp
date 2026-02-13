@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Inflamer {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Inflamer(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Inflamer(samplingRate);}
 
-Inflamer::Inflamer(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Inflamer::Inflamer(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

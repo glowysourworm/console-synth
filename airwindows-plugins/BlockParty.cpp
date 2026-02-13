@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BlockParty {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BlockParty(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BlockParty(samplingRate);}
 
-BlockParty::BlockParty(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BlockParty::BlockParty(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

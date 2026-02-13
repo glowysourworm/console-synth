@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Galactic3 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Galactic3(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Galactic3(samplingRate);}
 
-Galactic3::Galactic3(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Galactic3::Galactic3(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

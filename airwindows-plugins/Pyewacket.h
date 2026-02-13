@@ -32,7 +32,7 @@ class Pyewacket :
     public AudioEffectX 
 {
 public:
-    Pyewacket(audioMasterCallback audioMaster);
+    Pyewacket(float samplingRate);
     ~Pyewacket();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::FireAmp {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new FireAmp(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new FireAmp(samplingRate);}
 
-FireAmp::FireAmp(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+FireAmp::FireAmp(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

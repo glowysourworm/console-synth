@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DeBez {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DeBez(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DeBez(samplingRate);}
 
-DeBez::DeBez(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DeBez::DeBez(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

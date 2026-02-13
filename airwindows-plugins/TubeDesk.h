@@ -29,7 +29,7 @@ class TubeDesk :
     public AudioEffectX 
 {
 public:
-    TubeDesk(audioMasterCallback audioMaster);
+    TubeDesk(float samplingRate);
     ~TubeDesk();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

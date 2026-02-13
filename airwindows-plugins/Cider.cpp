@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Cider {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Cider(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Cider(samplingRate);}
 
-Cider::Cider(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Cider::Cider(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.70;
 	B = 0.3333333;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::GrindAmp {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new GrindAmp(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new GrindAmp(samplingRate);}
 
-GrindAmp::GrindAmp(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+GrindAmp::GrindAmp(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

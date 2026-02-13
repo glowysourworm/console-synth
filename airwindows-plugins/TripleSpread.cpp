@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TripleSpread {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TripleSpread(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TripleSpread(samplingRate);}
 
-TripleSpread::TripleSpread(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TripleSpread::TripleSpread(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int count = 0; count < 131074; count++) {pL[count] = 0; pR[count] = 0;}
 	for (int count = 0; count < 257; count++) {

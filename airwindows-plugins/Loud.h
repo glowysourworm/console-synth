@@ -32,7 +32,7 @@ class Loud :
     public AudioEffectX 
 {
 public:
-    Loud(audioMasterCallback audioMaster);
+    Loud(float samplingRate);
     ~Loud();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

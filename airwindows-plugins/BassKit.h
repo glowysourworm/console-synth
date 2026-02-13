@@ -33,7 +33,7 @@ class BassKit :
     public AudioEffectX 
 {
 public:
-    BassKit(audioMasterCallback audioMaster);
+    BassKit(float samplingRate);
     ~BassKit();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

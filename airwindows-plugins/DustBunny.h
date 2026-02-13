@@ -30,7 +30,7 @@ class DustBunny :
     public AudioEffectX 
 {
 public:
-    DustBunny(audioMasterCallback audioMaster);
+    DustBunny(float samplingRate);
     ~DustBunny();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

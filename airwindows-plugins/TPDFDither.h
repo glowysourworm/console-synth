@@ -31,7 +31,7 @@ class TPDFDither :
     public AudioEffectX 
 {
 public:
-    TPDFDither(audioMasterCallback audioMaster);
+    TPDFDither(float samplingRate);
     ~TPDFDither();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

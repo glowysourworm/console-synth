@@ -33,7 +33,7 @@ class Hypersoft :
     public AudioEffectX 
 {
 public:
-    Hypersoft(audioMasterCallback audioMaster);
+    Hypersoft(float samplingRate);
     ~Hypersoft();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Mojo {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Mojo(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Mojo(samplingRate);}
 
-Mojo::Mojo(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Mojo::Mojo(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

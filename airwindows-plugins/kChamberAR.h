@@ -38,7 +38,7 @@ class kChamberAR :
     public AudioEffectX 
 {
 public:
-    kChamberAR(audioMasterCallback audioMaster);
+    kChamberAR(float samplingRate);
     ~kChamberAR();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

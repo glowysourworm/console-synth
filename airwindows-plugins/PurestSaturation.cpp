@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestSaturation {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestSaturation(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestSaturation(samplingRate);}
 
-PurestSaturation::PurestSaturation(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestSaturation::PurestSaturation(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 1.0;

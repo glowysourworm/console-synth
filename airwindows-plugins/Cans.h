@@ -51,7 +51,7 @@ class Cans :
     public AudioEffectX 
 {
 public:
-    Cans(audioMasterCallback audioMaster);
+    Cans(float samplingRate);
     ~Cans();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

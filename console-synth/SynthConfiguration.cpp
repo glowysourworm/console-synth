@@ -13,7 +13,7 @@ SynthConfiguration::SynthConfiguration()
 	_keyMap = new SynthNoteMap();
 
 	// LOAD AIRWIN PLUGINS! (This may take a couple seconds)
-	_airwinEffectRegistry->Load();
+	_airwinEffectRegistry->Load(0);
 	
 	_waitFlag = false;							// std::atomic
 	_isDirty = false;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Podcast {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Podcast(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Podcast(samplingRate);}
 
-Podcast::Podcast(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Podcast::Podcast(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

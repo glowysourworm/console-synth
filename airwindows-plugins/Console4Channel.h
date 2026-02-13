@@ -35,7 +35,7 @@ class Console4Channel :
     public AudioEffectX 
 {
 public:
-    Console4Channel(audioMasterCallback audioMaster);
+    Console4Channel(float samplingRate);
     ~Console4Channel();
     
     // Configuration

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ConsoleMDChannel {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ConsoleMDChannel(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ConsoleMDChannel(samplingRate);}
 
-ConsoleMDChannel::ConsoleMDChannel(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ConsoleMDChannel::ConsoleMDChannel(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.25;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Energy2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Energy2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Energy2(samplingRate);}
 
-Energy2::Energy2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Energy2::Energy2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

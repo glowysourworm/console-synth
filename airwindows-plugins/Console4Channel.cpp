@@ -12,13 +12,13 @@
 #include <algorithm>
 namespace airwinconsolidated::Console4Channel {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) 
+AudioEffect* createEffectInstance(float samplingRate) 
 {
-	return new Console4Channel(audioMaster);
+	return new Console4Channel(samplingRate);
 }
 
-Console4Channel::Console4Channel(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console4Channel::Console4Channel(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	gain = 1.0;
 	gainchase = -90.0;

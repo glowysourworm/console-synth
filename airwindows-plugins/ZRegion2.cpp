@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ZRegion2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ZRegion2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ZRegion2(samplingRate);}
 
-ZRegion2::ZRegion2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ZRegion2::ZRegion2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 0.5;

@@ -39,7 +39,7 @@ class BuildATPDF :
     public AudioEffectX 
 {
 public:
-    BuildATPDF(audioMasterCallback audioMaster);
+    BuildATPDF(float samplingRate);
     ~BuildATPDF();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

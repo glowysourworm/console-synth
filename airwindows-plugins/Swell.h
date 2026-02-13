@@ -32,7 +32,7 @@ class Swell :
     public AudioEffectX 
 {
 public:
-    Swell(audioMasterCallback audioMaster);
+    Swell(float samplingRate);
     ~Swell();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

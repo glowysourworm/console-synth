@@ -31,7 +31,7 @@ class PhaseNudge :
     public AudioEffectX 
 {
 public:
-    PhaseNudge(audioMasterCallback audioMaster);
+    PhaseNudge(float samplingRate);
     ~PhaseNudge();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

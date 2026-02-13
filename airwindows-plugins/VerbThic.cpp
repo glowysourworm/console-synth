@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::VerbThic {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new VerbThic(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new VerbThic(samplingRate);}
 
-VerbThic::VerbThic(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+VerbThic::VerbThic(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ChimeyGuitar2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ChimeyGuitar2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ChimeyGuitar2(samplingRate);}
 
-ChimeyGuitar2::ChimeyGuitar2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ChimeyGuitar2::ChimeyGuitar2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.6;
 	B = 0.8;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Golem {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Golem(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Golem(samplingRate);}
 
-Golem::Golem(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Golem::Golem(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

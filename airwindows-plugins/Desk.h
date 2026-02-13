@@ -29,7 +29,7 @@ class Desk :
     public AudioEffectX 
 {
 public:
-    Desk(audioMasterCallback audioMaster);
+    Desk(float samplingRate);
     ~Desk();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

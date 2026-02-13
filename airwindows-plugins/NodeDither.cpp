@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::NodeDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new NodeDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new NodeDither(samplingRate);}
 
-NodeDither::NodeDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+NodeDither::NodeDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.04;
 	B = 0.0;

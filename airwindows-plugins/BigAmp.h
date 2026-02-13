@@ -33,7 +33,7 @@ class BigAmp :
     public AudioEffectX 
 {
 public:
-    BigAmp(audioMasterCallback audioMaster);
+    BigAmp(float samplingRate);
     ~BigAmp();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::uLawEncode {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new uLawEncode(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new uLawEncode(samplingRate);}
 
-uLawEncode::uLawEncode(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+uLawEncode::uLawEncode(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 1.0;

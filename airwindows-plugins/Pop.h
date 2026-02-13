@@ -32,7 +32,7 @@ class Pop :
     public AudioEffectX 
 {
 public:
-    Pop(audioMasterCallback audioMaster);
+    Pop(float samplingRate);
     ~Pop();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::EveryTrim {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new EveryTrim(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new EveryTrim(samplingRate);}
 
-EveryTrim::EveryTrim(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+EveryTrim::EveryTrim(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

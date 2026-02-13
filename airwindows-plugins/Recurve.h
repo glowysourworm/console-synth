@@ -29,7 +29,7 @@ class Recurve :
     public AudioEffectX 
 {
 public:
-    Recurve(audioMasterCallback audioMaster);
+    Recurve(float samplingRate);
     ~Recurve();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

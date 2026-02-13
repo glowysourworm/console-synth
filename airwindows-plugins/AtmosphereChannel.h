@@ -30,7 +30,7 @@ class AtmosphereChannel :
     public AudioEffectX 
 {
 public:
-    AtmosphereChannel(audioMasterCallback audioMaster);
+    AtmosphereChannel(float samplingRate);
     ~AtmosphereChannel();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

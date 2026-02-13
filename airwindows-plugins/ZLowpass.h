@@ -33,7 +33,7 @@ class ZLowpass :
     public AudioEffectX 
 {
 public:
-    ZLowpass(audioMasterCallback audioMaster);
+    ZLowpass(float samplingRate);
     ~ZLowpass();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

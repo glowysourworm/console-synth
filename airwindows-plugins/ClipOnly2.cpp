@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ClipOnly2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ClipOnly2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ClipOnly2(samplingRate);}
 
-ClipOnly2::ClipOnly2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ClipOnly2::ClipOnly2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	lastSampleL = 0.0;
 	wasPosClipL = false;

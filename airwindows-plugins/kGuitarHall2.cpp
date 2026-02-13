@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::kGuitarHall2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new kGuitarHall2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new kGuitarHall2(samplingRate);}
 
-kGuitarHall2::kGuitarHall2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+kGuitarHall2::kGuitarHall2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

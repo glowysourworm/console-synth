@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Thunder {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Thunder(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Thunder(samplingRate);}
 
-Thunder::Thunder(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Thunder::Thunder(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

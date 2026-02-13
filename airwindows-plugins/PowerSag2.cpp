@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PowerSag2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PowerSag2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PowerSag2(samplingRate);}
 
-PowerSag2::PowerSag2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PowerSag2::PowerSag2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 
 	for(int count = 0; count < 16385; count++) {dL[count] = 0; dR[count] = 0;}

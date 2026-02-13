@@ -35,7 +35,7 @@ class TexturizeMS :
     public AudioEffectX 
 {
 public:
-    TexturizeMS(audioMasterCallback audioMaster);
+    TexturizeMS(float samplingRate);
     ~TexturizeMS();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

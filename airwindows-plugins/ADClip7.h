@@ -34,7 +34,7 @@ class ADClip7 :
     public AudioEffectX 
 {
 public:
-    ADClip7(audioMasterCallback audioMaster);
+    ADClip7(float samplingRate);
     ~ADClip7();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

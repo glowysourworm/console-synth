@@ -49,7 +49,7 @@ class CloudCoat :
     public AudioEffectX 
 {
 public:
-    CloudCoat(audioMasterCallback audioMaster);
+    CloudCoat(float samplingRate);
     ~CloudCoat();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

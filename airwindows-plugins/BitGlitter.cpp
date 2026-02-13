@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BitGlitter {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BitGlitter(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BitGlitter(samplingRate);}
 
-BitGlitter::BitGlitter(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BitGlitter::BitGlitter(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

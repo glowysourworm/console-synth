@@ -29,7 +29,7 @@ class NotJustAnotherCD :
     public AudioEffectX 
 {
 public:
-    NotJustAnotherCD(audioMasterCallback audioMaster);
+    NotJustAnotherCD(float samplingRate);
     ~NotJustAnotherCD();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

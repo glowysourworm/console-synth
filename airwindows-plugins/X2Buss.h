@@ -39,7 +39,7 @@ class X2Buss :
     public AudioEffectX 
 {
 public:
-    X2Buss(audioMasterCallback audioMaster);
+    X2Buss(float samplingRate);
     ~X2Buss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

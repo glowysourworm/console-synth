@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TubeDesk {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TubeDesk(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TubeDesk(samplingRate);}
 
-TubeDesk::TubeDesk(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TubeDesk::TubeDesk(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for(int count = 0; count < 4999; count++) {dL[count] = 0; dR[count] = 0;}
 	gcount = 0;

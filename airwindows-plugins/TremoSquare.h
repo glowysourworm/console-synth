@@ -31,7 +31,7 @@ class TremoSquare :
     public AudioEffectX 
 {
 public:
-    TremoSquare(audioMasterCallback audioMaster);
+    TremoSquare(float samplingRate);
     ~TremoSquare();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

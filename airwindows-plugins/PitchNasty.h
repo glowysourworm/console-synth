@@ -35,7 +35,7 @@ class PitchNasty :
     public AudioEffectX 
 {
 public:
-    PitchNasty(audioMasterCallback audioMaster);
+    PitchNasty(float samplingRate);
     ~PitchNasty();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

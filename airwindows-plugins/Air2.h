@@ -34,7 +34,7 @@ class Air2 :
     public AudioEffectX 
 {
 public:
-    Air2(audioMasterCallback audioMaster);
+    Air2(float samplingRate);
     ~Air2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

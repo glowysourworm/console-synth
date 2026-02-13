@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestDualPan {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestDualPan(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestDualPan(samplingRate);}
 
-PurestDualPan::PurestDualPan(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestDualPan::PurestDualPan(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::StudioTan {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new StudioTan(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new StudioTan(samplingRate);}
 
-StudioTan::StudioTan(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+StudioTan::StudioTan(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 

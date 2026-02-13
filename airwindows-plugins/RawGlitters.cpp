@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::RawGlitters {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new RawGlitters(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new RawGlitters(samplingRate);}
 
-RawGlitters::RawGlitters(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+RawGlitters::RawGlitters(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

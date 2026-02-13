@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PaulDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PaulDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PaulDither(samplingRate);}
 
-PaulDither::PaulDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PaulDither::PaulDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

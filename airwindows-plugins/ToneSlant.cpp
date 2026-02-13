@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ToneSlant {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ToneSlant(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ToneSlant(samplingRate);}
 
-ToneSlant::ToneSlant(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ToneSlant::ToneSlant(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

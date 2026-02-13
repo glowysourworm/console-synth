@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::kWoodRoom {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new kWoodRoom(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new kWoodRoom(samplingRate);}
 
-kWoodRoom::kWoodRoom(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+kWoodRoom::kWoodRoom(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

@@ -34,7 +34,7 @@ class Slew :
     public AudioEffectX 
 {
 public:
-    Slew(audioMasterCallback audioMaster);
+    Slew(float samplingRate);
     ~Slew();
     
     // Configuration

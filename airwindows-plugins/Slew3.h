@@ -30,7 +30,7 @@ class Slew3 :
     public AudioEffectX 
 {
 public:
-    Slew3(audioMasterCallback audioMaster);
+    Slew3(float samplingRate);
     ~Slew3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

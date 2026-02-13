@@ -38,7 +38,7 @@ class ResEQ :
     public AudioEffectX 
 {
 public:
-    ResEQ(audioMasterCallback audioMaster);
+    ResEQ(float samplingRate);
     ~ResEQ();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

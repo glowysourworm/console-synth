@@ -35,7 +35,7 @@ class PearEQ :
     public AudioEffectX 
 {
 public:
-    PearEQ(audioMasterCallback audioMaster);
+    PearEQ(float samplingRate);
     ~PearEQ();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

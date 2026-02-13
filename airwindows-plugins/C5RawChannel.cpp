@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::C5RawChannel {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new C5RawChannel(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new C5RawChannel(samplingRate);}
 
-C5RawChannel::C5RawChannel(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+C5RawChannel::C5RawChannel(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	lastFXChannelL = 0.0;

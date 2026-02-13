@@ -33,7 +33,7 @@ class MidAmp :
     public AudioEffectX 
 {
 public:
-    MidAmp(audioMasterCallback audioMaster);
+    MidAmp(float samplingRate);
     ~MidAmp();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

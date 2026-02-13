@@ -32,7 +32,7 @@ class Coils2 :
     public AudioEffectX 
 {
 public:
-    Coils2(audioMasterCallback audioMaster);
+    Coils2(float samplingRate);
     ~Coils2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

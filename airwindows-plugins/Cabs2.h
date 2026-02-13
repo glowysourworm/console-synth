@@ -31,7 +31,7 @@ class Cabs2 :
     public AudioEffectX 
 {
 public:
-    Cabs2(audioMasterCallback audioMaster);
+    Cabs2(float samplingRate);
     ~Cabs2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

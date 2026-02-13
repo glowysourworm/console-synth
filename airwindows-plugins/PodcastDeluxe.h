@@ -30,7 +30,7 @@ class PodcastDeluxe :
     public AudioEffectX 
 {
 public:
-    PodcastDeluxe(audioMasterCallback audioMaster);
+    PodcastDeluxe(float samplingRate);
     ~PodcastDeluxe();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

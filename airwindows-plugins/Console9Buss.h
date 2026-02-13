@@ -31,7 +31,7 @@ class Console9Buss :
     public AudioEffectX 
 {
 public:
-    Console9Buss(audioMasterCallback audioMaster);
+    Console9Buss(float samplingRate);
     ~Console9Buss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

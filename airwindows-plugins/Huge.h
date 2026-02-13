@@ -31,7 +31,7 @@ class Huge :
     public AudioEffectX 
 {
 public:
-    Huge(audioMasterCallback audioMaster);
+    Huge(float samplingRate);
     ~Huge();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

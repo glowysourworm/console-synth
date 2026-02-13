@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::HipCrush {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new HipCrush(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new HipCrush(samplingRate);}
 
-HipCrush::HipCrush(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+HipCrush::HipCrush(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	TRF = 0.5;
 	TRG = 0.0;

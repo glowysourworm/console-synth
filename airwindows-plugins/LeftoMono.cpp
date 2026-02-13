@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::LeftoMono {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new LeftoMono(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new LeftoMono(samplingRate);}
 
-LeftoMono::LeftoMono(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+LeftoMono::LeftoMono(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	
     _canDo.insert("plugAsChannelInsert"); // plug-in can be used as a channel insert effect.

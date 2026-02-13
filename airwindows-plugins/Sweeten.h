@@ -30,7 +30,7 @@ class Sweeten :
     public AudioEffectX 
 {
 public:
-    Sweeten(audioMasterCallback audioMaster);
+    Sweeten(float samplingRate);
     ~Sweeten();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

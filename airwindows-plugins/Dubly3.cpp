@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Dubly3 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Dubly3(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Dubly3(samplingRate);}
 
-Dubly3::Dubly3(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Dubly3::Dubly3(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

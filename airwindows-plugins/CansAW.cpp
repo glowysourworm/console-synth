@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::CansAW {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new CansAW(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new CansAW(samplingRate);}
 
-CansAW::CansAW(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+CansAW::CansAW(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.2;
 	

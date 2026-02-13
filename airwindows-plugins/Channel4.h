@@ -31,7 +31,7 @@ class Channel4 :
     public AudioEffectX 
 {
 public:
-    Channel4(audioMasterCallback audioMaster);
+    Channel4(float samplingRate);
     ~Channel4();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

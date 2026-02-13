@@ -37,7 +37,7 @@ class EQ :
     public AudioEffectX 
 {
 public:
-    EQ(audioMasterCallback audioMaster);
+    EQ(float samplingRate);
     ~EQ();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

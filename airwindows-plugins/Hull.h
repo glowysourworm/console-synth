@@ -31,7 +31,7 @@ class Hull :
     public AudioEffectX 
 {
 public:
-    Hull(audioMasterCallback audioMaster);
+    Hull(float samplingRate);
     ~Hull();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

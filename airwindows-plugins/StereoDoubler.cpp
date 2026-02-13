@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::StereoDoubler {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new StereoDoubler(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new StereoDoubler(samplingRate);}
 
-StereoDoubler::StereoDoubler(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+StereoDoubler::StereoDoubler(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.6;
 	B = 0.6;

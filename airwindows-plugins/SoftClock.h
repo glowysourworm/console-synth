@@ -37,7 +37,7 @@ class SoftClock :
     public AudioEffectX 
 {
 public:
-    SoftClock(audioMasterCallback audioMaster);
+    SoftClock(float samplingRate);
     ~SoftClock();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

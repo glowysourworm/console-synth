@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Infinity {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Infinity(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Infinity(samplingRate);}
 
-Infinity::Infinity(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Infinity::Infinity(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 11; x++) {biquadA[x] = 0.0; biquadB[x] = 0.0; biquadC[x] = 0.0;}
 	

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SampleDelay {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SampleDelay(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SampleDelay(samplingRate);}
 
-SampleDelay::SampleDelay(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SampleDelay::SampleDelay(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

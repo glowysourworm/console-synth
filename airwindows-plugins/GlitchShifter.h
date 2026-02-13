@@ -34,7 +34,7 @@ class GlitchShifter :
     public AudioEffectX 
 {
 public:
-    GlitchShifter(audioMasterCallback audioMaster);
+    GlitchShifter(float samplingRate);
     ~GlitchShifter();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -31,7 +31,7 @@ class Nikola :
     public AudioEffectX 
 {
 public:
-    Nikola(audioMasterCallback audioMaster);
+    Nikola(float samplingRate);
     ~Nikola();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SoftClock2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SoftClock2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SoftClock2(samplingRate);}
 
-SoftClock2::SoftClock2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SoftClock2::SoftClock2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.2;
 	B = 0.2;

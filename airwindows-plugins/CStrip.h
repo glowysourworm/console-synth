@@ -41,7 +41,7 @@ class CStrip :
     public AudioEffectX 
 {
 public:
-    CStrip(audioMasterCallback audioMaster);
+    CStrip(float samplingRate);
     ~CStrip();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

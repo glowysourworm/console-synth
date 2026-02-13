@@ -32,7 +32,7 @@ class Discontapeity :
     public AudioEffectX 
 {
 public:
-    Discontapeity(audioMasterCallback audioMaster);
+    Discontapeity(float samplingRate);
     ~Discontapeity();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

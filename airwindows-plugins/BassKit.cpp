@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BassKit {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BassKit(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BassKit(samplingRate);}
 
-BassKit::BassKit(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BassKit::BassKit(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

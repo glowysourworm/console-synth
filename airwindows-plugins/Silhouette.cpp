@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Silhouette {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Silhouette(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Silhouette(samplingRate);}
 
-Silhouette::Silhouette(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Silhouette::Silhouette(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	

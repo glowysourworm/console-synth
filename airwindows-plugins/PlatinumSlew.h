@@ -30,7 +30,7 @@ class PlatinumSlew :
     public AudioEffectX 
 {
 public:
-    PlatinumSlew(audioMasterCallback audioMaster);
+    PlatinumSlew(float samplingRate);
     ~PlatinumSlew();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

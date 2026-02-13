@@ -31,7 +31,7 @@ class Hombre :
     public AudioEffectX 
 {
 public:
-    Hombre(audioMasterCallback audioMaster);
+    Hombre(float samplingRate);
     ~Hombre();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

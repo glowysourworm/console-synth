@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::LilAmp {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new LilAmp(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new LilAmp(samplingRate);}
 
-LilAmp::LilAmp(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+LilAmp::LilAmp(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

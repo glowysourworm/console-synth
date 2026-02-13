@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::AtmosphereBuss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new AtmosphereBuss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new AtmosphereBuss(samplingRate);}
 
-AtmosphereBuss::AtmosphereBuss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+AtmosphereBuss::AtmosphereBuss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 

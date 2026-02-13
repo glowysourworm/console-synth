@@ -39,7 +39,7 @@ class PunchyGuitar :
     public AudioEffectX 
 {
 public:
-    PunchyGuitar(audioMasterCallback audioMaster);
+    PunchyGuitar(float samplingRate);
     ~PunchyGuitar();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

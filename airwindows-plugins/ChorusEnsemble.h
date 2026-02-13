@@ -32,7 +32,7 @@ class ChorusEnsemble :
     public AudioEffectX 
 {
 public:
-    ChorusEnsemble(audioMasterCallback audioMaster);
+    ChorusEnsemble(float samplingRate);
     ~ChorusEnsemble();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

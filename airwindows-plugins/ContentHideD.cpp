@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ContentHideD {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ContentHideD(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ContentHideD(samplingRate);}
 
-ContentHideD::ContentHideD(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ContentHideD::ContentHideD(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	demotimer = 0.0;
 	fpd = 1.0; while (fpd < 16386) fpd = rand()*UINT32_MAX;

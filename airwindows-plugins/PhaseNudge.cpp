@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PhaseNudge {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PhaseNudge(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PhaseNudge(samplingRate);}
 
-PhaseNudge::PhaseNudge(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PhaseNudge::PhaseNudge(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

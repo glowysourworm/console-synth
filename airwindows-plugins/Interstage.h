@@ -29,7 +29,7 @@ class Interstage :
     public AudioEffectX 
 {
 public:
-    Interstage(audioMasterCallback audioMaster);
+    Interstage(float samplingRate);
     ~Interstage();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

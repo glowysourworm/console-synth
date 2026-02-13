@@ -33,7 +33,7 @@ class Drive :
     public AudioEffectX 
 {
 public:
-    Drive(audioMasterCallback audioMaster);
+    Drive(float samplingRate);
     ~Drive();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

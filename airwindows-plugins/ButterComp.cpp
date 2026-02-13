@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ButterComp {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ButterComp(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ButterComp(samplingRate);}
 
-ButterComp::ButterComp(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ButterComp::ButterComp(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

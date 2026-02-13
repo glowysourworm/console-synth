@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::VariMu {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new VariMu(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new VariMu(samplingRate);}
 
-VariMu::VariMu(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+VariMu::VariMu(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	
 	muSpeedAL = 10000;

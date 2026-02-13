@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Precious {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Precious(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Precious(samplingRate);}
 
-Precious::Precious(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Precious::Precious(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.70;
 	B = 0.3333333;

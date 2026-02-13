@@ -32,7 +32,7 @@ class PurestAir :
     public AudioEffectX 
 {
 public:
-    PurestAir(audioMasterCallback audioMaster);
+    PurestAir(float samplingRate);
     ~PurestAir();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

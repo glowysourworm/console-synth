@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Hombre {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Hombre(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Hombre(samplingRate);}
 
-Hombre::Hombre(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Hombre::Hombre(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.421;
 	B = 0.5;

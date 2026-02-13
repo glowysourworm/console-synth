@@ -34,7 +34,7 @@ class XRegion :
     public AudioEffectX 
 {
 public:
-    XRegion(audioMasterCallback audioMaster);
+    XRegion(float samplingRate);
     ~XRegion();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

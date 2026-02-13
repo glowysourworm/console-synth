@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Monitoring2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Monitoring2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Monitoring2(samplingRate);}
 
-Monitoring2::Monitoring2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Monitoring2::Monitoring2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for(int count = 0; count < 99; count++) {
 		darkSampleL[count] = 0;

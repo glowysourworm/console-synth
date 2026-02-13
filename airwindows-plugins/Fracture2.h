@@ -34,7 +34,7 @@ class Fracture2 :
     public AudioEffectX 
 {
 public:
-    Fracture2(audioMasterCallback audioMaster);
+    Fracture2(float samplingRate);
     ~Fracture2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

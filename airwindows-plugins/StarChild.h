@@ -32,7 +32,7 @@ class StarChild :
     public AudioEffectX 
 {
 public:
-    StarChild(audioMasterCallback audioMaster);
+    StarChild(float samplingRate);
     ~StarChild();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Discontinuity {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Discontinuity(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Discontinuity(samplingRate);}
 
-Discontinuity::Discontinuity(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Discontinuity::Discontinuity(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	for(int count = 0; count < dscBuf+2; count++) {

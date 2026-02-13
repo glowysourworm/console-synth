@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::VerbSixes {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new VerbSixes(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new VerbSixes(samplingRate);}
 
-VerbSixes::VerbSixes(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+VerbSixes::VerbSixes(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 #ifdef THREEBYTHREE
 	for(int x = 0; x < d3A+2; x++) {a3AL[x] = 0.0; a3AR[x] = 0.0;}

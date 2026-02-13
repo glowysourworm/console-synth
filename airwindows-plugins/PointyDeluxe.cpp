@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PointyDeluxe {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PointyDeluxe(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PointyDeluxe(samplingRate);}
 
-PointyDeluxe::PointyDeluxe(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PointyDeluxe::PointyDeluxe(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

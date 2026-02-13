@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Facet {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Facet(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Facet(samplingRate);}
 
-Facet::Facet(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Facet::Facet(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

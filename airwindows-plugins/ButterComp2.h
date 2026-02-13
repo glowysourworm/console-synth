@@ -32,7 +32,7 @@ class ButterComp2 :
     public AudioEffectX 
 {
 public:
-    ButterComp2(audioMasterCallback audioMaster);
+    ButterComp2(float samplingRate);
     ~ButterComp2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

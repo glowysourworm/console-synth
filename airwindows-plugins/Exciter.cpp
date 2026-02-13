@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Exciter {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Exciter(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Exciter(samplingRate);}
 
-Exciter::Exciter(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Exciter::Exciter(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.6;
 	B = 0.0;

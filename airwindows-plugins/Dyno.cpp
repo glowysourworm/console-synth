@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Dyno {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Dyno(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Dyno(samplingRate);}
 
-Dyno::Dyno(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Dyno::Dyno(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

@@ -31,7 +31,7 @@ class uLawDecode :
     public AudioEffectX 
 {
 public:
-    uLawDecode(audioMasterCallback audioMaster);
+    uLawDecode(float samplingRate);
     ~uLawDecode();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

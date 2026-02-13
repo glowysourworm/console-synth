@@ -43,7 +43,7 @@ class kGuitarHall2 :
     public AudioEffectX 
 {
 public:
-    kGuitarHall2(audioMasterCallback audioMaster);
+    kGuitarHall2(float samplingRate);
     ~kGuitarHall2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

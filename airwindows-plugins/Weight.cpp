@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Weight {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Weight(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Weight(samplingRate);}
 
-Weight::Weight(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Weight::Weight(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

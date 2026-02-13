@@ -12,13 +12,13 @@
 #include <algorithm>
 namespace airwinconsolidated::Console4Buss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) 
+AudioEffect* createEffectInstance(float samplingRate) 
 {
-	return new Console4Buss(audioMaster);
+	return new Console4Buss(samplingRate);
 }
 
-Console4Buss::Console4Buss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console4Buss::Console4Buss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	gain = 1.0;
 	lastSampleL = 0.0;

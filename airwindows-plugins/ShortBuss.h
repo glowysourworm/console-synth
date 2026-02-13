@@ -31,7 +31,7 @@ class ShortBuss :
     public AudioEffectX 
 {
 public:
-    ShortBuss(audioMasterCallback audioMaster);
+    ShortBuss(float samplingRate);
     ~ShortBuss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Surge {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Surge(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Surge(samplingRate);}
 
-Surge::Surge(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Surge::Surge(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;
 	fpdR = 1.0; while (fpdR < 16386) fpdR = rand()*UINT32_MAX;

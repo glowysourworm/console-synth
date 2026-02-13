@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Balanced {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Balanced(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Balanced(samplingRate);}
 
-Balanced::Balanced(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Balanced::Balanced(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

@@ -35,7 +35,7 @@ class TapeDelay2 :
     public AudioEffectX 
 {
 public:
-    TapeDelay2(audioMasterCallback audioMaster);
+    TapeDelay2(float samplingRate);
     ~TapeDelay2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

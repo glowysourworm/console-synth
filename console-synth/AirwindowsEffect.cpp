@@ -2,11 +2,10 @@
 #include "FilterBase.h"
 #include "PlaybackFrame.h"
 #include "SynthConfiguration.h"
-#include <kCathedral.h>
 
 AirwindowsEffect::AirwindowsEffect(float delaySeconds, float gain, unsigned int numberOfChannels, unsigned int samplingRate) : FilterBase(gain, numberOfChannels, samplingRate)
 {
-	_effect = new kCathedral(0);
+	//_effect = new kCathedral(0);
 	_input = new float* [2];
 	_output = new float* [2];
 
@@ -19,13 +18,13 @@ AirwindowsEffect::AirwindowsEffect(float delaySeconds, float gain, unsigned int 
 	_output[0] = new float[1];			// Left (output)
 	_output[1] = new float[1];			// Right (output)
 
-	_effect->setSampleRate(samplingRate);
-	_effect->setParameter(0, delaySeconds);
+	//_effect->setSampleRate(samplingRate);
+	//_effect->setParameter(0, delaySeconds);
 }
 
 AirwindowsEffect::~AirwindowsEffect()
 {
-	delete _effect;
+	//delete _effect;
 }
 
 void AirwindowsEffect::GetSample(PlaybackFrame* frame, float absoluteTime)
@@ -47,7 +46,7 @@ void AirwindowsEffect::GetSample(PlaybackFrame* frame, float absoluteTime)
 	_input[0][0] = frame->GetSample(0);
 	_input[1][0] = frame->GetSample(1);
 
-	_effect->processReplacing(_input, _output, 1);
+	//_effect->processReplacing(_input, _output, 1);
 
 	frame->SetSample(0, _output[0][0]);
 	frame->SetSample(0, _output[1][0]);

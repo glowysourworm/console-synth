@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Focus {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Focus(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Focus(samplingRate);}
 
-Focus::Focus(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Focus::Focus(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

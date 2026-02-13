@@ -43,7 +43,7 @@ class kWoodRoom :
     public AudioEffectX 
 {
 public:
-    kWoodRoom(audioMasterCallback audioMaster);
+    kWoodRoom(float samplingRate);
     ~kWoodRoom();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::RightoMono {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new RightoMono(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new RightoMono(samplingRate);}
 
-RightoMono::RightoMono(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+RightoMono::RightoMono(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	
     _canDo.insert("plugAsChannelInsert"); // plug-in can be used as a channel insert effect.

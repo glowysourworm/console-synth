@@ -31,7 +31,7 @@ class Surge :
     public AudioEffectX 
 {
 public:
-    Surge(audioMasterCallback audioMaster);
+    Surge(float samplingRate);
     ~Surge();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

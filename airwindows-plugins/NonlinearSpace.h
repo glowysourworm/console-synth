@@ -35,7 +35,7 @@ class NonlinearSpace :
     public AudioEffectX 
 {
 public:
-    NonlinearSpace(audioMasterCallback audioMaster);
+    NonlinearSpace(float samplingRate);
     ~NonlinearSpace();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

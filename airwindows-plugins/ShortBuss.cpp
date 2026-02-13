@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ShortBuss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ShortBuss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ShortBuss(samplingRate);}
 
-ShortBuss::ShortBuss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ShortBuss::ShortBuss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

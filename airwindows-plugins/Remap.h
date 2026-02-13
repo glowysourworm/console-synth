@@ -32,7 +32,7 @@ class Remap :
     public AudioEffectX 
 {
 public:
-    Remap(audioMasterCallback audioMaster);
+    Remap(float samplingRate);
     ~Remap();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

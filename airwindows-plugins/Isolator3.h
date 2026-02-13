@@ -31,7 +31,7 @@ class Isolator3 :
     public AudioEffectX 
 {
 public:
-    Isolator3(audioMasterCallback audioMaster);
+    Isolator3(float samplingRate);
     ~Isolator3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

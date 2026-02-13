@@ -31,7 +31,7 @@ class StereoDoubler :
     public AudioEffectX 
 {
 public:
-    StereoDoubler(audioMasterCallback audioMaster);
+    StereoDoubler(float samplingRate);
     ~StereoDoubler();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

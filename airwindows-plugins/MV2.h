@@ -34,7 +34,7 @@ class MV2 :
     public AudioEffectX 
 {
 public:
-    MV2(audioMasterCallback audioMaster);
+    MV2(float samplingRate);
     ~MV2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

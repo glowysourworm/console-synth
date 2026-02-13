@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Tremolo {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Tremolo(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Tremolo(samplingRate);}
 
-Tremolo::Tremolo(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Tremolo::Tremolo(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

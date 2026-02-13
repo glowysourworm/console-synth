@@ -33,7 +33,7 @@ class ZBandpass2 :
     public AudioEffectX 
 {
 public:
-    ZBandpass2(audioMasterCallback audioMaster);
+    ZBandpass2(float samplingRate);
     ~ZBandpass2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -31,7 +31,7 @@ class BlockParty :
     public AudioEffectX 
 {
 public:
-    BlockParty(audioMasterCallback audioMaster);
+    BlockParty(float samplingRate);
     ~BlockParty();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

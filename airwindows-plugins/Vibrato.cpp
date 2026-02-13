@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Vibrato {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Vibrato(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Vibrato(samplingRate);}
 
-Vibrato::Vibrato(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Vibrato::Vibrato(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.3;
 	B = 0.0;

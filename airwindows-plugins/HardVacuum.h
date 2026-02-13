@@ -34,7 +34,7 @@ class HardVacuum :
     public AudioEffectX 
 {
 public:
-    HardVacuum(audioMasterCallback audioMaster);
+    HardVacuum(float samplingRate);
     ~HardVacuum();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DigitalBlack {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DigitalBlack(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DigitalBlack(samplingRate);}
 
-DigitalBlack::DigitalBlack(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DigitalBlack::DigitalBlack(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DeRez {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DeRez(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DeRez(samplingRate);}
 
-DeRez::DeRez(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DeRez::DeRez(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 1.0;

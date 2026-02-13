@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Zoom {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Zoom(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Zoom(samplingRate);}
 
-Zoom::Zoom(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Zoom::Zoom(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 

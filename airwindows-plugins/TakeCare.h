@@ -37,7 +37,7 @@ class TakeCare :
     public AudioEffectX 
 {
 public:
-    TakeCare(audioMasterCallback audioMaster);
+    TakeCare(float samplingRate);
     ~TakeCare();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

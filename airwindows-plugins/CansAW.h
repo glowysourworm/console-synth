@@ -47,7 +47,7 @@ class CansAW :
     public AudioEffectX 
 {
 public:
-    CansAW(audioMasterCallback audioMaster);
+    CansAW(float samplingRate);
     ~CansAW();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

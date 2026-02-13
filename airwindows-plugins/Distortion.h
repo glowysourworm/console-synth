@@ -33,7 +33,7 @@ class Distortion :
     public AudioEffectX 
 {
 public:
-    Distortion(audioMasterCallback audioMaster);
+    Distortion(float samplingRate);
     ~Distortion();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

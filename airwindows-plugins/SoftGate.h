@@ -32,7 +32,7 @@ class SoftGate :
     public AudioEffectX 
 {
 public:
-    SoftGate(audioMasterCallback audioMaster);
+    SoftGate(float samplingRate);
     ~SoftGate();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

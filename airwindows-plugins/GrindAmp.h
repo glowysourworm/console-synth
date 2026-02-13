@@ -33,7 +33,7 @@ class GrindAmp :
     public AudioEffectX 
 {
 public:
-    GrindAmp(audioMasterCallback audioMaster);
+    GrindAmp(float samplingRate);
     ~GrindAmp();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

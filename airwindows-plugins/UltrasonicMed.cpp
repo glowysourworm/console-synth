@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::UltrasonicMed {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new UltrasonicMed(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new UltrasonicMed(samplingRate);}
 
-UltrasonicMed::UltrasonicMed(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+UltrasonicMed::UltrasonicMed(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int x = 0; x < 15; x++) {biquadA[x] = 0.0;biquadB[x] = 0.0;}
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

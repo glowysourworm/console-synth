@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Desk4 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Desk4(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Desk4(samplingRate);}
 
-Desk4::Desk4(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Desk4::Desk4(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.27;
 	B = 0.18;

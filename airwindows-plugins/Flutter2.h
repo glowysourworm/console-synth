@@ -32,7 +32,7 @@ class Flutter2 :
     public AudioEffectX 
 {
 public:
-    Flutter2(audioMasterCallback audioMaster);
+    Flutter2(float samplingRate);
     ~Flutter2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

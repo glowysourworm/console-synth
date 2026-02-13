@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::UltrasonX {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new UltrasonX(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new UltrasonX(samplingRate);}
 
-UltrasonX::UltrasonX(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+UltrasonX::UltrasonX(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	

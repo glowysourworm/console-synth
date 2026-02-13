@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Dynamics {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Dynamics(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Dynamics(samplingRate);}
 
-Dynamics::Dynamics(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Dynamics::Dynamics(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

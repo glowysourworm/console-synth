@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Logical4 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Logical4(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Logical4(samplingRate);}
 
-Logical4::Logical4(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Logical4::Logical4(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.2;

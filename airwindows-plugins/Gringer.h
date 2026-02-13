@@ -29,7 +29,7 @@ class Gringer :
     public AudioEffectX 
 {
 public:
-    Gringer(audioMasterCallback audioMaster);
+    Gringer(float samplingRate);
     ~Gringer();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

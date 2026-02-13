@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Deckwrecka {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Deckwrecka(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Deckwrecka(samplingRate);}
 
-Deckwrecka::Deckwrecka(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Deckwrecka::Deckwrecka(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

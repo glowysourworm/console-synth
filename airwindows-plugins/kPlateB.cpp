@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::kPlateB {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new kPlateB(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new kPlateB(samplingRate);}
 
-kPlateB::kPlateB(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+kPlateB::kPlateB(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.5;

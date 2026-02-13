@@ -30,7 +30,7 @@ class Zoom :
     public AudioEffectX 
 {
 public:
-    Zoom(audioMasterCallback audioMaster);
+    Zoom(float samplingRate);
     ~Zoom();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

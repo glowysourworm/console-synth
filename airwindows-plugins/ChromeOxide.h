@@ -31,7 +31,7 @@ class ChromeOxide :
     public AudioEffectX 
 {
 public:
-    ChromeOxide(audioMasterCallback audioMaster);
+    ChromeOxide(float samplingRate);
     ~ChromeOxide();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

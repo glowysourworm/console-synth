@@ -30,7 +30,7 @@ class Console5DarkCh :
     public AudioEffectX 
 {
 public:
-    Console5DarkCh(audioMasterCallback audioMaster);
+    Console5DarkCh(float samplingRate);
     ~Console5DarkCh();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

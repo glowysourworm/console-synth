@@ -31,7 +31,7 @@ class Righteous4 :
     public AudioEffectX 
 {
 public:
-    Righteous4(audioMasterCallback audioMaster);
+    Righteous4(float samplingRate);
     ~Righteous4();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

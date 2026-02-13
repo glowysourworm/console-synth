@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::TPDFWide {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new TPDFWide(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new TPDFWide(samplingRate);}
 
-TPDFWide::TPDFWide(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+TPDFWide::TPDFWide(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

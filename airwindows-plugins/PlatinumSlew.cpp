@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PlatinumSlew {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PlatinumSlew(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PlatinumSlew(samplingRate);}
 
-PlatinumSlew::PlatinumSlew(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PlatinumSlew::PlatinumSlew(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	for (int x = 0; x < gslew_total; x++) gslew[x] = 0.0;

@@ -29,7 +29,7 @@ class PeaksOnly :
     public AudioEffectX 
 {
 public:
-    PeaksOnly(audioMasterCallback audioMaster);
+    PeaksOnly(float samplingRate);
     ~PeaksOnly();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

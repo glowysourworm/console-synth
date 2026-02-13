@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Point {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Point(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Point(samplingRate);}
 
-Point::Point(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Point::Point(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

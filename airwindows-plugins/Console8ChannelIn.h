@@ -29,7 +29,7 @@ class Console8ChannelIn :
     public AudioEffectX 
 {
 public:
-    Console8ChannelIn(audioMasterCallback audioMaster);
+    Console8ChannelIn(float samplingRate);
     ~Console8ChannelIn();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

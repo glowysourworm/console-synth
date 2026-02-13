@@ -33,7 +33,7 @@ class BassAmp :
     public AudioEffectX 
 {
 public:
-    BassAmp(audioMasterCallback audioMaster);
+    BassAmp(float samplingRate);
     ~BassAmp();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

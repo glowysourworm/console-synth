@@ -31,7 +31,7 @@ class NCSeventeen :
     public AudioEffectX 
 {
 public:
-    NCSeventeen(audioMasterCallback audioMaster);
+    NCSeventeen(float samplingRate);
     ~NCSeventeen();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

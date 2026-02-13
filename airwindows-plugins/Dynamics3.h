@@ -33,7 +33,7 @@ class Dynamics3 :
     public AudioEffectX 
 {
 public:
-    Dynamics3(audioMasterCallback audioMaster);
+    Dynamics3(float samplingRate);
     ~Dynamics3();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

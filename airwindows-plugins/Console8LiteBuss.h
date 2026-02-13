@@ -30,7 +30,7 @@ class Console8LiteBuss :
     public AudioEffectX 
 {
 public:
-    Console8LiteBuss(audioMasterCallback audioMaster);
+    Console8LiteBuss(float samplingRate);
     ~Console8LiteBuss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Console8ChannelOut {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Console8ChannelOut(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Console8ChannelOut(samplingRate);}
 
-Console8ChannelOut::Console8ChannelOut(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Console8ChannelOut::Console8ChannelOut(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	inTrimA = 0.5; inTrimB = 0.5;

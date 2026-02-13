@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestConsole3Channel {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestConsole3Channel(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestConsole3Channel(samplingRate);}
 
-PurestConsole3Channel::PurestConsole3Channel(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestConsole3Channel::PurestConsole3Channel(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;
 	fpdR = 1.0; while (fpdR < 16386) fpdR = rand()*UINT32_MAX;

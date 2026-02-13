@@ -30,7 +30,7 @@ class ConsoleMCBuss :
     public AudioEffectX 
 {
 public:
-    ConsoleMCBuss(audioMasterCallback audioMaster);
+    ConsoleMCBuss(float samplingRate);
     ~ConsoleMCBuss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

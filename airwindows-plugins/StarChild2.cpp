@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::StarChild2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new StarChild2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new StarChild2(samplingRate);}
 
-StarChild2::StarChild2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+StarChild2::StarChild2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.7;

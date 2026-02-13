@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Channel5 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Channel5(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Channel5(samplingRate);}
 
-Channel5::Channel5(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Channel5::Channel5(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	fpNShapeL = 0.0;
 	fpNShapeR = 0.0;

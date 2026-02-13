@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DubPlate {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DubPlate(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DubPlate(samplingRate);}
 
-DubPlate::DubPlate(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DubPlate::DubPlate(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	iirA = 0.0;
 	iirB = 0.0;

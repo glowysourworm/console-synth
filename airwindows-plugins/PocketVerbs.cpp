@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PocketVerbs {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PocketVerbs(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PocketVerbs(samplingRate);}
 
-PocketVerbs::PocketVerbs(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PocketVerbs::PocketVerbs(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

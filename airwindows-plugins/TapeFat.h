@@ -31,7 +31,7 @@ class TapeFat :
     public AudioEffectX 
 {
 public:
-    TapeFat(audioMasterCallback audioMaster);
+    TapeFat(float samplingRate);
     ~TapeFat();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

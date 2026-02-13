@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ChorusEnsemble {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ChorusEnsemble(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ChorusEnsemble(samplingRate);}
 
-ChorusEnsemble::ChorusEnsemble(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ChorusEnsemble::ChorusEnsemble(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

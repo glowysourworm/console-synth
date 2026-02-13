@@ -38,7 +38,7 @@ class Energy2 :
     public AudioEffectX 
 {
 public:
-    Energy2(audioMasterCallback audioMaster);
+    Energy2(float samplingRate);
     ~Energy2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

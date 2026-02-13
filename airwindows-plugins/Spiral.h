@@ -29,7 +29,7 @@ class Spiral :
     public AudioEffectX 
 {
 public:
-    Spiral(audioMasterCallback audioMaster);
+    Spiral(float samplingRate);
     ~Spiral();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

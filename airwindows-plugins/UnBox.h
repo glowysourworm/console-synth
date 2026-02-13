@@ -32,7 +32,7 @@ class UnBox :
     public AudioEffectX 
 {
 public:
-    UnBox(audioMasterCallback audioMaster);
+    UnBox(float samplingRate);
     ~UnBox();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

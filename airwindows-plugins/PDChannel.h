@@ -31,7 +31,7 @@ class PDChannel :
     public AudioEffectX 
 {
 public:
-    PDChannel(audioMasterCallback audioMaster);
+    PDChannel(float samplingRate);
     ~PDChannel();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

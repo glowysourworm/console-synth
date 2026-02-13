@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SlewSonic {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SlewSonic(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SlewSonic(samplingRate);}
 
-SlewSonic::SlewSonic(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SlewSonic::SlewSonic(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

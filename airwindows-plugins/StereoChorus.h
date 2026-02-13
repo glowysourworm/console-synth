@@ -31,7 +31,7 @@ class StereoChorus :
     public AudioEffectX 
 {
 public:
-    StereoChorus(audioMasterCallback audioMaster);
+    StereoChorus(float samplingRate);
     ~StereoChorus();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

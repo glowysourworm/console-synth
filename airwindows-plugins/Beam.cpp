@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Beam {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Beam(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Beam(samplingRate);}
 
-Beam::Beam(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Beam::Beam(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.5;

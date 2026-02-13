@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Loud {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Loud(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Loud(samplingRate);}
 
-Loud::Loud(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Loud::Loud(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

@@ -33,7 +33,7 @@ class PocketVerbs :
     public AudioEffectX 
 {
 public:
-    PocketVerbs(audioMasterCallback audioMaster);
+    PocketVerbs(float samplingRate);
     ~PocketVerbs();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Melt {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Melt(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Melt(samplingRate);}
 
-Melt::Melt(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Melt::Melt(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.25;
 	B = 0.75;

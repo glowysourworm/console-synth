@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DrumSlam {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DrumSlam(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DrumSlam(samplingRate);}
 
-DrumSlam::DrumSlam(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DrumSlam::DrumSlam(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

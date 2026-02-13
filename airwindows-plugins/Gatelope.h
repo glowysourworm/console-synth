@@ -34,7 +34,7 @@ class Gatelope :
     public AudioEffectX 
 {
 public:
-    Gatelope(audioMasterCallback audioMaster);
+    Gatelope(float samplingRate);
     ~Gatelope();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

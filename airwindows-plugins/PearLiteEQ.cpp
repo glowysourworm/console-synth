@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PearLiteEQ {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PearLiteEQ(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PearLiteEQ(samplingRate);}
 
-PearLiteEQ::PearLiteEQ(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PearLiteEQ::PearLiteEQ(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

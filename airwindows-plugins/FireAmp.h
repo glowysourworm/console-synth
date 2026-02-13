@@ -33,7 +33,7 @@ class FireAmp :
     public AudioEffectX 
 {
 public:
-    FireAmp(audioMasterCallback audioMaster);
+    FireAmp(float samplingRate);
     ~FireAmp();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

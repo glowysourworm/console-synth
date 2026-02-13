@@ -48,7 +48,7 @@ class ClearCoat :
     public AudioEffectX 
 {
 public:
-    ClearCoat(audioMasterCallback audioMaster);
+    ClearCoat(float samplingRate);
     ~ClearCoat();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -31,7 +31,7 @@ class TPDFWide :
     public AudioEffectX 
 {
 public:
-    TPDFWide(audioMasterCallback audioMaster);
+    TPDFWide(float samplingRate);
     ~TPDFWide();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

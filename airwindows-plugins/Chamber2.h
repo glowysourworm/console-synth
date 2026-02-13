@@ -33,7 +33,7 @@ class Chamber2 :
     public AudioEffectX 
 {
 public:
-    Chamber2(audioMasterCallback audioMaster);
+    Chamber2(float samplingRate);
     ~Chamber2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ElectroHat {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ElectroHat(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ElectroHat(samplingRate);}
 
-ElectroHat::ElectroHat(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ElectroHat::ElectroHat(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

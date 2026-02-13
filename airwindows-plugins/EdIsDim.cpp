@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::EdIsDim {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new EdIsDim(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new EdIsDim(samplingRate);}
 
-EdIsDim::EdIsDim(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+EdIsDim::EdIsDim(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	fpdL = 1.0; while (fpdL < 16386) fpdL = rand()*UINT32_MAX;

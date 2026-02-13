@@ -34,7 +34,7 @@ class Srsly :
     public AudioEffectX 
 {
 public:
-    Srsly(audioMasterCallback audioMaster);
+    Srsly(float samplingRate);
     ~Srsly();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

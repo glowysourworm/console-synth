@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Pockey2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Pockey2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Pockey2(samplingRate);}
 
-Pockey2::Pockey2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Pockey2::Pockey2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.66;

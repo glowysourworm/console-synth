@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Pop {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Pop(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Pop(samplingRate);}
 
-Pop::Pop(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Pop::Pop(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.3;
 	B = 1.0;

@@ -39,7 +39,7 @@ class Parametric :
     public AudioEffectX 
 {
 public:
-    Parametric(audioMasterCallback audioMaster);
+    Parametric(float samplingRate);
     ~Parametric();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

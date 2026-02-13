@@ -32,7 +32,7 @@ class TapeHack2 :
     public AudioEffectX 
 {
 public:
-    TapeHack2(audioMasterCallback audioMaster);
+    TapeHack2(float samplingRate);
     ~TapeHack2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Monitoring {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Monitoring(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Monitoring(samplingRate);}
 
-Monitoring::Monitoring(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Monitoring::Monitoring(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	bynL[0] = 1000.0;
 	bynL[1] = 301.0;

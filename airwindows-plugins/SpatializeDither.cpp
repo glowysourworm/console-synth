@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SpatializeDither {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SpatializeDither(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SpatializeDither(samplingRate);}
 
-SpatializeDither::SpatializeDither(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SpatializeDither::SpatializeDither(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

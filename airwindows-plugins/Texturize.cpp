@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Texturize {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Texturize(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Texturize(samplingRate);}
 
-Texturize::Texturize(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Texturize::Texturize(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	polarityL = false;
 	lastSampleL = 0.0;

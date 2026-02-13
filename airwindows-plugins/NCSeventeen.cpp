@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::NCSeventeen {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new NCSeventeen(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new NCSeventeen(samplingRate);}
 
-NCSeventeen::NCSeventeen(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+NCSeventeen::NCSeventeen(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

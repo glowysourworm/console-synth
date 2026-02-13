@@ -36,7 +36,7 @@ class MatrixVerb :
     public AudioEffectX 
 {
 public:
-    MatrixVerb(audioMasterCallback audioMaster);
+    MatrixVerb(float samplingRate);
     ~MatrixVerb();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

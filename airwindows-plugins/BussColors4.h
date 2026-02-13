@@ -33,7 +33,7 @@ class BussColors4 :
     public AudioEffectX 
 {
 public:
-    BussColors4(audioMasterCallback audioMaster);
+    BussColors4(float samplingRate);
     ~BussColors4();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

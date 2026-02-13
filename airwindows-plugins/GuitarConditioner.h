@@ -29,7 +29,7 @@ class GuitarConditioner :
     public AudioEffectX 
 {
 public:
-    GuitarConditioner(audioMasterCallback audioMaster);
+    GuitarConditioner(float samplingRate);
     ~GuitarConditioner();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

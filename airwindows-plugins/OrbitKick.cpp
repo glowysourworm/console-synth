@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::OrbitKick {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new OrbitKick(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new OrbitKick(samplingRate);}
 
-OrbitKick::OrbitKick(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+OrbitKick::OrbitKick(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

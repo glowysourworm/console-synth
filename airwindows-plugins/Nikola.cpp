@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Nikola {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Nikola(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Nikola(samplingRate);}
 
-Nikola::Nikola(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Nikola::Nikola(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 1.0;

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::C5RawBuss {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new C5RawBuss(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new C5RawBuss(samplingRate);}
 
-C5RawBuss::C5RawBuss(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+C5RawBuss::C5RawBuss(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	lastFXBussL = 0.0;

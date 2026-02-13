@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::GlitchShifter {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new GlitchShifter(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new GlitchShifter(samplingRate);}
 
-GlitchShifter::GlitchShifter(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+GlitchShifter::GlitchShifter(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	for (int count = 0; count < 131074; count++) {pL[count] = 0; pR[count] = 0;}
 	for (int count = 0; count < 257; count++) {

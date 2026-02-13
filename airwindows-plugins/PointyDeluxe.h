@@ -39,7 +39,7 @@ class PointyDeluxe :
     public AudioEffectX 
 {
 public:
-    PointyDeluxe(audioMasterCallback audioMaster);
+    PointyDeluxe(float samplingRate);
     ~PointyDeluxe();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Wider {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Wider(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Wider(samplingRate);}
 
-Wider::Wider(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Wider::Wider(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

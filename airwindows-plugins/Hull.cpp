@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::Hull {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new Hull(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new Hull(samplingRate);}
 
-Hull::Hull(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+Hull::Hull(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

@@ -33,7 +33,7 @@ class ZNotch :
     public AudioEffectX 
 {
 public:
-    ZNotch(audioMasterCallback audioMaster);
+    ZNotch(float samplingRate);
     ~ZNotch();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

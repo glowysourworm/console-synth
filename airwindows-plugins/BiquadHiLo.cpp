@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::BiquadHiLo {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new BiquadHiLo(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new BiquadHiLo(samplingRate);}
 
-BiquadHiLo::BiquadHiLo(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+BiquadHiLo::BiquadHiLo(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

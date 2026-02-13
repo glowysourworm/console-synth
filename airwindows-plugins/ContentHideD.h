@@ -29,7 +29,7 @@ class ContentHideD :
     public AudioEffectX 
 {
 public:
-    ContentHideD(audioMasterCallback audioMaster);
+    ContentHideD(float samplingRate);
     ~ContentHideD();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

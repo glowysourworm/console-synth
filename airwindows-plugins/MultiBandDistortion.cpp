@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::MultiBandDistortion {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new MultiBandDistortion(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new MultiBandDistortion(samplingRate);}
 
-MultiBandDistortion::MultiBandDistortion(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+MultiBandDistortion::MultiBandDistortion(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;

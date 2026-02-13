@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SurgeTide {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SurgeTide(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SurgeTide(samplingRate);}
 
-SurgeTide::SurgeTide(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SurgeTide::SurgeTide(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.3;

@@ -30,7 +30,7 @@ class Console7Cascade :
     public AudioEffectX 
 {
 public:
-    Console7Cascade(audioMasterCallback audioMaster);
+    Console7Cascade(float samplingRate);
     ~Console7Cascade();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ClipSoftly {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ClipSoftly(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ClipSoftly(samplingRate);}
 
-ClipSoftly::ClipSoftly(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ClipSoftly::ClipSoftly(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	lastSampleL = 0.0;
 	lastSampleR = 0.0;

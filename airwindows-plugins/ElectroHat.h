@@ -34,7 +34,7 @@ class ElectroHat :
     public AudioEffectX 
 {
 public:
-    ElectroHat(audioMasterCallback audioMaster);
+    ElectroHat(float samplingRate);
     ~ElectroHat();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

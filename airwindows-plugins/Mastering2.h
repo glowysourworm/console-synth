@@ -36,7 +36,7 @@ class Mastering2 :
     public AudioEffectX 
 {
 public:
-    Mastering2(audioMasterCallback audioMaster);
+    Mastering2(float samplingRate);
     ~Mastering2();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

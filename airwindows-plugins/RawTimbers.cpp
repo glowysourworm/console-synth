@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::RawTimbers {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new RawTimbers(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new RawTimbers(samplingRate);}
 
-RawTimbers::RawTimbers(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+RawTimbers::RawTimbers(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 0.0;

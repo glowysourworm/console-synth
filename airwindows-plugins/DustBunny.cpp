@@ -10,10 +10,10 @@
 #include <algorithm>
 namespace airwinconsolidated::DustBunny {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new DustBunny(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new DustBunny(samplingRate);}
 
-DustBunny::DustBunny(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+DustBunny::DustBunny(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	

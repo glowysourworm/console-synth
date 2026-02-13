@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ZOutputStage {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ZOutputStage(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ZOutputStage(samplingRate);}
 
-ZOutputStage::ZOutputStage(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ZOutputStage::ZOutputStage(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 1.0;

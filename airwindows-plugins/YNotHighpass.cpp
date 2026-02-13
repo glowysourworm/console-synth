@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::YNotHighpass {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new YNotHighpass(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new YNotHighpass(samplingRate);}
 
-YNotHighpass::YNotHighpass(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+YNotHighpass::YNotHighpass(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.1;
 	B = 0.5;

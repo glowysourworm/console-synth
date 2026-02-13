@@ -32,7 +32,7 @@ class DeEss :
     public AudioEffectX 
 {
 public:
-    DeEss(audioMasterCallback audioMaster);
+    DeEss(float samplingRate);
     ~DeEss();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

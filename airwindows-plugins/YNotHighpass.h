@@ -35,7 +35,7 @@ class YNotHighpass :
     public AudioEffectX 
 {
 public:
-    YNotHighpass(audioMasterCallback audioMaster);
+    YNotHighpass(float samplingRate);
     ~YNotHighpass();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

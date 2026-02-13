@@ -29,7 +29,7 @@ class DubPlate :
     public AudioEffectX 
 {
 public:
-    DubPlate(audioMasterCallback audioMaster);
+    DubPlate(float samplingRate);
     ~DubPlate();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

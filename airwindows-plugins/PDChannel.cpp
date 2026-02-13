@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PDChannel {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PDChannel(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PDChannel(samplingRate);}
 
-PDChannel::PDChannel(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PDChannel::PDChannel(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 1.0;
 	B = 1.0;

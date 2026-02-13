@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ADClip8 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ADClip8(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ADClip8(samplingRate);}
 
-ADClip8::ADClip8(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ADClip8::ADClip8(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.883;

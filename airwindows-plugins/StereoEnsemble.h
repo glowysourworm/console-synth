@@ -31,7 +31,7 @@ class StereoEnsemble :
     public AudioEffectX 
 {
 public:
-    StereoEnsemble(audioMasterCallback audioMaster);
+    StereoEnsemble(float samplingRate);
     ~StereoEnsemble();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

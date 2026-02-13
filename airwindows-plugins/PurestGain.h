@@ -31,7 +31,7 @@ class PurestGain :
     public AudioEffectX 
 {
 public:
-    PurestGain(audioMasterCallback audioMaster);
+    PurestGain(float samplingRate);
     ~PurestGain();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

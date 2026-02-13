@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::PurestWarm2 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new PurestWarm2(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new PurestWarm2(samplingRate);}
 
-PurestWarm2::PurestWarm2(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+PurestWarm2::PurestWarm2(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.0;

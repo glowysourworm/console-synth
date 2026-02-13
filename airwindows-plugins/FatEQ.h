@@ -34,7 +34,7 @@ class FatEQ :
     public AudioEffectX 
 {
 public:
-    FatEQ(audioMasterCallback audioMaster);
+    FatEQ(float samplingRate);
     ~FatEQ();
     virtual bool getEffectName(char* name);                       // The plug-in name
     virtual VstPlugCategory getPlugCategory();                    // The general category for the plug-in

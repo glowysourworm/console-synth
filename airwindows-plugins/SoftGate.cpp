@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SoftGate {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SoftGate(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SoftGate(samplingRate);}
 
-SoftGate::SoftGate(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SoftGate::SoftGate(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.5;

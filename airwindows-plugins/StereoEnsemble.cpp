@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::StereoEnsemble {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new StereoEnsemble(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new StereoEnsemble(samplingRate);}
 
-StereoEnsemble::StereoEnsemble(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+StereoEnsemble::StereoEnsemble(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 1.0;

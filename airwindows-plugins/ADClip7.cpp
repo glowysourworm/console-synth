@@ -9,12 +9,14 @@
 #include <cmath>
 #include <cstdlib>
 #include <algorithm>
+#include "airwin_consolidated_base.h"
+#include <cstdint>
 namespace airwinconsolidated::ADClip7 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ADClip7(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ADClip7(samplingRate);}
 
-ADClip7::ADClip7(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ADClip7::ADClip7(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.0;
 	B = 0.5;

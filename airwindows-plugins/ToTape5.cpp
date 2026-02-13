@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::ToTape5 {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new ToTape5(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new ToTape5(samplingRate);}
 
-ToTape5::ToTape5(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+ToTape5::ToTape5(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.25;
 	B = 0.0;

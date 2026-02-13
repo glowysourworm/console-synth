@@ -11,10 +11,10 @@
 #include <algorithm>
 namespace airwinconsolidated::SquareRoot {
 
-AudioEffect* createEffectInstance(audioMasterCallback audioMaster) {return new SquareRoot(audioMaster);}
+AudioEffect* createEffectInstance(float samplingRate) {return new SquareRoot(samplingRate);}
 
-SquareRoot::SquareRoot(audioMasterCallback audioMaster) :
-    AudioEffectX(audioMaster, kNumPrograms, kNumParameters)
+SquareRoot::SquareRoot(float samplingRate) :
+    AudioEffectX(samplingRate, kNumPrograms, kNumParameters)
 {
 	A = 0.5;
 	B = 0.0;
